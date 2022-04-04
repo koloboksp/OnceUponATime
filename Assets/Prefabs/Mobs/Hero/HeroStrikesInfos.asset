@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5ab0d6ff68bb10419452f779a94a19e, type: 3}
+  m_Name: HeroStrikesInfos
+  m_EditorClassIdentifier: 
+  StrikeInfos:
+  - Strike: 0
+    DealDamageTimeInterval: {x: 0.45, y: 0.65}
+    ShotTime: 0.5
+    BlockMovement: 1
+    PreparationNeeded: 0
+    Move: 1
+    MovingSpeed: 1
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0.1, y: 0.9}
+  - Strike: 1
+    DealDamageTimeInterval: {x: 0.5, y: 0.75}
+    ShotTime: 0.5
+    BlockMovement: 1
+    PreparationNeeded: 0
+    Move: 1
+    MovingSpeed: 1
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0.1, y: 0.9}
+  - Strike: 2
+    DealDamageTimeInterval: {x: 0, y: 1}
+    ShotTime: 0.5
+    BlockMovement: 1
+    PreparationNeeded: 0
+    Move: 0
+    MovingSpeed: 0
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0, y: 0}
+  - Strike: 3
+    DealDamageTimeInterval: {x: 0, y: 0}
+    ShotTime: 0.5
+    BlockMovement: 1
+    PreparationNeeded: 0
+    Move: 1
+    MovingSpeed: 1
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0.1, y: 0.6}
+  - Strike: 6
+    DealDamageTimeInterval: {x: 0, y: 0}
+    ShotTime: 0
+    BlockMovement: 0
+    PreparationNeeded: 1
+    Move: 0
+    MovingSpeed: 0
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0, y: 0}
+  - Strike: 5
+    DealDamageTimeInterval: {x: 0, y: 0}
+    ShotTime: 0.3
+    BlockMovement: 1
+    PreparationNeeded: 0
+    Move: 0
+    MovingSpeed: 0
+    MovingDirection: 0
+    MovingTimeInterval: {x: 0, y: 0}

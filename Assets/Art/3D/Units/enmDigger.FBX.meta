@@ -1,0 +1,1509 @@
+fileFormatVersion: 2
+guid: 6e2449b5fc50bc24697d2313caecaca8
+timeCreated: 1478775018
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: bnClavL
+    100002: bnClavR
+    100004: bnFootL1
+    100006: bnFootL2
+    100008: bnFootL3
+    100010: bnFootL4
+    100012: bnFootR1
+    100014: bnFootR2
+    100016: bnFootR3
+    100018: bnFootR4
+    100020: bnHandL1
+    100022: bnHandL2
+    100024: bnHandL3
+    100026: bnHandR1
+    100028: bnHandR2
+    100030: bnHandR3
+    100032: bnHead
+    100034: bnJaw1
+    100036: bnLick1
+    100038: bnLick2
+    100040: bnPelvis
+    100042: bnSpine
+    100044: bnTail1
+    100046: bnTail2
+    100048: bnTail3
+    100050: //RootNode
+    100052: enmDigger
+    100054: pntLick1
+    400000: bnClavL
+    400002: bnClavR
+    400004: bnFootL1
+    400006: bnFootL2
+    400008: bnFootL3
+    400010: bnFootL4
+    400012: bnFootR1
+    400014: bnFootR2
+    400016: bnFootR3
+    400018: bnFootR4
+    400020: bnHandL1
+    400022: bnHandL2
+    400024: bnHandL3
+    400026: bnHandR1
+    400028: bnHandR2
+    400030: bnHandR3
+    400032: bnHead
+    400034: bnJaw1
+    400036: bnLick1
+    400038: bnLick2
+    400040: bnPelvis
+    400042: bnSpine
+    400044: bnTail1
+    400046: bnTail2
+    400048: bnTail3
+    400050: //RootNode
+    400052: enmDigger
+    400054: pntLick1
+    4300000: enmDigger
+    7400000: run_0
+    7400002: idle
+    7400004: dead
+    7400006: damage
+    7400008: attackMelee
+    7400010: idleAggressive
+    7400012: lost
+    7400014: stun
+    7400016: attackMeleeRun
+    7400018: run_1
+    7400020: loot_0
+    7400022: loot_1
+    7400024: walk
+    7400026: turnRight
+    7400028: turnLeft
+    7400030: jump
+    9500000: //RootNode
+    13700000: enmDigger
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: enmDigger
+    second: {fileID: 2100000, guid: 49b28011778fea9458c4168827da457a, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: run_0
+      takeName: Take 001
+      firstFrame: 5
+      lastFrame: 45
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: idle
+      takeName: Take 001
+      firstFrame: 50
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: dead
+      takeName: Take 001
+      firstFrame: 75
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: damage
+      takeName: Take 001
+      firstFrame: 125
+      lastFrame: 150
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: attackMelee
+      takeName: Take 001
+      firstFrame: 155
+      lastFrame: 190
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: idleAggressive
+      takeName: Take 001
+      firstFrame: 220
+      lastFrame: 275
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: lost
+      takeName: Take 001
+      firstFrame: 280
+      lastFrame: 355
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: stun
+      takeName: Take 001
+      firstFrame: 360
+      lastFrame: 400
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: attackMeleeRun
+      takeName: Take 001
+      firstFrame: 165
+      lastFrame: 190
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 0
+      - path: bnPelvis/bnFootL1
+        weight: 0
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 0
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 0
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 0
+      - path: bnPelvis/bnFootR1
+        weight: 0
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 0
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 0
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 0
+      - path: bnPelvis/bnSpine
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 0
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 0
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 0
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 0
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 0
+      - path: enmDigger
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: run_1
+      takeName: Take 001
+      firstFrame: 195
+      lastFrame: 215
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: loot_0
+      takeName: Take 001
+      firstFrame: 405
+      lastFrame: 490
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: loot_1
+      takeName: Take 001
+      firstFrame: 495
+      lastFrame: 535
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: walk
+      takeName: Take 001
+      firstFrame: 540
+      lastFrame: 580
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: turnRight
+      takeName: Take 001
+      firstFrame: 590
+      lastFrame: 630
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: turnLeft
+      takeName: Take 001
+      firstFrame: 640
+      lastFrame: 680
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: jump
+      takeName: Take 001
+      firstFrame: 690
+      lastFrame: 700
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnPelvis
+        weight: 1
+      - path: bnPelvis/bnFootL1
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3
+        weight: 1
+      - path: bnPelvis/bnFootL1/bnFootL2/bnFootL3/bnFootL4
+        weight: 1
+      - path: bnPelvis/bnFootR1
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3
+        weight: 1
+      - path: bnPelvis/bnFootR1/bnFootR2/bnFootR3/bnFootR4
+        weight: 1
+      - path: bnPelvis/bnSpine
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavL/bnHandL1/bnHandL2/bnHandL3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2
+        weight: 1
+      - path: bnPelvis/bnSpine/bnClavR/bnHandR1/bnHandR2/bnHandR3
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/bnJaw1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick1
+        weight: 1
+      - path: bnPelvis/bnSpine/bnHead/pntLick1/bnLick2
+        weight: 1
+      - path: bnPelvis/bnTail1
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2
+        weight: 1
+      - path: bnPelvis/bnTail1/bnTail2/bnTail3
+        weight: 1
+      - path: enmDigger
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

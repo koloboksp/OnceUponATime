@@ -1,0 +1,687 @@
+fileFormatVersion: 2
+guid: 0da04e706e57a2d42a9fb0855f7d178e
+timeCreated: 1476985339
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: bnEyeC
+    100002: bnEyeC1
+    100004: bnEyeC2
+    100006: bnEyeC3
+    100008: bnEyeL1
+    100010: bnEyeL2
+    100012: bnEyeL3
+    100014: bnEyelidL1
+    100016: bnEyelidL2
+    100018: bnEyelidL3
+    100020: bnEyelidL4
+    100022: bnEyelidL5
+    100024: bnEyelidL6
+    100026: bnEyelidR1
+    100028: bnEyelidR2
+    100030: bnEyelidR3
+    100032: bnEyelidR4
+    100034: bnEyelidR5
+    100036: bnEyelidR6
+    100038: bnEyeR1
+    100040: bnEyeR2
+    100042: bnEyeR3
+    100044: bnHorn1
+    100046: bnHorn2
+    100048: bnHorn3
+    100050: bnHorn4
+    100052: bnHorn5
+    100054: bnHorn6
+    100056: bnHorn7
+    100058: bnJaw
+    100060: bnRoot
+    100062: enmBeholder
+    100064: //RootNode
+    100066: pntEyeL1
+    100068: pntEyeL2
+    100070: pntEyeL3
+    100072: pntEyeR1
+    100074: pntEyeR2
+    100076: pntEyeR3
+    400000: bnEyeC
+    400002: bnEyeC1
+    400004: bnEyeC2
+    400006: bnEyeC3
+    400008: bnEyeL1
+    400010: bnEyeL2
+    400012: bnEyeL3
+    400014: bnEyelidL1
+    400016: bnEyelidL2
+    400018: bnEyelidL3
+    400020: bnEyelidL4
+    400022: bnEyelidL5
+    400024: bnEyelidL6
+    400026: bnEyelidR1
+    400028: bnEyelidR2
+    400030: bnEyelidR3
+    400032: bnEyelidR4
+    400034: bnEyelidR5
+    400036: bnEyelidR6
+    400038: bnEyeR1
+    400040: bnEyeR2
+    400042: bnEyeR3
+    400044: bnHorn1
+    400046: bnHorn2
+    400048: bnHorn3
+    400050: bnHorn4
+    400052: bnHorn5
+    400054: bnHorn6
+    400056: bnHorn7
+    400058: bnJaw
+    400060: bnRoot
+    400062: //RootNode
+    400064: enmBeholder
+    400066: pntEyeL1
+    400068: pntEyeL2
+    400070: pntEyeL3
+    400072: pntEyeR1
+    400074: pntEyeR2
+    400076: pntEyeR3
+    4300000: enmBeholder
+    7400000: idle
+    7400002: move
+    7400004: attack
+    7400006: dead
+    7400008: damage
+    9500000: //RootNode
+    13700000: enmBeholder
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: idle
+      takeName: Take 001
+      firstFrame: 10
+      lastFrame: 90
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnRoot
+        weight: 1
+      - path: bnRoot/bnEyeC
+        weight: 1
+      - path: bnRoot/bnEyeC1
+        weight: 1
+      - path: bnRoot/bnEyeC2
+        weight: 1
+      - path: bnRoot/bnEyeC3
+        weight: 1
+      - path: bnRoot/bnHorn1
+        weight: 1
+      - path: bnRoot/bnHorn2
+        weight: 1
+      - path: bnRoot/bnHorn3
+        weight: 1
+      - path: bnRoot/bnHorn4
+        weight: 1
+      - path: bnRoot/bnHorn5
+        weight: 1
+      - path: bnRoot/bnHorn6
+        weight: 1
+      - path: bnRoot/bnHorn7
+        weight: 1
+      - path: bnRoot/bnJaw
+        weight: 1
+      - path: bnRoot/pntEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL2
+        weight: 1
+      - path: bnRoot/pntEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL3
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL4
+        weight: 1
+      - path: bnRoot/pntEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL5
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL6
+        weight: 1
+      - path: bnRoot/pntEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR2
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR3
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR4
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR3
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR5
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR6
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyeR3
+        weight: 1
+      - path: enmBeholder
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: move
+      takeName: Take 001
+      firstFrame: 95
+      lastFrame: 135
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnRoot
+        weight: 1
+      - path: bnRoot/bnEyeC
+        weight: 1
+      - path: bnRoot/bnEyeC1
+        weight: 1
+      - path: bnRoot/bnEyeC2
+        weight: 1
+      - path: bnRoot/bnEyeC3
+        weight: 1
+      - path: bnRoot/bnHorn1
+        weight: 1
+      - path: bnRoot/bnHorn2
+        weight: 1
+      - path: bnRoot/bnHorn3
+        weight: 1
+      - path: bnRoot/bnHorn4
+        weight: 1
+      - path: bnRoot/bnHorn5
+        weight: 1
+      - path: bnRoot/bnHorn6
+        weight: 1
+      - path: bnRoot/bnHorn7
+        weight: 1
+      - path: bnRoot/bnJaw
+        weight: 1
+      - path: bnRoot/pntEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL2
+        weight: 1
+      - path: bnRoot/pntEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL3
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL4
+        weight: 1
+      - path: bnRoot/pntEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL5
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL6
+        weight: 1
+      - path: bnRoot/pntEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR2
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR3
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR4
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR3
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR5
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR6
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyeR3
+        weight: 1
+      - path: enmBeholder
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: attack
+      takeName: Take 001
+      firstFrame: 140
+      lastFrame: 200
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnRoot
+        weight: 1
+      - path: bnRoot/bnEyeC
+        weight: 1
+      - path: bnRoot/bnEyeC1
+        weight: 1
+      - path: bnRoot/bnEyeC2
+        weight: 1
+      - path: bnRoot/bnEyeC3
+        weight: 1
+      - path: bnRoot/bnHorn1
+        weight: 1
+      - path: bnRoot/bnHorn2
+        weight: 1
+      - path: bnRoot/bnHorn3
+        weight: 1
+      - path: bnRoot/bnHorn4
+        weight: 1
+      - path: bnRoot/bnHorn5
+        weight: 1
+      - path: bnRoot/bnHorn6
+        weight: 1
+      - path: bnRoot/bnHorn7
+        weight: 1
+      - path: bnRoot/bnJaw
+        weight: 1
+      - path: bnRoot/pntEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL2
+        weight: 1
+      - path: bnRoot/pntEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL3
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL4
+        weight: 1
+      - path: bnRoot/pntEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL5
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL6
+        weight: 1
+      - path: bnRoot/pntEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR2
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR3
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR4
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR3
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR5
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR6
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyeR3
+        weight: 1
+      - path: enmBeholder
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: dead
+      takeName: Take 001
+      firstFrame: 205
+      lastFrame: 245
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnRoot
+        weight: 1
+      - path: bnRoot/bnEyeC
+        weight: 1
+      - path: bnRoot/bnEyeC1
+        weight: 1
+      - path: bnRoot/bnEyeC2
+        weight: 1
+      - path: bnRoot/bnEyeC3
+        weight: 1
+      - path: bnRoot/bnHorn1
+        weight: 1
+      - path: bnRoot/bnHorn2
+        weight: 1
+      - path: bnRoot/bnHorn3
+        weight: 1
+      - path: bnRoot/bnHorn4
+        weight: 1
+      - path: bnRoot/bnHorn5
+        weight: 1
+      - path: bnRoot/bnHorn6
+        weight: 1
+      - path: bnRoot/bnHorn7
+        weight: 1
+      - path: bnRoot/bnJaw
+        weight: 1
+      - path: bnRoot/pntEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL2
+        weight: 1
+      - path: bnRoot/pntEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL3
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL4
+        weight: 1
+      - path: bnRoot/pntEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL5
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL6
+        weight: 1
+      - path: bnRoot/pntEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR2
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR3
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR4
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR3
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR5
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR6
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyeR3
+        weight: 1
+      - path: enmBeholder
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: damage
+      takeName: Take 001
+      firstFrame: 250
+      lastFrame: 285
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bnRoot
+        weight: 1
+      - path: bnRoot/bnEyeC
+        weight: 1
+      - path: bnRoot/bnEyeC1
+        weight: 1
+      - path: bnRoot/bnEyeC2
+        weight: 1
+      - path: bnRoot/bnEyeC3
+        weight: 1
+      - path: bnRoot/bnHorn1
+        weight: 1
+      - path: bnRoot/bnHorn2
+        weight: 1
+      - path: bnRoot/bnHorn3
+        weight: 1
+      - path: bnRoot/bnHorn4
+        weight: 1
+      - path: bnRoot/bnHorn5
+        weight: 1
+      - path: bnRoot/bnHorn6
+        weight: 1
+      - path: bnRoot/bnHorn7
+        weight: 1
+      - path: bnRoot/bnJaw
+        weight: 1
+      - path: bnRoot/pntEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyeL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL1
+        weight: 1
+      - path: bnRoot/pntEyeL1/bnEyelidL2
+        weight: 1
+      - path: bnRoot/pntEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyeL2
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL3
+        weight: 1
+      - path: bnRoot/pntEyeL2/bnEyelidL4
+        weight: 1
+      - path: bnRoot/pntEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyeL3
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL5
+        weight: 1
+      - path: bnRoot/pntEyeL3/bnEyelidL6
+        weight: 1
+      - path: bnRoot/pntEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR1
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyelidR2
+        weight: 1
+      - path: bnRoot/pntEyeR1/bnEyeR1
+        weight: 1
+      - path: bnRoot/pntEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR3
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyelidR4
+        weight: 1
+      - path: bnRoot/pntEyeR2/bnEyeR2
+        weight: 1
+      - path: bnRoot/pntEyeR3
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR5
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyelidR6
+        weight: 1
+      - path: bnRoot/pntEyeR3/bnEyeR3
+        weight: 1
+      - path: enmBeholder
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

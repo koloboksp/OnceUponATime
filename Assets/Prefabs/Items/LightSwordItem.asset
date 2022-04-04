@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335bb2d1fd29c584b9c3a1d64c665b74, type: 3}
+  m_Name: LightSwordItem
+  m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
+  EquipmentViewPartPrefab: {fileID: 3253187818162193631, guid: 682a50bf8b46e4b44939d58e8ad6d548,
+    type: 3}
+  Type: 30
+  DamageType: 0
+  Attack: 2
+  HorizontalRange: 1.6
+  VerticalRangePadding: 0.8
+  Force: 2

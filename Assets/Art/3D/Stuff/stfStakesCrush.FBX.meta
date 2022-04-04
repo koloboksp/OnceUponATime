@@ -1,0 +1,187 @@
+fileFormatVersion: 2
+guid: c9676d4d749d5aa4f88a79d79fa2f8aa
+timeCreated: 1491482037
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: stfStakes_00
+    100002: stfStakes_00_col
+    100004: stfStakes_01
+    100006: stfStakes_01_col
+    100008: stfStakes_02
+    100010: stfStakes_02_col
+    100012: stfStakes_03
+    100014: stfStakes_03_col
+    100016: stfStakes_04
+    100018: stfStakes_04_col
+    100020: stfStakes_05
+    100022: stfStakes_05_col
+    100024: stfStakes_06
+    100026: stfStakes_06_col
+    100028: stfStakes_07
+    100030: stfStakes_07_col
+    100032: stfStakes_08
+    100034: stfStakes_08_col
+    100036: stfStakes_09
+    100038: stfStakes_09_col
+    100040: stfStakes_11
+    100042: stfStakes_11_col
+    100044: stfStakes_12
+    100046: stfStakes_12_col
+    100048: stfStakes_13
+    100050: stfStakes_13_col
+    100052: stfStakes_14
+    100054: stfStakes_14_col
+    100056: //RootNode
+    100058: stfStakesRoot
+    100060: stfStakes_10
+    100062: stfStakes_10_col
+    400000: stfStakes_00
+    400002: stfStakes_00_col
+    400004: stfStakes_01
+    400006: stfStakes_01_col
+    400008: stfStakes_02
+    400010: stfStakes_02_col
+    400012: stfStakes_03
+    400014: stfStakes_03_col
+    400016: stfStakes_04
+    400018: stfStakes_04_col
+    400020: stfStakes_05
+    400022: stfStakes_05_col
+    400024: stfStakes_06
+    400026: stfStakes_06_col
+    400028: stfStakes_07
+    400030: stfStakes_07_col
+    400032: stfStakes_08
+    400034: stfStakes_08_col
+    400036: stfStakes_09
+    400038: stfStakes_09_col
+    400040: stfStakes_11
+    400042: stfStakes_11_col
+    400044: stfStakes_12
+    400046: stfStakes_12_col
+    400048: stfStakes_13
+    400050: stfStakes_13_col
+    400052: stfStakes_14
+    400054: stfStakes_14_col
+    400056: //RootNode
+    400058: stfStakesRoot
+    400060: stfStakes_10
+    400062: stfStakes_10_col
+    2300000: stfStakes_00
+    2300002: stfStakes_01
+    2300004: stfStakes_02
+    2300006: stfStakes_03
+    2300008: stfStakes_04
+    2300010: stfStakes_05
+    2300012: stfStakes_06
+    2300014: stfStakes_07
+    2300016: stfStakes_08
+    2300018: stfStakes_09
+    2300020: stfStakes_11
+    2300022: stfStakes_12
+    2300024: stfStakes_13
+    2300026: stfStakes_14
+    2300028: stfStakes_10
+    2300030: //RootNode
+    3300000: stfStakes_00
+    3300002: stfStakes_01
+    3300004: stfStakes_02
+    3300006: stfStakes_03
+    3300008: stfStakes_04
+    3300010: stfStakes_05
+    3300012: stfStakes_06
+    3300014: stfStakes_07
+    3300016: stfStakes_08
+    3300018: stfStakes_09
+    3300020: stfStakes_11
+    3300022: stfStakes_12
+    3300024: stfStakes_13
+    3300026: stfStakes_14
+    3300028: stfStakes_10
+    3300030: //RootNode
+    4300000: stfStakes_13
+    4300002: stfStakes_07
+    4300004: stfStakes_06
+    4300006: stfStakes_09
+    4300008: stfStakes_08
+    4300010: stfStakes_11
+    4300012: stfStakes_04
+    4300014: stfStakes_14
+    4300016: stfStakes_05
+    4300018: stfStakes_00
+    4300020: stfStakes_01
+    4300022: stfStakes_12
+    4300024: stfStakes_03
+    4300026: stfStakes_02
+    4300028: stfStakesRoot
+    4300030: stfStakes_10
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

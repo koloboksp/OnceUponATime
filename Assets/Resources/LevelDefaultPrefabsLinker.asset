@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4950a690bd0913a43ac6c97e0a88dc76, type: 3}
+  m_Name: LevelDefaultPrefabsLinker
+  m_EditorClassIdentifier: 
+  UIPrefab: {fileID: 7596390709432516046, guid: 6a9144af0fd98244ea7fb8ded20f5449,
+    type: 3}
+  HeroPrefab: {fileID: 7952652801997947278, guid: 19c61968ab173514ba59eba7a774c1d7,
+    type: 3}
+  CameraControlPrefab: {fileID: 5907037195787404556, guid: ea5a857b2a8a21543acdd3f6ad70ae48,
+    type: 3}

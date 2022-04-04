@@ -1,0 +1,183 @@
+fileFormatVersion: 2
+guid: 3589554544758cc42841db7075a6bbbb
+timeCreated: 1462474897
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: box_00
+    100002: box_01
+    100004: box_02
+    100006: box_03
+    100008: box_04
+    100010: box_05
+    100012: box_06
+    100014: box_07
+    100016: box_08
+    100018: box_09
+    100020: box_10
+    100022: box_11
+    100024: box_12
+    100026: box_13
+    100028: box_14
+    100030: box_15
+    100032: box_16
+    100034: box_17
+    100036: box_18
+    100038: box_19
+    100040: box_20
+    100042: box_21
+    100044: //RootNode
+    400000: box_00
+    400002: box_01
+    400004: box_02
+    400006: box_03
+    400008: box_04
+    400010: box_05
+    400012: box_06
+    400014: box_07
+    400016: box_08
+    400018: box_09
+    400020: box_10
+    400022: box_11
+    400024: box_12
+    400026: box_13
+    400028: box_14
+    400030: box_15
+    400032: box_16
+    400034: box_17
+    400036: box_18
+    400038: box_19
+    400040: box_20
+    400042: box_21
+    400044: //RootNode
+    2300000: box_00
+    2300002: box_01
+    2300004: box_02
+    2300006: box_03
+    2300008: box_04
+    2300010: box_05
+    2300012: box_06
+    2300014: box_07
+    2300016: box_08
+    2300018: box_09
+    2300020: box_10
+    2300022: box_11
+    2300024: box_12
+    2300026: box_13
+    2300028: box_14
+    2300030: box_15
+    2300032: box_16
+    2300034: box_17
+    2300036: box_18
+    2300038: box_19
+    2300040: box_20
+    2300042: box_21
+    3300000: box_00
+    3300002: box_01
+    3300004: box_02
+    3300006: box_03
+    3300008: box_04
+    3300010: box_05
+    3300012: box_06
+    3300014: box_07
+    3300016: box_08
+    3300018: box_09
+    3300020: box_10
+    3300022: box_11
+    3300024: box_12
+    3300026: box_13
+    3300028: box_14
+    3300030: box_15
+    3300032: box_16
+    3300034: box_17
+    3300036: box_18
+    3300038: box_19
+    3300040: box_20
+    3300042: box_21
+    4300000: box_21
+    4300002: box_20
+    4300004: box_15
+    4300006: box_16
+    4300008: box_17
+    4300010: box_19
+    4300012: box_12
+    4300014: box_14
+    4300016: box_13
+    4300018: box_01
+    4300020: box_11
+    4300022: box_00
+    4300024: box_02
+    4300026: box_18
+    4300028: box_03
+    4300030: box_04
+    4300032: box_05
+    4300034: box_06
+    4300036: box_07
+    4300038: box_08
+    4300040: box_09
+    4300042: box_10
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
