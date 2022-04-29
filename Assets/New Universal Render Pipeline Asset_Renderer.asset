@@ -70,18 +70,10 @@ MonoBehaviour:
   m_Name: FakeLightingFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  _fakeLightTextureName: _OutlineBluredTexture
-  FakeLightPassEvent: 350
-  LayerMask:
-    serializedVersion: 2
-    m_Bits: 67108864
-  MixLighting: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
   settings:
-    renderPassEvent: 300
     blitMaterial: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
     blitMaterialPassIndex: -1
     sourceType: 0
     destinationType: 0
     sourceTextureId: _SourceTexture
     destinationTextureId: _DestinationTexture
-  FillLightColor: {r: 0, g: 0, b: 0, a: 0}

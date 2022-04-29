@@ -10,7 +10,7 @@ namespace Assets.Scripts.Effects
 		Custom
 	}
 
-	public class MixLightingPass : ScriptableRenderPass
+	public class LightingMixPass : ScriptableRenderPass
 	{
 		public FilterMode filterMode { get; set; }
 		private string _profilerTag = "MixLightWith";
@@ -28,19 +28,11 @@ namespace Assets.Scripts.Effects
 
 		FakeLightingFeature.Settings settings;
 
-		public MixLightingPass(FakeLightingFeature.Settings settings)
+		public LightingMixPass(FakeLightingFeature.Settings settings)
 		{
 			this.settings = settings;
 		}
 
-		public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-		{
-			//cmd.GetTemporaryRT(_destination.id, cameraTextureDescriptor);
-		//	ConfigureTarget(_depth);
-			//	ConfigureClear(ClearFlag.Color, Color.clear);
-
-			//			CMD = cmd;
-		}
 
 		public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
 		{
@@ -85,20 +77,8 @@ namespace Assets.Scripts.Effects
 
 		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 		{
-			//var cmd = CommandBufferPool.Get(_profilerTag);
-			//
-			//using (new ProfilingSample(cmd, _profilerTag))
-			//{
-			//	var mesh = RenderingUtils.fullscreenMesh;
-			//	cmd.DrawMesh(mesh, Matrix4x4.identity, _material, 0, 0);
-			//}
-			//
-			//context.ExecuteCommandBuffer(cmd);
-			//CommandBufferPool.Release(cmd);
-
 			CommandBuffer cmd = CommandBufferPool.Get(_profilerTag);
 
-			// Can't read and write to same color target, create a temp render target to blit. 
 			if (isSourceAndDestinationSameTarget)
 			{
 				Blit(cmd, source, destination, settings.blitMaterial, settings.blitMaterialPassIndex);
@@ -111,11 +91,6 @@ namespace Assets.Scripts.Effects
 
 			context.ExecuteCommandBuffer(cmd);
 			CommandBufferPool.Release(cmd);
-		}
-
-		public void setColorTexture(RenderTargetIdentifier colorTexture)
-		{
-			_depth = colorTexture;
-		}
+		}		
 	}
 }

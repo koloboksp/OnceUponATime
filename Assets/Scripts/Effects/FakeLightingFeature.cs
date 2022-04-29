@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -5,58 +6,53 @@ namespace Assets.Scripts.Effects
 {
 	public class FakeLightingFeature : ScriptableRendererFeature
 	{
+		public const string FakeLightTagName = "FakeLight";
+		public const int FakeLightRenderTextureDownSample = 4;
+		public const string FakeLightTextureName = "_FakeLightRenderTexture";
+		public const RenderPassEvent FirePassEvent = RenderPassEvent.AfterRenderingOpaques;
+
+		RenderTargetHandle _FakeLightRenderTexture;
+		FakeLightPass mFakeLightPass;
+		LightingMixPass mLightingMixPass;
+
+		public Settings settings;
+		
+		[NonSerialized]
+		public bool Enabled = true;
+		[NonSerialized]
+		public Color FillLightColor = Color.gray;
+
+		public override void Create()
+		{
+			
+			_FakeLightRenderTexture.Init(FakeLightTextureName);
+			
+			mFakeLightPass = new FakeLightPass(_FakeLightRenderTexture, FakeLightRenderTextureDownSample);
+			mFakeLightPass.renderPassEvent = FirePassEvent;
+
+			mLightingMixPass = new LightingMixPass(settings);
+			mLightingMixPass.renderPassEvent = FirePassEvent;
+		}
+
+		public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+		{
+			if (Enabled)
+			{	
+				mFakeLightPass.FillColor = FillLightColor;
+				renderer.EnqueuePass(mFakeLightPass);
+				renderer.EnqueuePass(mLightingMixPass);
+			}
+		}
+
 		[System.Serializable]
 		public class Settings
 		{
-			public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
-
 			public Material blitMaterial = null;
 			public int blitMaterialPassIndex = -1;
 			public BufferType sourceType = BufferType.CameraColor;
 			public BufferType destinationType = BufferType.CameraColor;
 			public string sourceTextureId = "_SourceTexture";
 			public string destinationTextureId = "_DestinationTexture";
-		}
-
-		RenderTargetHandle _fakeLightTexture;
-
-		[SerializeField]
-		string _fakeLightTextureName;
-
-		[SerializeField] public RenderPassEvent FakeLightPassEvent;
-
-		[Space]
-		public LayerMask LayerMask = 0;
-
-		private FakeLightPass _fakeLightPass;
-
-
-		MixLightingPass _mixLighting;
-		public Material MixLighting = null;
-
-		public Settings settings;
-		public bool Enabled { get; set; }
-		public Color FillLightColor;
-
-		public override void Create()
-		{
-			_fakeLightTexture.Init(_fakeLightTextureName);
-			
-			_fakeLightPass = new FakeLightPass(_fakeLightTexture, LayerMask);
-			_fakeLightPass.renderPassEvent = FakeLightPassEvent;
-			_mixLighting = new MixLightingPass(settings);
-			_mixLighting.renderPassEvent = FakeLightPassEvent;
-		}
-
-		public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
-		{
-			var colorTexture = renderer.cameraColorTarget;
-			var depthTexture = renderer.cameraDepthTarget;
-			_fakeLightPass.SetDepthTexture(depthTexture);
-
-			_fakeLightPass.FillColor = FillLightColor;
-			renderer.EnqueuePass(_fakeLightPass);
-			renderer.EnqueuePass(_mixLighting);
 		}
 	}
 }

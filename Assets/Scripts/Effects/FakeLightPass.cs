@@ -7,47 +7,43 @@ using UnityEngine.Rendering.Universal;
 namespace Assets.Scripts.Effects
 {
 	public class FakeLightPass : ScriptableRenderPass
-	{
-		string _profilerTag = "FakeLightPass";
-
-		RenderTargetHandle _destination;
-		RenderTargetIdentifier _depth;
-		public FilterMode filterMode { get; set; }
-
-		List<ShaderTagId> _shaderTagIdList = new List<ShaderTagId>() { new ShaderTagId("FakeLight") };
-		FilteringSettings _filteringSettings;
-		RenderStateBlock _renderStateBlock;
+	{	
+		RenderTargetHandle mDestination;
+	
+		List<ShaderTagId> mShaderTagIdList = new List<ShaderTagId>() { new ShaderTagId(FakeLightingFeature.FakeLightTagName) };
+		FilteringSettings mFilteringSettings;
+		RenderStateBlock mRenderStateBlock;
+		int mDownSample = 4;
 
 		public Color FillColor;
 
-		public FakeLightPass(RenderTargetHandle destination, int layerMask)
+		public FakeLightPass(RenderTargetHandle destination, int downSample)
 		{
-			_destination = destination;
+			mDestination = destination;
+			mDownSample = downSample;
 
-				
-			_filteringSettings = new FilteringSettings(RenderQueueRange.opaque, layerMask);
-			_renderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
-
-		}
-
-		public void SetDepthTexture(RenderTargetIdentifier depth)
-		{
-			_depth = depth;
+			mFilteringSettings = new FilteringSettings(RenderQueueRange.opaque);
+			mRenderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
 		}
 
 		public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
 		{
-			cmd.GetTemporaryRT(_destination.id, cameraTextureDescriptor);
-			ConfigureTarget(_destination.Identifier());
+			var width = Mathf.Max(1, cameraTextureDescriptor.width >> mDownSample);
+			var height = Mathf.Max(1, cameraTextureDescriptor.height >> mDownSample);
+			var blurTextureDesc = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBHalf, 0, 0);
+
+			cmd.GetTemporaryRT(mDestination.id, blurTextureDesc, FilterMode.Point);
+			
+			ConfigureTarget(mDestination.Identifier());
 			ConfigureClear(ClearFlag.Color, FillColor);		
 		}
 
 		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 		{		
 			SortingCriteria sortingCriteria = renderingData.cameraData.defaultOpaqueSortFlags;
-			DrawingSettings drawingSettings = CreateDrawingSettings(_shaderTagIdList, ref renderingData, sortingCriteria);
+			DrawingSettings drawingSettings = CreateDrawingSettings(mShaderTagIdList, ref renderingData, sortingCriteria);
 			
-			context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref _filteringSettings, ref _renderStateBlock);		
+			context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref mFilteringSettings, ref mRenderStateBlock);		
 		}
 	}
 }

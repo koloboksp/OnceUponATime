@@ -1,17 +1,16 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "FakeLightImageEffect"
+﻿Shader "FakeLightImageEffect"
 {
     Properties
     {
         _MainTex("Base (RGB)", 2D) = "white" {}
+        _FakeLightRenderTexture("Base (RGB)", 2D) = "_FakeLightRenderTexture" {}
         _Color("Glow Color", Color) = (1, 1, 1, 1)
         _Intensity("Intensity", Float) = 2
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 0
     }
 
-        SubShader
+    SubShader
     {
         HLSLINCLUDE
 
@@ -34,8 +33,8 @@ Shader "FakeLightImageEffect"
         TEXTURE2D_X(_MainTex);
         SAMPLER(sampler_MainTex);
 
-        TEXTURE2D_X(_OutlineBluredTexture);
-        SAMPLER(sampler_OutlineBluredTexture);
+        TEXTURE2D_X(_FakeLightRenderTexture);
+        SAMPLER(sampler_FakeLightRenderTexture);
 
         half4 _Color;
         half _Intensity;
@@ -55,10 +54,10 @@ Shader "FakeLightImageEffect"
         half4 Fragment(Varyings input) : SV_Target
         {
             float2 uv = UnityStereoTransformScreenSpaceTex(input.uv);
-            half4 prepassColor = SAMPLE_TEXTURE2D_X(_MainTex, sampler_MainTex, uv);
-            half4 bluredColor = SAMPLE_TEXTURE2D_X(_OutlineBluredTexture, sampler_OutlineBluredTexture,uv);
-           // half4 difColor = max(0, bluredColor - prepassColor);
-            half4 color = prepassColor * bluredColor * 2;
+            half4 mainColor = SAMPLE_TEXTURE2D_X(_MainTex, sampler_MainTex, uv);
+            half4 lightColor = SAMPLE_TEXTURE2D_X(_FakeLightRenderTexture, sampler_FakeLightRenderTexture,uv);
+            half4 color = mainColor * lightColor * 2;
+
             color.a = 1;
             return color;
         }
@@ -68,9 +67,9 @@ Shader "FakeLightImageEffect"
         Pass
         {
             Blend[_SrcBlend][_DstBlend]
-            ZTest Always    // всегда рисуем, независимо от текущей глубины в буфере
-            ZWrite Off      // и ничего в него не пишем
-            Cull Off        // рисуем все стороны меша
+            ZTest Always    
+            ZWrite Off      
+            Cull Off        
 
             HLSLPROGRAM
 
