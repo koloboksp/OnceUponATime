@@ -7,14 +7,76 @@
 	}
 	SubShader
 	{
-		Tags 
-		{ 
-			"DisableBatching" = "True"
-			"RenderType"="Transparent" 
-		}
-	
+		//Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "UniversalMaterialType" = "SimpleLit" "IgnoreProjector" = "True" "ShaderModel" = "4.5"}
+		//Tags { "LightMode" = "UniversalForward" }
+		//Tags 
+		//{ 
+		//	"FakeLight" = "True"
+		//	"DisableBatching" = "True"
+		//	"RenderType"="Transparent" 
+		//}
 		Pass
 		{
+			Tags { "LightMode" = "UniversalForward" }
+
+			Blend One One
+			Cull Off
+			ZTest Always
+
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			// make fog work
+			#pragma multi_compile_fog
+
+			#include "UnityCG.cginc"
+
+
+			struct appdata
+			{
+				float4 vertex : POSITION;
+
+				float4 color : COLOR;
+			};
+
+			struct v2f
+			{
+				float4 vertex : SV_POSITION;
+
+				float3 lVertex : TEXCOORD0;
+				float4 color : COLOR;
+				UNITY_FOG_COORDS(1)
+			};
+
+			sampler2D _MainTex;
+
+			float4 _MainTex_ST;
+			float _Range;
+			half4 _Color;
+
+			v2f vert(appdata v)
+			{
+				v2f o;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.lVertex = v.vertex * _Range * 2;
+				o.color = v.color;
+				UNITY_TRANSFER_FOG(o,o.vertex);
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target
+			{
+				clip(-1);
+				
+				return 0;
+			}
+			ENDCG
+		}
+
+		Pass
+		{
+			Tags { "LightMode" = "FakeLight" }
+
 			Blend One One
 			Cull Off
 			ZTest Always

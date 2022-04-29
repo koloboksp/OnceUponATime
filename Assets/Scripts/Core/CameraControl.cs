@@ -13,7 +13,9 @@ namespace Assets.Scripts.Core
         public Level Owner;
         public Hero Target;
 
-        public CameraFakeLightingEffect FakeLightingEffect;
+        public FakeLightingFeature FakeLight;
+
+      //  public CameraFakeLightingEffect FakeLightingEffect;
 
         void Start()
         {
@@ -27,12 +29,12 @@ namespace Assets.Scripts.Core
         {      
             if (Owner.LightingSettings.FakeLightingDarknessColor.grayscale < 1)
             {
-                FakeLightingEffect.DarknessColor = Owner.LightingSettings.FakeLightingDarknessColor;
-                FakeLightingEffect.enabled = true;
+	            FakeLight.FillLightColor = Owner.LightingSettings.FakeLightingDarknessColor;
+	            FakeLight.Enabled = true;
             }
             else
             {
-                FakeLightingEffect.enabled = false;
+	            FakeLight.Enabled = false;
             }         
         }
 

@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8121082139454072229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7097e39018d0d44da5620bb5f229e05, type: 3}
-  m_Name: OutlineFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  FakeLightMaterial: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,8 +16,8 @@ MonoBehaviour:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
       type: 3}
   m_RendererFeatures:
-  - {fileID: -8121082139454072229}
-  m_RendererFeatureMap: 5b1a124ed21e4c8f
+  - {fileID: 6520478747272708535}
+  m_RendererFeatureMap: b781aca8df647d5a
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -56,7 +42,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -71,3 +57,31 @@ MonoBehaviour:
   m_ClusteredRendering: 0
   m_TileSize: 32
   m_IntermediateTextureMode: 0
+--- !u!114 &6520478747272708535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7097e39018d0d44da5620bb5f229e05, type: 3}
+  m_Name: FakeLightingFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  _fakeLightTextureName: _OutlineBluredTexture
+  FakeLightPassEvent: 350
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 67108864
+  MixLighting: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
+  settings:
+    renderPassEvent: 300
+    blitMaterial: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
+    blitMaterialPassIndex: -1
+    sourceType: 0
+    destinationType: 0
+    sourceTextureId: _SourceTexture
+    destinationTextureId: _DestinationTexture
+  FillLightColor: {r: 0, g: 0, b: 0, a: 0}

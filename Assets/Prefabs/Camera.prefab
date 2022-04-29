@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5907037195787404556}
   - component: {fileID: 5927170466070297893}
   - component: {fileID: 5927170466070297881}
-  - component: {fileID: 1760168724484440048}
   - component: {fileID: 7347915290342123324}
   m_Layer: 0
   m_Name: Camera
@@ -69,7 +68,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8405047
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -103,7 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Owner: {fileID: 0}
   Target: {fileID: 0}
-  FakeLightingEffect: {fileID: 1760168724484440048}
+  FakeLight: {fileID: 6520478747272708535, guid: 671abbb7197a4424ea34e4337d107f64,
+    type: 2}
 --- !u!114 &5927170466070297893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,19 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8a16da74b46f664ba79fa076383c7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1760168724484440048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5927170466070297894}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a569072d0f9c9fc44ba39edaedac17b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectMaterial: {fileID: 2100000, guid: 5c199dd001671a94897fd71bc1c96213, type: 2}
 --- !u!114 &7347915290342123324
 MonoBehaviour:
   m_ObjectHideFlags: 0

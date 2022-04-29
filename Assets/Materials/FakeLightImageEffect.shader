@@ -2,59 +2,82 @@
 
 Shader "FakeLightImageEffect"
 {
-	Properties
-	{
-		_MainTex("Source", 2D) = "white" {}
-		_LightingTex("Lighting", 2D) = "white" {}
-	}
-	
-	SubShader
-	{
-		Cull Off
-		ZWrite Off
-		ZTest Always
-	
-		Pass
-		{
-			CGPROGRAM
-			#pragma vertex vertexShader
-			#pragma fragment fragmentShader
-			
-			#include "UnityCG.cginc"
-			
-			struct vertexInput
-			{
-				float4 vertex : POSITION;
-				float2 texcoord : TEXCOORD0;
-			};
-			
-			struct vertexOutput
-			{
-				float2 texcoord : TEXCOORD0;
-				float4 position : SV_POSITION;
-			};
-			
-			vertexOutput vertexShader(vertexInput i)
-			{
-				vertexOutput o;
-				o.position = UnityObjectToClipPos(i.vertex);
-				o.texcoord = i.texcoord;
-				return o;
-			}
-			
-			sampler2D _MainTex;
-			sampler2D _LightingTex;
+    Properties
+    {
+        _MainTex("Base (RGB)", 2D) = "white" {}
+        _Color("Glow Color", Color) = (1, 1, 1, 1)
+        _Intensity("Intensity", Float) = 2
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 0
+    }
 
-			
-			float4 fragmentShader(vertexOutput i) : COLOR
-			{
-				float4 srcColor = tex2D(_MainTex, i.texcoord);
-				float4 lightingColor = tex2D(_LightingTex, i.texcoord);
+        SubShader
+    {
+        HLSLINCLUDE
 
-				return srcColor * lightingColor;
-			}
-			ENDCG
-		}
-	}
-	Fallback Off
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+        struct Attributes
+        {
+            float4 positionOS   : POSITION;
+            float2 uv           : TEXCOORD0;
+        };
+
+
+        struct Varyings
+        {
+            float2 uv        : TEXCOORD0;
+            float4 vertex : SV_POSITION;
+            UNITY_VERTEX_OUTPUT_STEREO
+        };
+
+        TEXTURE2D_X(_MainTex);
+        SAMPLER(sampler_MainTex);
+
+        TEXTURE2D_X(_OutlineBluredTexture);
+        SAMPLER(sampler_OutlineBluredTexture);
+
+        half4 _Color;
+        half _Intensity;
+
+        Varyings Vertex(Attributes input)
+        {
+            Varyings output = (Varyings)0;
+            UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+
+            VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
+            output.vertex = vertexInput.positionCS;
+            output.uv = input.uv;
+
+            return output;
+        }
+
+        half4 Fragment(Varyings input) : SV_Target
+        {
+            float2 uv = UnityStereoTransformScreenSpaceTex(input.uv);
+            half4 prepassColor = SAMPLE_TEXTURE2D_X(_MainTex, sampler_MainTex, uv);
+            half4 bluredColor = SAMPLE_TEXTURE2D_X(_OutlineBluredTexture, sampler_OutlineBluredTexture,uv);
+           // half4 difColor = max(0, bluredColor - prepassColor);
+            half4 color = prepassColor * bluredColor * 2;
+            color.a = 1;
+            return color;
+        }
+
+        ENDHLSL
+
+        Pass
+        {
+            Blend[_SrcBlend][_DstBlend]
+            ZTest Always    // всегда рисуем, независимо от текущей глубины в буфере
+            ZWrite Off      // и ничего в него не пишем
+            Cull Off        // рисуем все стороны меша
+
+            HLSLPROGRAM
+
+            #pragma vertex Vertex
+            #pragma fragment Fragment        
+
+            ENDHLSL
+        }
+    }
 }
