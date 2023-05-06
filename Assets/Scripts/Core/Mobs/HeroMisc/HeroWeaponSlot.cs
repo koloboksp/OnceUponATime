@@ -4,10 +4,11 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class HeroWeaponSlot
     {
+        private InventoryItem _inventoryItem;
+
         public readonly WeaponItemPlacement Placement;
         public readonly Transform Anchor;
-        private InventoryItem mInventoryItem;
-
+        
         public HeroWeaponSlot()
         {
            
@@ -18,18 +19,18 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             Anchor = anchor;
         }
 
-        public InventoryItem InventoryItem => mInventoryItem;
+        public InventoryItem InventoryItem => _inventoryItem;
 
         public void ChangeItem(InventoryItem item)
         {
-            if(mInventoryItem != null)
-                mInventoryItem.ItemInstance.DestroyEquipmentViewPart();
+            if(_inventoryItem != null)
+                _inventoryItem.ItemInstance.DestroyEquipmentViewPart();
 
-            mInventoryItem = item;
+            _inventoryItem = item;
 
-            if (mInventoryItem != null)
+            if (_inventoryItem != null)
             {
-                mInventoryItem.ItemInstance.CreateEquipmentViewPart(Anchor);
+                _inventoryItem.ItemInstance.CreateEquipmentViewPart(Anchor);
             }
         }
     }

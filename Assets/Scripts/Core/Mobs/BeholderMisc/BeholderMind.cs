@@ -1,62 +1,62 @@
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.BeholderMisc
 {
     public class BeholderMind : MonoBehaviour
     {
-        public Beholder Owner;
-        public HeroDetectionTrigger FrontAttackTrigger;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Beholder _owner;
+        [FormerlySerializedAs("FrontAttackTrigger")] [SerializeField] private HeroDetectionTrigger _frontAttackTrigger;
 
-        public float MaxRemovalDistance = 5.0f;
+        [FormerlySerializedAs("MaxRemovalDistance")] [SerializeField] private float _maxRemovalDistance = 5.0f;
 
-        public float WaitTimeAfterTakeDamage = 1.0f;
+        [FormerlySerializedAs("WaitTimeAfterTakeDamage")] [SerializeField] private float _waitTimeAfterTakeDamage = 1.0f;
 
-        public float AttackSpeed = 0.545f;
-        public float AttackDamage = 1f;
-        public float AttackForce = 2f;
-        public float AttackWaitingPart = 0.3f;
+        [FormerlySerializedAs("AttackSpeed")] [SerializeField] private float _attackSpeed = 0.545f;
+        [FormerlySerializedAs("AttackDamage")] [SerializeField] private float _attackDamage = 1f;
+        [FormerlySerializedAs("AttackForce")] [SerializeField] private float _attackForce = 2f;
+        [FormerlySerializedAs("AttackWaitingPart")] [SerializeField] private float _attackWaitingPart = 0.3f;
 
-        public float AttackVerticalRangePadding = -0.3f;
-        public float AttackHorizontalRange = 5.0f;
+        [FormerlySerializedAs("AttackVerticalRangePadding")] [SerializeField] private float _attackVerticalRangePadding = -0.3f;
+        [FormerlySerializedAs("AttackHorizontalRange")] [SerializeField] private float _attackHorizontalRange = 5.0f;
 
-        public Vector2 AttackDamageInterval = new Vector2(0, 1);
+        [FormerlySerializedAs("AttackDamageInterval")] [SerializeField] private Vector2 _attackDamageInterval = new Vector2(0, 1);
 
-        public float RotationSpeed = 1.0f;
+        [FormerlySerializedAs("RotationSpeed")] [SerializeField] private float _rotationSpeed = 1.0f;
 
-        private bool mFirstLanding;
-        private float mTraveledDistance;
+        private bool _firstLanding;
+        private float _traveledDistance;
 
-        private Operation mTakeDamageOperation = new Operation();
-        private Operation mDealDamageOnContactOperation = new Operation();
+        private readonly Operation _takeDamageOperation = new Operation();
+        private readonly Operation _dealDamageOnContactOperation = new Operation();
 
 
         private void Start()
         {
-            Owner.OnLanded += Owner_OnOnLanded;
-            Owner.OnTakeDamage += Owner_OnTakeDamage;
-            Owner.OnDealDamageOnContact += Owner_OnDealDamageOnContact;
+            _owner.OnLanded += Owner_OnOnLanded;
+            _owner.OnTakeDamage += Owner_OnTakeDamage;
+            _owner.OnDealDamageOnContact += Owner_OnDealDamageOnContact;
         }
 
         private void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
         {
-            mTakeDamageOperation.Execute(WaitTimeAfterTakeDamage);
+            _takeDamageOperation.Execute(_waitTimeAfterTakeDamage);
 
-            Owner.StopMove();
-            mDealDamageOnContactOperation.Abort();
+            _owner.StopMove();
+            _dealDamageOnContactOperation.Abort();
         }
-
-
+        
         private void Owner_OnOnLanded(GroundMovementCharacter obj)
         {
-            mFirstLanding = true;
+            _firstLanding = true;
         }
 
         private void Owner_OnDealDamageOnContact()
         {
-            mDealDamageOnContactOperation.Execute(1.0f);
+            _dealDamageOnContactOperation.Execute(1.0f);
 
-            Owner.StopMove();
+            _owner.StopMove();
         }
 
         private void Update()
@@ -64,88 +64,85 @@ namespace Assets.Scripts.Core.Mobs.BeholderMisc
             DetermineCurrentAction();
 
 
-            if (Owner.IsMoving && !mTakeDamageOperation.InProcess)
+            if (_owner.IsMoving && !_takeDamageOperation.InProcess)
             {
-                mTraveledDistance += Owner.BodyRelativeVelocity.magnitude * Time.deltaTime;
+                _traveledDistance += _owner.BodyRelativeVelocity.magnitude * Time.deltaTime;
             }
 
-            mTakeDamageOperation.Process(Time.deltaTime);
-            mDealDamageOnContactOperation.Process(Time.deltaTime);
+            _takeDamageOperation.Process(Time.deltaTime);
+            _dealDamageOnContactOperation.Process(Time.deltaTime);
         }
 
         private void DetermineCurrentAction()
         {
-            if (!Owner.IsAlive)
+            if (!_owner.IsAlive)
                 return;
 
-            if (!mFirstLanding)
+            if (!_firstLanding)
                 return;
 
-            if (mTakeDamageOperation.InProcess)
+            if (_takeDamageOperation.InProcess)
             {
                 return;
             }
 
-            if (mDealDamageOnContactOperation.InProcess)
+            if (_dealDamageOnContactOperation.InProcess)
             {
                 return;
             }
 
-            if (Owner.AttackOperation.InProcess)
+            if (_owner.AttackOperation.InProcess)
             {
                 return;
             }
 
-            if (Owner.IsBreaking)
+            if (_owner.IsBreaking)
                 return;
-            if (Owner.SmoothRotationOperation.InProcess)
+            if (_owner.SmoothRotationOperation.InProcess)
                 return;
-
             
             {
-                if (FrontAttackTrigger.EnemiesCount > 0)
+                if (_frontAttackTrigger.EnemiesCount > 0)
                 {
-                    if (Owner.IsMoving)
+                    if (_owner.IsMoving)
                     {
-                        Owner.StopMove(Owner.WalkSpeed * Owner.WalkSpeed * 0.5f / 0.5f);
+                        _owner.StopMove(_owner.WalkSpeed * _owner.WalkSpeed * 0.5f / 0.5f);
 
                     }
                     else
                     {
-                        Owner.Attack(AttackSpeed, AttackWaitingPart, AttackDamageInterval,
-                            DamageType.Cut, AttackDamage, AttackForce, AttackHorizontalRange, AttackVerticalRangePadding);
+                        _owner.Attack(_attackSpeed, _attackWaitingPart, _attackDamageInterval,
+                            DamageType.Cut, _attackDamage, _attackForce, _attackHorizontalRange, _attackVerticalRangePadding);
+                    }
+
+                    return;
+                }
+            }
+            
+            {
+                if (_owner.CantMove || _traveledDistance >= _maxRemovalDistance)
+                {
+                    if (_owner.IsMoving)
+                    {
+                        _owner.StopMove(_owner.WalkSpeed * _owner.WalkSpeed * 0.5f / 0.5f * 0.5f);
+                    }
+                    else
+                    {
+                        _owner.ChangeDirectionSmooth(
+                            _owner.Direction == Direction.Left ? Direction.Right : Direction.Left,
+                            _owner.Direction == Direction.Left ? RotationDirection.Clockwise : RotationDirection.AntiClockwise,
+                            1.0f / _rotationSpeed,
+                            _owner.SmoothRotationRoot);
+
+                        _traveledDistance = 0.0f;
                     }
 
                     return;
                 }
             }
 
-            
-            {
-                if (Owner.CantMove || mTraveledDistance >= MaxRemovalDistance)
-                {
-                    if (Owner.IsMoving)
-                    {
-                        Owner.StopMove(Owner.WalkSpeed * Owner.WalkSpeed * 0.5f / 0.5f * 0.5f);
-                    }
-                    else
-                    {
-                        Owner.ChangeDirectionSmooth(
-                            Owner.Direction == Direction.Left ? Direction.Right : Direction.Left,
-                            Owner.Direction == Direction.Left ? RotationDirection.Clockwise : RotationDirection.AntiClockwise,
-                            1.0f / RotationSpeed,
-                            Owner.SmoothRotationRoot);
-
-                        mTraveledDistance = 0.0f;
-                    }
-
-                    return;
-                }
-            }
-
-            Owner.SetMovingSpeed(Owner.WalkSpeed);
-            Owner.Move();
+            _owner.SetMovingSpeed(_owner.WalkSpeed);
+            _owner.Move();
         }
-
     }
 }

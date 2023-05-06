@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Core.Mobs.DiggerMisc;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
@@ -13,35 +14,40 @@ namespace Assets.Scripts.Core.Mobs
         public event Action<Character> OnLifeLevelChanged;
         public event Action<Character> OnBeforeDestroy;
 
-        public Rect Bounds = Rect.zero;
+        [FormerlySerializedAs("Bounds")] [SerializeField] private Rect _bounds = Rect.zero;
 
-        public float Lives = 1;
-        public float MaxLives = 1;
+        [FormerlySerializedAs("Lives")] [SerializeField] private float _lives = 1;
+        [FormerlySerializedAs("MaxLives")] [SerializeField] private float _maxLives = 1;
 
-        public float DeathTime = 1;
+        [FormerlySerializedAs("DeathTime")] [SerializeField] private float _deathTime = 1;
 
-        private readonly Operation mDeathOperation = new Operation();
+        private readonly Operation _deathOperation = new Operation();
 
-        public Operation DeathOperation => mDeathOperation;
+        public Rect Bounds => _bounds;
+        public float Lives => _lives;
+        public float MaxLives => _maxLives;
+        public float DeathTime => _deathTime;
+        public Operation DeathOperation => _deathOperation;
+        
         public virtual void TakeDamage(object sender, DamageInfo damageInfo)
         {
-            float previousLives = Lives;
+            float previousLives = _lives;
 
-            Lives -= damageInfo.Attack;
-            Lives = Mathf.Clamp(Lives, 0, MaxLives);
+            _lives -= damageInfo.Attack;
+            _lives = Mathf.Clamp(_lives, 0, _maxLives);
 
             if (OnTakeDamage != null)
                 OnTakeDamage(this, damageInfo);
 
-            if (previousLives != Lives)
+            if (previousLives != _lives)
             {
                 if (OnLifeLevelChanged != null)
                     OnLifeLevelChanged(this);
             }
 
-            if (Lives <= 0)
+            if (_lives <= 0)
             {
-                if (!mDeathOperation.InProcess)
+                if (!_deathOperation.InProcess)
                 {
                     if (OnBeforeDestroy != null)
                         OnBeforeDestroy(this);
@@ -51,34 +57,39 @@ namespace Assets.Scripts.Core.Mobs
             }
         }
 
+        public virtual void SetLives(float lives)
+        {
+            _lives = lives;
+        }
+        
         public virtual void Treat(object sender, TreatmentInfo treatmentInfo)
         {
-            Lives += Mathf.Min(treatmentInfo.Power, MaxLives - Lives);
-            Lives = Mathf.Clamp(Lives, 0, MaxLives);
+            _lives += Mathf.Min(treatmentInfo.Power, _maxLives - _lives);
+            _lives = Mathf.Clamp(_lives, 0, _maxLives);
 
             if (OnLifeLevelChanged != null)
                 OnLifeLevelChanged(this);
 
-            if (Lives > 0)
+            if (_lives > 0)
             {
-                if(mDeathOperation.InProcess)
-                    mDeathOperation.Abort();
+                if(_deathOperation.InProcess)
+                    _deathOperation.Abort();
             }
         }
 
         protected virtual void Destroy()
         {
-            mDeathOperation.Execute(DeathTime);
-            mDeathOperation.OnComplete = DeathOperation_OnComplete;
+            _deathOperation.Execute(_deathTime);
+            _deathOperation.OnComplete = DeathOperation_OnComplete;
 
             StartCoroutine(WaitForDeath());
         }
 
         private IEnumerator WaitForDeath()
         {
-            while (mDeathOperation.InProcess)
+            while (_deathOperation.InProcess)
             {
-                mDeathOperation.Process(Time.deltaTime);
+                _deathOperation.Process(Time.deltaTime);
                 yield return null;
             }
         }
@@ -90,7 +101,7 @@ namespace Assets.Scripts.Core.Mobs
 
         public bool IsAlive
         {
-            get { return Lives > 0; }
+            get { return _lives > 0; }
         }
 
         public virtual void IgnoreCollisions(Collider2D target, bool ignore)
@@ -100,10 +111,10 @@ namespace Assets.Scripts.Core.Mobs
 
         protected virtual void OnDrawGizmosSelected()
         {
-            var rtC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(0.5f, 0.5f));
-            var rbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(0.5f, -0.5f));
-            var lbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(-0.5f, -0.5f));
-            var tbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(-0.5f, 0.5f));
+            var rtC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(0.5f, 0.5f));
+            var rbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(0.5f, -0.5f));
+            var lbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(-0.5f, -0.5f));
+            var tbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(-0.5f, 0.5f));
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(rtC, rbC);

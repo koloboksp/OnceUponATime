@@ -6,11 +6,11 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class SimpleMeleeAttackOperation : AttackOperation
     {
-        protected Character mOwner;
-        private DamageType mDamageType;
+        protected Character _owner;
+        private DamageType _damageType;
 
-        private readonly List<IDamageable> mAlreadyDamagedObjectsAtCycle = new List<IDamageable>();
-        private readonly List<KeyValuePair<IDamageable, Collider2D>> mDamagedObjectsAtCycle = new List<KeyValuePair<IDamageable, Collider2D>>();
+        private readonly List<IDamageable> _alreadyDamagedObjectsAtCycle = new List<IDamageable>();
+        private readonly List<KeyValuePair<IDamageable, Collider2D>> _damagedObjectsAtCycle = new List<KeyValuePair<IDamageable, Collider2D>>();
         private float _attack;
         private float _force;
         protected float _horizontalRange;
@@ -19,8 +19,8 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         public void Execute(Character owner, DamageType damageType, float attack, float force, float hRange, float vRangePadding, 
             Vector2 dealDamageTimeInterval, float attackPartTime, float waitPartTime)
         {         
-            mOwner = owner;
-            mDamageType = damageType;
+            _owner = owner;
+            _damageType = damageType;
             _attack = attack;
             _force = force;
             _horizontalRange = hRange;
@@ -28,32 +28,31 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
             MeleeExecute(dealDamageTimeInterval, attackPartTime, waitPartTime);
         }
-
-
+        
         protected override void MeleeDealDamage()
         {
-            var damageArea = GetDamageArea(mOwner, _horizontalRange, _verticalRangePadding);
+            var damageArea = GetDamageArea(_owner, _horizontalRange, _verticalRangePadding);
 
-            FindObjectsInArea(damageArea, mDamagedObjectsAtCycle);
+            FindObjectsInArea(damageArea, _damagedObjectsAtCycle);
 
-            for (var dpIndex = 0; dpIndex < mDamagedObjectsAtCycle.Count; dpIndex++)
+            for (var dpIndex = 0; dpIndex < _damagedObjectsAtCycle.Count; dpIndex++)
             {
-                var damagedPair = mDamagedObjectsAtCycle[dpIndex];
-                if (!ReferenceEquals(damagedPair.Key, mOwner) &&
-                    !mAlreadyDamagedObjectsAtCycle.Contains(damagedPair.Key))
+                var damagedPair = _damagedObjectsAtCycle[dpIndex];
+                if (!ReferenceEquals(damagedPair.Key, _owner) &&
+                    !_alreadyDamagedObjectsAtCycle.Contains(damagedPair.Key))
                 {
-                    mAlreadyDamagedObjectsAtCycle.Add(damagedPair.Key);
+                    _alreadyDamagedObjectsAtCycle.Add(damagedPair.Key);
 
-                    var vecTo = mOwner.transform.position - damagedPair.Value.gameObject.transform.position;
+                    var vecTo = _owner.transform.position - damagedPair.Value.gameObject.transform.position;
                     var dirTo = -vecTo.normalized;
-                    damagedPair.Key.TakeDamage(mOwner, new DamageInfo(mDamageType, _attack, mOwner.transform.position, _force, dirTo));
+                    damagedPair.Key.TakeDamage(_owner, new DamageInfo(_damageType, _attack, _owner.transform.position, _force, dirTo));
                 }
             }
         }
 
         protected override void EndMeleeDealDamage()
         {     
-            mAlreadyDamagedObjectsAtCycle.Clear();
+            _alreadyDamagedObjectsAtCycle.Clear();
         }
     }
 }

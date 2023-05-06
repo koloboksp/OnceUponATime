@@ -1,23 +1,25 @@
 using Assets.Scripts.Core.Items;
 using Assets.Scripts.Effects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class Bush : MonoBehaviour, IDamageable
     {
-        public ShakeEffect InteractionEffect;
-        public Collider2D BodyCollider;
+        [FormerlySerializedAs("InteractionEffect")] [SerializeField] private ShakeEffect _interactionEffect;
+        [FormerlySerializedAs("BodyCollider")] [SerializeField] private Collider2D _bodyCollider;
 
-        public DropDownItemsLevel DropDownItemsLevel;
+        [FormerlySerializedAs("DropDownItemsLevel")] [SerializeField] private DropDownItemsLevel _dropDownItemsLevel;
 
         private void OnTriggerEnter2D(Collider2D collider2d)
         {
-            InteractionEffect.enabled = true;
+            _interactionEffect.enabled = true;
         }
+        
         public virtual void TakeDamage(object sender, DamageInfo damageInfo)
         {
-            DropDownItemsManager.Instance.GenerateItem(DropDownItemsLevel, transform.position);
+            DropDownItemsManager.Instance.GenerateItem(_dropDownItemsLevel, transform.position);
 
             Destroy(this.gameObject);  
         }

@@ -4,16 +4,6 @@ namespace Assets.Scripts.Core.Mobs
 {
     public class Fly : MonoBehaviour
     {
-        private enum State
-        {
-            Move,
-            Attack,
-            TakeDamage,
-            WaitBeforeDie,
-            Die,
-        }
-
-
         private Vector3 mCenterPoint;
 
         private float mSpeed = 2.0f;
@@ -185,6 +175,15 @@ namespace Assets.Scripts.Core.Mobs
             var vecToForce = transform.localPosition - localForcePoint;
             var dirToForce = vecToForce.normalized;
             mDestination += dirToForce * distanceToTravel; 
+        }
+        
+        private enum State
+        {
+            Move,
+            Attack,
+            TakeDamage,
+            WaitBeforeDie,
+            Die,
         }
     }
 }

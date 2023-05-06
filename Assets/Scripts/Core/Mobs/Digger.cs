@@ -3,6 +3,7 @@ using System.Collections;
 using Assets.Scripts.Core.Mobs.DiggerMisc;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
@@ -10,18 +11,20 @@ namespace Assets.Scripts.Core.Mobs
     {
         public event Action<Digger> OnAttackStateChanged;
         
-        public Transform OrientedByGroundRoot;
-        private readonly RotationInterpolator mOrientedByGroundRootInterpolator = new RotationInterpolator();
-        public Transform SmoothRotationRoot;
-
-        private readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();    
-        public AttackOperation AttackOperation => mAttackOperation;
+        private readonly RotationInterpolator _orientedByGroundRootInterpolator = new RotationInterpolator();
+        private readonly SimpleMeleeAttackOperation _attackOperation = new SimpleMeleeAttackOperation();   
+        
+        [FormerlySerializedAs("OrientedByGroundRoot")] [SerializeField] private Transform _orientedByGroundRoot;
+        [FormerlySerializedAs("SmoothRotationRoot")] [SerializeField] private Transform _smoothRotationRoot;
+        
+        public AttackOperation AttackOperation => _attackOperation;
+        public Transform SmoothRotationRoot => _smoothRotationRoot;
 
         private void Update()
         {
             base.InnerUpdate();
 
-            mAttackOperation.Process(Time.deltaTime);
+            _attackOperation.Process(Time.deltaTime);
         }
 
         internal void Attack(float speed, float waitPart, Vector2 dealDamageInterval, DamageType damageType, float attack, float force, float hRange, float vRangePadding)
@@ -29,12 +32,12 @@ namespace Assets.Scripts.Core.Mobs
             var attackTime = 1.0f / speed;
             var waitPartTime = attackTime * waitPart;
 
-            mAttackOperation.Execute(this, damageType, attack, force, hRange, vRangePadding, dealDamageInterval * (attackTime - waitPartTime),
+            _attackOperation.Execute(this, damageType, attack, force, hRange, vRangePadding, dealDamageInterval * (attackTime - waitPartTime),
                 attackTime - waitPartTime, waitPartTime);
 
-            mAttackOperation.OnInWaitPart = Attack_InWaitPart;
-            mAttackOperation.OnComplete = Attack_OnComplete;
-            mAttackOperation.OnAbort = Attack_Abort;
+            _attackOperation.OnInWaitPart = Attack_InWaitPart;
+            _attackOperation.OnComplete = Attack_OnComplete;
+            _attackOperation.OnAbort = Attack_Abort;
 
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);

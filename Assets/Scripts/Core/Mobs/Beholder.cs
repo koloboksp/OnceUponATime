@@ -1,26 +1,27 @@
 using System;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class Beholder : GroundMob
     {
-        
         public event Action<Beholder> OnAttackStateChanged;
 
-        public Transform SmoothRotationRoot;
-
         private readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();
+        
+        [FormerlySerializedAs("SmoothRotationRoot")] [SerializeField] private Transform _smoothRotationRoot;
+        
         public AttackOperation AttackOperation => mAttackOperation;
+        public Transform SmoothRotationRoot => _smoothRotationRoot;
 
         internal override void ChangeDirectionSmooth(Direction direction, RotationDirection rotationDirection, float time, Transform rotationRoot)
         {
             base.ChangeDirectionSmooth(direction, rotationDirection, time, rotationRoot);
       
         }
-
-
+        
         private void Update()
         {
             base.InnerUpdate();
@@ -61,7 +62,5 @@ namespace Assets.Scripts.Core.Mobs
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);
         }
-
-        
     }
 }

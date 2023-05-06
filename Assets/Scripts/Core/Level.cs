@@ -72,7 +72,7 @@ namespace Assets.Scripts.Core
                 heroInstance.Translate(enterToLevel.ExitPoint);
                 checkPointPosition = enterToLevel.EnterPoint;
 
-                heroInstance.Lives = lastInfoUserData.HeroLives;
+                heroInstance.SetLives(lastInfoUserData.HeroLives);
                 heroInstance.ClearInventory();
                 foreach (var item in lastInfoUserData.HeroInventoryItems)
                     heroInstance.AddNewItemInInventory(item);

@@ -1,181 +1,176 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class UserControllerLogic : MonoBehaviour
     {
-        private bool mNeedToBreak = false;
+        private bool _needToBreak = false;
+        private readonly InputDetectionHelper _jumpInputHelper = new InputDetectionHelper();
+        private readonly InputDetectionHelper _attackInputHelper = new InputDetectionHelper();
 
-        public HeroMind Mind;
+        [FormerlySerializedAs("Mind")] [SerializeField] private HeroMind _mind;
 
-        public bool DebugMoveLeft = false;
-        public bool DebugMoveRight = false;
-        public bool DebugAttack = false;
-
-        private readonly InputDetectionHelper mJumpInputHelper = new InputDetectionHelper();
-        private readonly InputDetectionHelper mAttackInputHelper = new InputDetectionHelper();
+        [FormerlySerializedAs("DebugMoveLeft")] [SerializeField] private bool _debugMoveLeft = false;
+        [FormerlySerializedAs("DebugMoveRight")] [SerializeField] private bool _debugMoveRight = false;
+        [FormerlySerializedAs("DebugAttack")] [SerializeField] private bool _debugAttack = false;
+        private bool _readAttackValue;
+        private bool _prepareComplete;
 
         private void Start()
         {
-            mAttackInputHelper.Threshold = 0.4f;
+            _attackInputHelper.Threshold = 0.4f;
 
             InputManager.OnInputActionStarted += InputManager_OnInputActionStarted;
             InputManager.OnInputActionEnded += InputManager_OnOnInputActionEnded;
         }
-
-
+        
         private void InputManager_OnInputActionStarted(InputAction action, InputAction previousAction)
         {
             if (InputManager.HasAction(action, InputAction.Jump))
             {
-                mJumpInputHelper.Activate();
+                _jumpInputHelper.Activate();
             }
 
             if (InputManager.HasAction(action, InputAction.ActionType1))
             {
-                mAttackInputHelper.Activate();
-                mReadAttackValue = true;
-                mPrepareComplete = false;
+                _attackInputHelper.Activate();
+                _readAttackValue = true;
+                _prepareComplete = false;
             }
         }
-
-
+        
         private void InputManager_OnOnInputActionEnded(InputAction endedActions, InputAction previousAction)
         {
-            if (mReadAttackValue)
+            if (_readAttackValue)
             {
                 if (InputManager.HasAction(endedActions, InputAction.ActionType1))
                 {
-                    mReadAttackValue = false;
-                    mPrepareComplete = true;
+                    _readAttackValue = false;
+                    _prepareComplete = true;
 
                 }
             }
         }
-
-        private bool mReadAttackValue;
-        private bool mPrepareComplete;
-
+        
         public void Update()
         {
            
-            if (mJumpInputHelper.Active)
+            if (_jumpInputHelper.Active)
             {
-                if (Mind.CanJump())
+                if (_mind.CanJump())
                 {
-                    mJumpInputHelper.Deactivate();
-                    Mind.Jump();
+                    _jumpInputHelper.Deactivate();
+                    _mind.Jump();
                 }
             }
 
-            if (DebugAttack)
-                mAttackInputHelper.Activate();
+            if (_debugAttack)
+                _attackInputHelper.Activate();
 
-            if (mAttackInputHelper.Active)
+            if (_attackInputHelper.Active)
             {
-                if (Mind.CanAttack(HeroAttackType.MainWeapon))
+                if (_mind.CanAttack(HeroAttackType.MainWeapon))
                 {
-                    mAttackInputHelper.Deactivate();
-                    Mind.AttackRequest(HeroAttackType.MainWeapon, InputManager.GetActionValue(InputAction.ActionType1));
+                    _attackInputHelper.Deactivate();
+                    _mind.AttackRequest(HeroAttackType.MainWeapon, InputManager.GetActionValue(InputAction.ActionType1));
                 }             
             }
 
-            if (!mAttackInputHelper.Active && mReadAttackValue)
+            if (!_attackInputHelper.Active && _readAttackValue)
             {
                 //if (Mind.CanAttack(HeroAttackType.MainWeapon))
-                    Mind.SetAttackValue(HeroAttackType.MainWeapon, InputManager.GetActionValue(InputAction.ActionType1));
+                    _mind.SetAttackValue(HeroAttackType.MainWeapon, InputManager.GetActionValue(InputAction.ActionType1));
             }
 
-            if (mPrepareComplete)
+            if (_prepareComplete)
             {
-                if (Mind.Owner.PrepareToAttackOperation.InProcess)
-                    if (Mind.Owner.PrepareToAttackOperation.MinimalTimePassed)
+                if (_mind.Owner.PrepareToAttackOperation.InProcess && _mind.Owner.PrepareToAttackOperation.MinimalTimePassed)
                 {
-                    mPrepareComplete = false;
+                    _prepareComplete = false;
                  
-                        Mind.AttackPrepareCompleteRequest(HeroAttackType.MainWeapon,
-                            InputManager.GetActionValue(InputAction.ActionType1));
+                    _mind.AttackPrepareCompleteRequest(HeroAttackType.MainWeapon,
+                        InputManager.GetActionValue(InputAction.ActionType1));
                 }
             }
 
             bool moveLeft = false;
             bool moveRight = false;
 
-            if (InputManager.HasAction(InputManager.Actions, InputAction.MoveLeft) || DebugMoveLeft)
+            if (InputManager.HasAction(InputManager.Actions, InputAction.MoveLeft) || _debugMoveLeft)
                 moveLeft = true;  
 
-            if (InputManager.HasAction(InputManager.Actions, InputAction.MoveRight) || DebugMoveRight)
+            if (InputManager.HasAction(InputManager.Actions, InputAction.MoveRight) || _debugMoveRight)
                 moveRight = true;
 
             bool notMove = true;
             if (moveLeft || moveRight)
             {
-                if (Mind.CanMove())
+                if (_mind.CanMove())
                 {
-                    if (Mind.CanChangeDirection())
+                    if (_mind.CanChangeDirection())
                     {
                         if (moveLeft)
-                            Mind.InstantChangeDirection(Direction.Left);
+                            _mind.InstantChangeDirection(Direction.Left);
                         if (moveRight)
-                            Mind.InstantChangeDirection(Direction.Right);
+                            _mind.InstantChangeDirection(Direction.Right);
 
-                        Mind.Move(MovingDirection.Forward, Mind.Owner.RunSpeed);
+                        _mind.Move(MovingDirection.Forward, _mind.Owner.RunSpeed);
                     }
                     else
                     {
-                        if (Mind.Owner.Direction == Direction.Left)
+                        if (_mind.Owner.Direction == Direction.Left)
                         {
                             if (moveLeft)
-                                Mind.Move(MovingDirection.Forward, Mind.Owner.WalkSpeed);
+                                _mind.Move(MovingDirection.Forward, _mind.Owner.WalkSpeed);
                             if (moveRight)
-                                Mind.Move(MovingDirection.Backward, Mind.Owner.WalkSpeed);
+                                _mind.Move(MovingDirection.Backward, _mind.Owner.WalkSpeed);
                         }
-                        if (Mind.Owner.Direction == Direction.Right)
+                        if (_mind.Owner.Direction == Direction.Right)
                         {
                             if (moveLeft)
-                                Mind.Move(MovingDirection.Backward, Mind.Owner.WalkSpeed);
+                                _mind.Move(MovingDirection.Backward, _mind.Owner.WalkSpeed);
                             if (moveRight)
-                                Mind.Move(MovingDirection.Forward, Mind.Owner.WalkSpeed);
+                                _mind.Move(MovingDirection.Forward, _mind.Owner.WalkSpeed);
                         }       
                     }
 
                     notMove = false;
-                    mNeedToBreak = true;
+                    _needToBreak = true;
                 }       
             }
           
 
-            if (mNeedToBreak && notMove)
+            if (_needToBreak && notMove)
             {
-                mNeedToBreak = false;
-                Mind.StopMove();
+                _needToBreak = false;
+                _mind.StopMove();
             }
 
-            mJumpInputHelper.Update(Time.deltaTime);
-            mAttackInputHelper.Update(Time.deltaTime);
+            _jumpInputHelper.Update(Time.deltaTime);
+            _attackInputHelper.Update(Time.deltaTime);
         }
     }
 
     public class InputDetectionHelper
     {
-        private float mTimer = 0;
+        private float _timer = 0;
+        private bool _active;
+
         public float Threshold { get; set; } = 0.1f;
 
-        private bool mActive;
-
-        
         public void Activate()
         {
-            mTimer = 0;
-            mActive = true;
+            _timer = 0;
+            _active = true;
         }
 
         public void Update(float dTime)
         {
-            if (mActive)
+            if (_active)
             {
-                mTimer += dTime;
-                if (mTimer > Threshold)
+                _timer += dTime;
+                if (_timer > Threshold)
                 {
                     Deactivate();
                 }
@@ -184,12 +179,12 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         public bool Active
         {
-            get { return mActive; }
+            get { return _active; }
         }
 
         public void Deactivate()
         {
-            mActive = false;
+            _active = false;
         }
     }
 

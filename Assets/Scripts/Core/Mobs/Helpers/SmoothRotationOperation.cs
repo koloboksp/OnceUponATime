@@ -5,21 +5,21 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class SmoothRotationOperation : Operation
     {
-        private Transform mSmoothRotationRoot;
+        private Transform _smoothRotationRoot;
+        
+        private Quaternion _startRotation;
+        private Quaternion _endRotation;
 
         public RotationDirection RotationDirection { get; private set; }
-
-        private Quaternion mStartRotation;
-        private Quaternion mEndRotation;
 
         public void Execute(float time, RotationDirection rotationDirection, Transform smoothRotationRoot)
         {         
             RotationDirection = rotationDirection;
-            mSmoothRotationRoot = smoothRotationRoot;
+            _smoothRotationRoot = smoothRotationRoot;
 
-            mEndRotation = mSmoothRotationRoot.localRotation;
-            mStartRotation = mEndRotation * Quaternion.Euler(0, Mathf.PI * Mathf.Rad2Deg, 0);
-            mSmoothRotationRoot.localRotation = mStartRotation;
+            _endRotation = _smoothRotationRoot.localRotation;
+            _startRotation = _endRotation * Quaternion.Euler(0, Mathf.PI * Mathf.Rad2Deg, 0);
+            _smoothRotationRoot.localRotation = _startRotation;
 
             base.Execute(time);
         }
@@ -29,12 +29,12 @@ namespace Assets.Scripts.Core.Mobs.Helpers
             base.InnerProcess(dTime);
 
             float rotationDirection = RotationDirection == RotationDirection.Clockwise ? -1.0f : 1.0f;
-            mSmoothRotationRoot.localRotation = mStartRotation* Quaternion.Euler(0, rotationDirection * NormElapsedTime * Mathf.PI * Mathf.Rad2Deg, 0);
+            _smoothRotationRoot.localRotation = _startRotation* Quaternion.Euler(0, rotationDirection * NormElapsedTime * Mathf.PI * Mathf.Rad2Deg, 0);
         }
 
         protected override void InnerComplete()
         {
-            mSmoothRotationRoot.localRotation = mEndRotation;           
+            _smoothRotationRoot.localRotation = _endRotation;           
         }
     }
 }

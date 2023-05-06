@@ -6,45 +6,31 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 { 
     public class AttackOperation : Operation
     {
-        private enum MeleeAttackState
-        {
-            WaitForBegin,
-            Process,
-            End,
-        }
+        private static readonly Collider2D[] NoAllocFoundResults = new Collider2D[10];
+        private static readonly List<IDamageable> NoAllocGetComponent = new List<IDamageable>();
 
-        private enum RangedAttackState
-        {
-            WaitForBegin,
-            WaitForShot,
-            End,          
-        }
+        private Action<AttackOperation> _onInWaitPart;
 
-        private static readonly Collider2D[] mNoAllocFoundResults = new Collider2D[10];
-        private static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
+        private float _preparePartTime;
+        private float _attackPartTime;
+        private float _waitPartTime;
 
-        private Action<AttackOperation> mOnInWaitPart;
+        private WeaponItemUsingType _itemUsingType;
 
-        private float mPreparePartTime;
-        private float mAttackPartTime;
-        private float mWaitPartTime;
+        private Vector2 _meleeDealDamageTimeInterval;
+        private MeleeAttackState _meleeAttackState;
 
-        private WeaponItemUsingType mUsingType;
-
-        private Vector2 mMeleeDealDamageTimeInterval;
-        private MeleeAttackState mMeleeAttackState;
-
-        private float mShotTime;
-        private RangedAttackState mRangedAttackState;
+        private float _shotTime;
+        private RangedAttackState _rangedAttackState;
 
         public bool InAttackPart { get; private set; }
         public bool InWaitingPart { get; private set; }
-        public float WaitPartTime => mWaitPartTime;
-        public float AttackPartTime => mAttackPartTime;
+        public float WaitPartTime => _waitPartTime;
+        public float AttackPartTime => _attackPartTime;
 
         public Action<AttackOperation> OnInWaitPart
         {
-            set => mOnInWaitPart = value;
+            set => _onInWaitPart = value;
         }
 
         
@@ -52,8 +38,8 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             base.Execute(attackPartTime + waitPartTime);
 
-            mAttackPartTime = attackPartTime;
-            mWaitPartTime = waitPartTime;
+            _attackPartTime = attackPartTime;
+            _waitPartTime = waitPartTime;
 
             InAttackPart = true;
             InWaitingPart = false;
@@ -63,19 +49,19 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             CommonExecute(attackPartTime, waitPartTime);
 
-            mUsingType = WeaponItemUsingType.Melee;
+            _itemUsingType = WeaponItemUsingType.Melee;
 
-            mMeleeDealDamageTimeInterval = dealDamageTimeInterval;
-            mMeleeAttackState = MeleeAttackState.WaitForBegin;
+            _meleeDealDamageTimeInterval = dealDamageTimeInterval;
+            _meleeAttackState = MeleeAttackState.WaitForBegin;
         }
         protected void RangedExecute(float shotTime, float attackPartTime, float waitPartTime)
         {
             CommonExecute(attackPartTime, waitPartTime);
 
-            mUsingType = WeaponItemUsingType.Ranged;
+            _itemUsingType = WeaponItemUsingType.Ranged;
 
-            mShotTime = shotTime;
-            mRangedAttackState = RangedAttackState.WaitForBegin;
+            _shotTime = shotTime;
+            _rangedAttackState = RangedAttackState.WaitForBegin;
         }
 
         public override void Abort()
@@ -90,40 +76,40 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             base.InnerProcess(dTime);
 
-            if (mUsingType == WeaponItemUsingType.Melee)
+            if (_itemUsingType == WeaponItemUsingType.Melee)
             {
-                if (mMeleeAttackState == MeleeAttackState.WaitForBegin)
+                if (_meleeAttackState == MeleeAttackState.WaitForBegin)
                 {
-                    if (mMeleeDealDamageTimeInterval.x <= Timer)
+                    if (_meleeDealDamageTimeInterval.x <= Timer)
                     {
-                        mMeleeAttackState = MeleeAttackState.Process;
+                        _meleeAttackState = MeleeAttackState.Process;
                         BeginMeleeDealDamage();
                     }
                 }
 
-                if (mMeleeAttackState == MeleeAttackState.Process)
+                if (_meleeAttackState == MeleeAttackState.Process)
                 {
                     MeleeDealDamage();
-                    if (mMeleeDealDamageTimeInterval.y <= Timer)
+                    if (_meleeDealDamageTimeInterval.y <= Timer)
                     {
-                        mMeleeAttackState = MeleeAttackState.End;
+                        _meleeAttackState = MeleeAttackState.End;
                         EndMeleeDealDamage();
                     }
                 }
             }
-            else if(mUsingType == WeaponItemUsingType.Ranged)
+            else if(_itemUsingType == WeaponItemUsingType.Ranged)
             {
-                if (mRangedAttackState == RangedAttackState.WaitForBegin)
+                if (_rangedAttackState == RangedAttackState.WaitForBegin)
                 {
                     BeginRangedAttack();
-                    mRangedAttackState = RangedAttackState.WaitForShot;
+                    _rangedAttackState = RangedAttackState.WaitForShot;
                     
                 }
-                if (mRangedAttackState == RangedAttackState.WaitForShot)
+                if (_rangedAttackState == RangedAttackState.WaitForShot)
                 {
-                    if (Timer >= mShotTime)
+                    if (Timer >= _shotTime)
                     {
-                        mRangedAttackState = RangedAttackState.End;
+                        _rangedAttackState = RangedAttackState.End;
                         RangedShot();
                     }
                 }
@@ -131,16 +117,16 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
             if (!InWaitingPart)
             {
-                if (Timer > Time - mWaitPartTime)
+                if (Timer > Time - _waitPartTime)
                 {
                     InAttackPart = false;
                     InWaitingPart = true;
 
-                    if (mUsingType == WeaponItemUsingType.Ranged)
+                    if (_itemUsingType == WeaponItemUsingType.Ranged)
                         EndRangedAttack();
 
-                    if (mOnInWaitPart != null)
-                        mOnInWaitPart(this);
+                    if (_onInWaitPart != null)
+                        _onInWaitPart(this);
                 }
             }
         }
@@ -173,17 +159,17 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             damaged.Clear();
 
-            var resultCount = Physics2D.OverlapBoxNonAlloc(damageArea.center, damageArea.size, 0, mNoAllocFoundResults);
+            var resultCount = Physics2D.OverlapBoxNonAlloc(damageArea.center, damageArea.size, 0, NoAllocFoundResults);
             DrawBox(damageArea.center, damageArea.size, Color.red);
 
             for (int rIndex = 0; rIndex < resultCount; rIndex++)
             {
-                var fCollider = mNoAllocFoundResults[rIndex];
-                fCollider.gameObject.GetComponents<IDamageable>(mNoAllocGetComponent);
+                var fCollider = NoAllocFoundResults[rIndex];
+                fCollider.gameObject.GetComponents<IDamageable>(NoAllocGetComponent);
 
-                for (var index = 0; index < mNoAllocGetComponent.Count; index++)
+                for (var index = 0; index < NoAllocGetComponent.Count; index++)
                 {
-                    var damageable = mNoAllocGetComponent[index];
+                    var damageable = NoAllocGetComponent[index];
                     damaged.Add(new KeyValuePair<IDamageable, Collider2D>(damageable, fCollider));  
                 }
             }
@@ -196,5 +182,19 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         protected virtual void BeginRangedAttack() { }
         protected virtual void RangedShot() { }
         protected virtual void EndRangedAttack() { }
+        
+        private enum MeleeAttackState
+        {
+            WaitForBegin,
+            Process,
+            End,
+        }
+
+        private enum RangedAttackState
+        {
+            WaitForBegin,
+            WaitForShot,
+            End,          
+        }
     }
 }

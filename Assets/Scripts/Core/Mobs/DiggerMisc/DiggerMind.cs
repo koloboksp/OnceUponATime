@@ -1,59 +1,59 @@
 using System.Collections.Generic;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.DiggerMisc
 {
     public class DiggerMind : MonoBehaviour
     {
-        public Digger Owner;
-        public HeroDetectionTrigger FrontAttackTrigger;
+        private bool _firstLanding;
+        private float _traveledDistance;
+        
+        private readonly Operation _takeDamageOperation = new Operation();
+        private readonly Operation _dealDamageOnContactOperation = new Operation();
 
-        public float MaxRemovalDistance = 5.0f;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Digger _owner;
+        [FormerlySerializedAs("FrontAttackTrigger")] [SerializeField] private HeroDetectionTrigger _frontAttackTrigger;
 
-        public float WaitTimeAfterTakeDamage = 1.0f;
+        [FormerlySerializedAs("MaxRemovalDistance")] [SerializeField] private float _maxRemovalDistance = 5.0f;
 
-        public float AttackSpeed = 0.545f;
-        public float AttackDamage = 1f;
-        public float AttackForce = 2f;
-        public float AttackWaitingPart = 0.3f;
-        public Vector2 AttackDamageInterval = new Vector2(0, 1);
+        [FormerlySerializedAs("WaitTimeAfterTakeDamage")] [SerializeField] private float _waitTimeAfterTakeDamage = 1.0f;
 
-        public float RotationSpeed = 1.0f;
+        [FormerlySerializedAs("AttackSpeed")] [SerializeField] private float _attackSpeed = 0.545f;
+        [FormerlySerializedAs("AttackDamage")] [SerializeField] private float _attackDamage = 1f;
+        [FormerlySerializedAs("AttackForce")] [SerializeField] private float _attackForce = 2f;
+        [FormerlySerializedAs("AttackWaitingPart")] [SerializeField] private float _attackWaitingPart = 0.3f;
+        [FormerlySerializedAs("AttackDamageInterval")] [SerializeField] private Vector2 _attackDamageInterval = new Vector2(0, 1);
 
-        private bool mFirstLanding;
-        private float mTraveledDistance;
-
-        private Operation mTakeDamageOperation = new Operation();
-        private Operation mDealDamageOnContactOperation = new Operation();
-
-
+        [FormerlySerializedAs("RotationSpeed")] [SerializeField] private float _rotationSpeed = 1.0f;
+        
         private void Start()
         {     
-            Owner.OnLanded += Owner_OnOnLanded;    
-            Owner.OnTakeDamage += Owner_OnTakeDamage;
-            Owner.OnDealDamageOnContact += Owner_OnDealDamageOnContact;
+            _owner.OnLanded += Owner_OnOnLanded;    
+            _owner.OnTakeDamage += Owner_OnTakeDamage;
+            _owner.OnDealDamageOnContact += Owner_OnDealDamageOnContact;
         }
 
         private void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
         {
-            mTakeDamageOperation.Execute(WaitTimeAfterTakeDamage);
+            _takeDamageOperation.Execute(_waitTimeAfterTakeDamage);
 
-            Owner.StopMove();
-            mDealDamageOnContactOperation.Abort();
+            _owner.StopMove();
+            _dealDamageOnContactOperation.Abort();
         }
 
 
         private void Owner_OnOnLanded(GroundMovementCharacter obj)
         {
-            mFirstLanding = true;
+            _firstLanding = true;
         }
 
         private void Owner_OnDealDamageOnContact()
         {
-            mDealDamageOnContactOperation.Execute(1.0f);
+            _dealDamageOnContactOperation.Execute(1.0f);
 
-            Owner.StopMove();
+            _owner.StopMove();
         }
 
         private void Update()
@@ -61,57 +61,57 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
             DetermineCurrentAction();
 
 
-            if (Owner.IsMoving && !mTakeDamageOperation.InProcess)
+            if (_owner.IsMoving && !_takeDamageOperation.InProcess)
             {
-                mTraveledDistance += Owner.BodyRelativeVelocity.magnitude * Time.deltaTime;
+                _traveledDistance += _owner.BodyRelativeVelocity.magnitude * Time.deltaTime;
             }
 
-            mTakeDamageOperation.Process(Time.deltaTime);
-            mDealDamageOnContactOperation.Process(Time.deltaTime);
+            _takeDamageOperation.Process(Time.deltaTime);
+            _dealDamageOnContactOperation.Process(Time.deltaTime);
         }
 
         private void DetermineCurrentAction()
         {
-            if (!Owner.IsAlive)
+            if (!_owner.IsAlive)
                 return;
 
-            if (!mFirstLanding)
+            if (!_firstLanding)
                 return;
             
-            if (mTakeDamageOperation.InProcess)
+            if (_takeDamageOperation.InProcess)
             {
                 return;
             }
             
-            if (mDealDamageOnContactOperation.InProcess)
+            if (_dealDamageOnContactOperation.InProcess)
             {
                 return;
             }
 
-            if (Owner.AttackOperation.InProcess)
+            if (_owner.AttackOperation.InProcess)
             {
                 return;
             }
 
-            if(Owner.IsBreaking)
+            if(_owner.IsBreaking)
                 return;
 
-            if (Owner.SmoothRotationOperation.InProcess)
+            if (_owner.SmoothRotationOperation.InProcess)
                 return;
             
 
             {       
-                if (FrontAttackTrigger.EnemiesCount > 0)
+                if (_frontAttackTrigger.EnemiesCount > 0)
                 {
-                    if (Owner.IsMoving)
+                    if (_owner.IsMoving)
                     {
-                        Owner.StopMove();
+                        _owner.StopMove();
                         
                     }
                     else
                     {
-                        Owner.Attack(AttackSpeed, AttackWaitingPart, AttackDamageInterval,
-                            DamageType.Cut, AttackDamage, AttackForce, 1.4f, 0.1f);
+                        _owner.Attack(_attackSpeed, _attackWaitingPart, _attackDamageInterval,
+                            DamageType.Cut, _attackDamage, _attackForce, 1.4f, 0.1f);
                     }
 
                     return;
@@ -120,29 +120,29 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
 
           
             {
-                if (Owner.CantMove || mTraveledDistance >= MaxRemovalDistance)
+                if (_owner.CantMove || _traveledDistance >= _maxRemovalDistance)
                 {
-                    if(Owner.IsMoving)
+                    if(_owner.IsMoving)
                     {
-                        Owner.StopMove(CalculateAcceleration(Owner.WalkSpeed, 0.5f));
+                        _owner.StopMove(CalculateAcceleration(_owner.WalkSpeed, 0.5f));
                     }
                     else
                     { 
-                        Owner.ChangeDirectionSmooth(
-                            Owner.Direction == Direction.Left ? Direction.Right : Direction.Left,
-                            Owner.Direction == Direction.Left ? RotationDirection.Clockwise : RotationDirection.AntiClockwise,
-                            1.0f / RotationSpeed,
-                            Owner.SmoothRotationRoot);
+                        _owner.ChangeDirectionSmooth(
+                            _owner.Direction == Direction.Left ? Direction.Right : Direction.Left,
+                            _owner.Direction == Direction.Left ? RotationDirection.Clockwise : RotationDirection.AntiClockwise,
+                            1.0f / _rotationSpeed,
+                            _owner.SmoothRotationRoot);
 
-                        mTraveledDistance = 0.0f;
+                        _traveledDistance = 0.0f;
                     }
 
                     return;
                 }
             }
 
-            Owner.SetMovingSpeed(Owner.WalkSpeed);
-            Owner.Move(CalculateAcceleration(Owner.WalkSpeed, 0.5f));
+            _owner.SetMovingSpeed(_owner.WalkSpeed);
+            _owner.Move(CalculateAcceleration(_owner.WalkSpeed, 0.5f));
         }
 
         private float CalculateAcceleration(float velocity, float distance)

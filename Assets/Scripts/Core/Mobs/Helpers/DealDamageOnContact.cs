@@ -6,15 +6,15 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class DealDamageOnContact
     {
-        private static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
+        private static readonly List<IDamageable> NoAllocGetComponent = new List<IDamageable>();
 
-        private readonly List<ContactInfo> mContactInfos = new List<ContactInfo>();
+        private readonly List<ContactInfo> _contactInfos = new List<ContactInfo>();
 
-        private Action<ContactInfo> OnDealDamage;
+        private readonly Action<ContactInfo> _onDealDamage;
 
         public DealDamageOnContact(Action<ContactInfo> onDealDamage)
         {
-            OnDealDamage = onDealDamage;
+            _onDealDamage = onDealDamage;
         }
 
         public bool Enable { get; set; } = true;
@@ -24,14 +24,14 @@ namespace Assets.Scripts.Core.Mobs.Helpers
             if(!Enable)
                 return;
             
-            for (var index = mContactInfos.Count - 1; index >= 0; index--)
+            for (var index = _contactInfos.Count - 1; index >= 0; index--)
             {
-                var contactInfo = mContactInfos[index];
+                var contactInfo = _contactInfos[index];
                 if (!contactInfo.HasContacts() && 
                     contactInfo.AtLeastOnceBeenAttacked &&
                     contactInfo.MinimalAttackIntervalPassed)
                 {
-                    mContactInfos.RemoveAt(index);
+                    _contactInfos.RemoveAt(index);
                 }
                 else
                 {
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
                     {
                         contactInfo.Attack();
 
-                        OnDealDamage(contactInfo);
+                        _onDealDamage(contactInfo);
                     }
 
                     contactInfo.UpdateDealDamageState(Time.deltaTime, dealDamageSpeed);
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
             if (!Enable)
                 return;
 
-            collisionInfo.collider.gameObject.GetComponents<IDamageable>(mNoAllocGetComponent);
+            collisionInfo.collider.gameObject.GetComponents<IDamageable>(NoAllocGetComponent);
 
             Vector2 averageNormal = Vector2.zero;
             Vector2 averagePoint = Vector2.zero;
@@ -67,16 +67,16 @@ namespace Assets.Scripts.Core.Mobs.Helpers
             }
 
 
-            for (var index = 0; index < mNoAllocGetComponent.Count; index++)
+            for (var index = 0; index < NoAllocGetComponent.Count; index++)
             {
-                var damageable = mNoAllocGetComponent[index];
+                var damageable = NoAllocGetComponent[index];
                 if (!ReferenceEquals(damageable, ignored))
                 {
-                    var findIndex = mContactInfos.FindIndex(i => i.Target == damageable);
+                    var findIndex = _contactInfos.FindIndex(i => i.Target == damageable);
                     if (findIndex >= 0)
-                        mContactInfos[findIndex].UpdateInfo(collisionInfo.collider, averagePoint, averageNormal);
+                        _contactInfos[findIndex].UpdateInfo(collisionInfo.collider, averagePoint, averageNormal);
                     else
-                        mContactInfos.Add(new ContactInfo(damageable, collisionInfo.collider, averagePoint, averageNormal));
+                        _contactInfos.Add(new ContactInfo(damageable, collisionInfo.collider, averagePoint, averageNormal));
                 }
             }
         }
@@ -86,21 +86,20 @@ namespace Assets.Scripts.Core.Mobs.Helpers
             if (!Enable)
                 return;
 
-            collisionInfo.collider.gameObject.GetComponents<IDamageable>(mNoAllocGetComponent);
+            collisionInfo.collider.gameObject.GetComponents<IDamageable>(NoAllocGetComponent);
 
-            for (var index = 0; index < mNoAllocGetComponent.Count; index++)
+            for (var index = 0; index < NoAllocGetComponent.Count; index++)
             {
-                var damageable = mNoAllocGetComponent[index];
+                var damageable = NoAllocGetComponent[index];
                 if (!ReferenceEquals(damageable, ignored))
                 {
-                    var findIndex = mContactInfos.FindIndex(i => i.Target == damageable);
+                    var findIndex = _contactInfos.FindIndex(i => i.Target == damageable);
                     if (findIndex >= 0)
-                        mContactInfos[findIndex].RemoveCollider(collisionInfo.collider);
+                        _contactInfos[findIndex].RemoveCollider(collisionInfo.collider);
                 }
             }
         }
-
-
+        
         public class ContactInfo
         {
             public readonly IDamageable Target;
@@ -176,6 +175,5 @@ namespace Assets.Scripts.Core.Mobs.Helpers
                 }
             }
         }
-
     }
 }

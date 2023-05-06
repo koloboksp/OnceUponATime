@@ -4,34 +4,34 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class Operation
     {
-        private float mTimer;
-        private float mTime;
+        private float _timer;
+        private float _time;
 
-        private Action<Operation> mOnComplete;
-        private Action<Operation> mOnProcess;
-        private Action<Operation> mOnAbort;
+        private Action<Operation> _onComplete;
+        private Action<Operation> _onProcess;
+        private Action<Operation> _onAbort;
 
-        public float Time => mTime;
-        public float Timer => mTimer;
+        public float Time => _time;
+        public float Timer => _timer;
 
         public Action<Operation> OnComplete
         {
-            set => mOnComplete = value;
+            set => _onComplete = value;
         }
         public Action<Operation> OnProcess
         {
-            set => mOnProcess = value;
+            set => _onProcess = value;
         }
         public Action<Operation> OnAbort
         {
-            set => mOnAbort = value;
+            set => _onAbort = value;
         }
 
         public void Execute(float time)
         {
-            mTime = time;
+            _time = time;
            
-            mTimer = 0.0f;
+            _timer = 0.0f;
             InProcess = true;
         }
 
@@ -39,27 +39,27 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             if (InProcess)
             {
-                mTimer += dTime;
+                _timer += dTime;
 
                 InnerProcess(dTime);
 
-                if (mOnProcess != null)
-                    mOnProcess(this);
+                if (_onProcess != null)
+                    _onProcess(this);
 
-                if (mTimer > mTime)
+                if (_timer > _time)
                 {
                     InProcess = false;
 
                     InnerComplete();
 
-                    if (mOnComplete != null)
-                        mOnComplete(this);
+                    if (_onComplete != null)
+                        _onComplete(this);
                 }
             }
         }
-
-
+        
         protected virtual void InnerProcess(float dTime) { }
+        
         protected virtual void InnerComplete() { }
 
         public bool InProcess { get; private set; }
@@ -68,16 +68,17 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         {
             get
             {
-                if (mTime <= 0)
+                if (_time <= 0)
                     return 0.0f;
 
-                return mTimer/mTime;
+                return _timer/_time;
             }
         }
+        
         public virtual void Abort()
         {
-            if (mOnAbort != null)
-                mOnAbort(this);
+            if (_onAbort != null)
+                _onAbort(this);
         }
 
         protected void ForceComplete()
@@ -86,8 +87,8 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
             InnerComplete();
 
-            if (mOnComplete != null)
-                mOnComplete(this);
+            if (_onComplete != null)
+                _onComplete(this);
         }
     }
 }
