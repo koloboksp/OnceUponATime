@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: -8.903718, y: -12.476341, z: -9.178273}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4539289210281622061}
   m_RootOrder: 0
@@ -39,8 +40,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685387356}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -89,6 +91,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!1 &4359150480310627050
@@ -118,6 +121,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.903718, y: 15.476341, z: 9.178273}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1685387358}
   m_Father: {fileID: 0}
@@ -135,6 +139,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1c6239026973842b7ba5e22df4493b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AmbientLight: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
-  FakeLightingDarknessColor: {r: 1, g: 1, b: 1, a: 1}
-  SkyBoxMaterial: {fileID: 0}
+  AmbientLight: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 0}
+  FakeLightingDarknessColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

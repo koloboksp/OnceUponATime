@@ -4,6 +4,7 @@
 	{
 		_Range("Range", Range(0,30)) = 10
 		_Color("Color", Color) = (1, 1, 1, 1)
+		_Intensity("_Intensity", Range(0,10000)) = 1000
 	}
 	SubShader
 	{
@@ -110,8 +111,11 @@
 			
 			float4 _MainTex_ST;
 			float _Range;
+			float _Intensity;
 			half4 _Color;
-
+			float _maxEnvironmentLightIntensity;
+			
+			
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -126,7 +130,7 @@
 			{
 				// sample the texture
 				float atten = saturate((_Range - length(i.lVertex)) / _Range);
-				fixed4 col = atten * atten * _Color;
+				fixed4 col = atten * atten * _Color * (_Intensity / _maxEnvironmentLightIntensity);
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);
 				return col;

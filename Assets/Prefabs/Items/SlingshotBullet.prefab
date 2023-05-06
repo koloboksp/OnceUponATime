@@ -48,12 +48,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab9f6841e60a2cb47a616f34a9027e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Body: {fileID: 8863003995969910196}
-  Collider: {fileID: 8386151802042997068}
-  Trigger: {fileID: 9046501742197346087}
-  Attack: 1
-  DamageType: 1
-  ForceValue: 1
+  _body: {fileID: 8863003995969910196}
+  _collider: {fileID: 8386151802042997068}
+  _trigger: {fileID: 9046501742197346087}
+  _attack: 1
+  _damageType: 1
+  _forceValue: 1
+  _explosionPrefab: {fileID: 7104332708914354366, guid: 2b68032a5b4af4640ac0c9da36868ef8,
+    type: 3}
 --- !u!50 &8863003995969910196
 Rigidbody2D:
   serializedVersion: 4

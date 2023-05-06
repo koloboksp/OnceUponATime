@@ -25,4 +25,4 @@ MonoBehaviour:
   MeleeVerticalRangePadding: 0
   BulletPrefab: {fileID: 3624027254340070517, guid: 3491d10b7f6469b42aa0f210aa2fab28,
     type: 3}
-  ShotForce: 20
+  ShotForce: 10

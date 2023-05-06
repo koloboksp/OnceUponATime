@@ -20,16 +20,16 @@ namespace Assets.Scripts.Core
         void Start()
         {
             var component = this.GetComponent<Camera>();
-            mFakeLightingDarknessColor = new ChangerListener<Color>(Owner.LightingSettings.FakeLightingDarknessColor);
+            mFakeLightingDarknessColor = new ChangerListener<Color>(Owner.Lighting.FakeLightingDarknessColor);
             mFakeLightingDarknessColor.OnValueChanged += FakeLightingDarknessColor_OnValueChanged;
             FakeLightingDarknessColor_OnValueChanged(mFakeLightingDarknessColor.Value);
         }
 
         void FakeLightingDarknessColor_OnValueChanged(Color oldColor)
         {      
-            if (Owner.LightingSettings.FakeLightingDarknessColor.grayscale < 1)
+            if (Owner.Lighting.FakeLightingDarknessColor.grayscale < 1)
             {
-	            FakeLight.FillLightColor = Owner.LightingSettings.FakeLightingDarknessColor;
+	            FakeLight.FillLightColor = Owner.Lighting.FakeLightingDarknessColor;
 	            FakeLight.Enabled = true;
             }
             else
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Core
 
         void Update()
         {
-            mFakeLightingDarknessColor.CheckValue(Owner.LightingSettings.FakeLightingDarknessColor);
+            mFakeLightingDarknessColor.CheckValue(Owner.Lighting.FakeLightingDarknessColor);
         }    
     }
 

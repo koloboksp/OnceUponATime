@@ -1,72 +1,74 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class ExtendedLight : MonoBehaviour
     {
-        [SerializeField]
-        float mRange = 10.0f;
-        [SerializeField]
-        Color mColor = Color.white;
+        [FormerlySerializedAs("mRange")] 
+        [SerializeField] private float _range = 10.0f;
+        [FormerlySerializedAs("mColor")] 
+        [SerializeField] private Color _color = Color.white;
+        [SerializeField] private float _intensity = 1000.0f;
 
-        public bool Blink;
-        float mBlinkingRangeChange = 0.05f;
-        Vector2 mBlinkingTimeToRangeChange = new Vector2(0.15f, 0.2f);
+        [FormerlySerializedAs("Blink")] [SerializeField] private bool _blink;
+        [FormerlySerializedAs("AttachRoot")] [SerializeField] private Transform _attachRoot;
+        [FormerlySerializedAs("Light")] [SerializeField] private Light _light;
+        [FormerlySerializedAs("FakeLightMesh")] [SerializeField] private Mesh _fakeLightMesh;
+        [FormerlySerializedAs("FakeLightMaterial")] [SerializeField] private Material _fakeLightMaterial;
 
-        public Transform AttachRoot;
-        public Light Light;
+        private float _blinkingRangeChange = 0.05f;
+        private Vector2 _blinkingTimeToRangeChange = new Vector2(0.15f, 0.2f);
 
-        public Mesh FakeLightMesh;
-        public Material FakeLightMaterial;
-
-        GameObject mFakeLightObj;
-        MeshRenderer mFakeLightRenderer;
-        MaterialPropertyBlock mMaterialPropertyBlock;
+        private GameObject _fakeLightObj;
+        private MeshRenderer _fakeLightRenderer;
+        private MaterialPropertyBlock _materialPropertyBlock;
 
         public void OnEnable()
         {
-            mFakeLightObj = new GameObject("FakeLight");
-            mFakeLightObj.layer = 26;
-            mFakeLightObj.transform.SetParent(AttachRoot);
-            mFakeLightObj.transform.localPosition = Vector3.zero;
-            mFakeLightObj.transform.localRotation = Quaternion.identity;
-            mFakeLightObj.transform.localScale = new Vector3(mRange * 2, mRange * 2);
-            var meshFilter = mFakeLightObj.AddComponent<MeshFilter>();
-            meshFilter.mesh = FakeLightMesh;
-            mFakeLightRenderer = mFakeLightObj.AddComponent<MeshRenderer>();
-            mFakeLightRenderer.material = FakeLightMaterial;
+            _fakeLightObj = new GameObject("FakeLight");
+            _fakeLightObj.layer = 26;
+            _fakeLightObj.transform.SetParent(_attachRoot);
+            _fakeLightObj.transform.localPosition = Vector3.zero;
+            _fakeLightObj.transform.localRotation = Quaternion.identity;
+            _fakeLightObj.transform.localScale = new Vector3(_range * 2, _range * 2);
+            var meshFilter = _fakeLightObj.AddComponent<MeshFilter>();
+            meshFilter.mesh = _fakeLightMesh;
+            _fakeLightRenderer = _fakeLightObj.AddComponent<MeshRenderer>();
+            _fakeLightRenderer.material = _fakeLightMaterial;
 
-            mMaterialPropertyBlock = new MaterialPropertyBlock();
-            mMaterialPropertyBlock.SetFloat("_Range", mRange);
-            mMaterialPropertyBlock.SetColor("_Color", mColor);
-            mFakeLightRenderer.SetPropertyBlock(mMaterialPropertyBlock);
+            _materialPropertyBlock = new MaterialPropertyBlock();
+            _materialPropertyBlock.SetFloat("_Range", _range);
+            _materialPropertyBlock.SetColor("_Color", _color);
+            _fakeLightRenderer.SetPropertyBlock(_materialPropertyBlock);
         }
 
         public void OnDisable()
         {
-            Destroy(mFakeLightObj);
+            Destroy(_fakeLightObj);
         }
         public void UpdateTargets()
         {
-            UpdateRange(mRange);
+            UpdateRange(_range);
         }
 
         void UpdateRange(float range)
         {
-            if (Light != null)
+            if (_light != null)
             {
-                Light.range = range;
-                Light.color = mColor;
+                _light.range = range;
+                _light.color = _color;
             }
 
-            if (mFakeLightObj != null)
+            if (_fakeLightObj != null)
             {
-                mFakeLightObj.transform.localScale = new Vector3(range * 2, range * 2);
+                _fakeLightObj.transform.localScale = new Vector3(range * 2, range * 2);
 
-                mMaterialPropertyBlock.SetFloat("_Range", range);
-                mMaterialPropertyBlock.SetColor("_Color", mColor);
-
-                mFakeLightRenderer.SetPropertyBlock(mMaterialPropertyBlock);
+                _materialPropertyBlock.SetFloat("_Range", range);
+                _materialPropertyBlock.SetColor("_Color", _color);
+                _materialPropertyBlock.SetFloat("_Intensity", _intensity);
+                
+                _fakeLightRenderer.SetPropertyBlock(_materialPropertyBlock);
             }
         }
 
@@ -77,7 +79,7 @@ namespace Assets.Scripts.Effects
 
         void Update()
         {
-            if (Blink)
+            if (_blink)
             {
                 if (WaitFor)
                 {
@@ -89,12 +91,12 @@ namespace Assets.Scripts.Effects
                 }
                 else
                 {
-                    var randomRange = Random.Range(-mBlinkingRangeChange, mBlinkingRangeChange);
-                    mTimeToChange = Random.Range(mBlinkingTimeToRangeChange.x, mBlinkingTimeToRangeChange.y);
+                    var randomRange = Random.Range(-_blinkingRangeChange, _blinkingRangeChange);
+                    mTimeToChange = Random.Range(_blinkingTimeToRangeChange.x, _blinkingTimeToRangeChange.y);
                     WaitFor = true;
                     mTimer = 0.0f;
 
-                    var newRange = (randomRange + 1) * mRange;
+                    var newRange = (randomRange + 1) * _range;
                     UpdateRange(newRange);
                 }
                
@@ -104,7 +106,7 @@ namespace Assets.Scripts.Effects
         public void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            UnityEditor.Handles.DrawWireDisc(AttachRoot.position, Vector3.forward, mRange);
+            UnityEditor.Handles.DrawWireDisc(_attachRoot.position, Vector3.forward, _range);
 #endif
 
         }

@@ -16,15 +16,25 @@ namespace Assets.Scripts.Core.Items
             mBulletInstance = Instantiate(BulletPrefab, mEquipmentViewPartInstance.transform.position, mEquipmentViewPartInstance.transform.rotation);
             mBulletInstance.Owner = this;
             mBulletInstance.IgnoreCollisions(true);
-
-            var quaternion = Owner.transform.rotation * Quaternion.Euler(0, 0, angle);
-            mBulletInstance.Body.AddForce((quaternion * Vector3.right) * ShotForce * mBulletInstance.Body.mass, ForceMode2D.Impulse);
+            
+            var directionOrientation = Owner.transform.rotation * Quaternion.Euler(0, 0, angle);
+            mBulletInstance.AddForce((directionOrientation * Vector3.right) * ShotForce * mBulletInstance.Mass);
+            mBulletInstance.OnDestroy += BulletInstance_OnDestroy;
         }
 
         public override void EndAttack()
         {
-            //if(mBulletInstance != null)
+            if(mBulletInstance != null)
                 mBulletInstance.IgnoreCollisions(false);
+        }
+
+        void BulletInstance_OnDestroy(SlingshotBullet bullet)
+        {
+            if (mBulletInstance == bullet)
+            {
+                mBulletInstance.OnDestroy -= BulletInstance_OnDestroy;
+                mBulletInstance = null;
+            }
         }
     }
 

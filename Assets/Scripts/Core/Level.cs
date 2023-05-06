@@ -30,11 +30,13 @@ namespace Assets.Scripts.Core
         readonly List<CheckPoint> mCheckPoints = new List<CheckPoint>();
         CheckPoint mLastActivatedCheckPoint = null;
 
-        public LevelLightingSettings LightingSettings;
+        [SerializeField] private LevelLighting _levelLighting;
 
         readonly List<HopelessPlace> mHopelessPlaces = new List<HopelessPlace>();
 
         public Rect Bounds = new Rect(new Vector2(0,0), new Vector2(10,10));
+
+       public LevelLighting Lighting => _levelLighting;
 
         public void Awake()
         {

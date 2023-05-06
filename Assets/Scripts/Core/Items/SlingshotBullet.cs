@@ -1,79 +1,97 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Items
 {
     public class SlingshotBullet : MonoBehaviour
     {   
-        List<Collider2D> mTriggeredItems = new List<Collider2D>();
-        bool mIgnoreCollisions;
-        bool mCanDealDamage = true;
+        public event Action<SlingshotBullet> OnDestroy;
+        
+        [FormerlySerializedAs("Body")] [SerializeField] private Rigidbody2D _body;
+        [FormerlySerializedAs("Collider")] [SerializeField] private Collider2D _collider;
+        [FormerlySerializedAs("Trigger")] [SerializeField] private Collider2D _trigger;
 
+        [FormerlySerializedAs("Attack")] [SerializeField] private float _attack = 1.0f;
+        [FormerlySerializedAs("DamageType")] [SerializeField] private DamageType _damageType = DamageType.Crush;
+        [FormerlySerializedAs("ForceValue")] [SerializeField] private float _forceValue = 1;
+        [SerializeField] private Explosion _explosionPrefab;
+        
+        readonly List<Collider2D> _triggeredItems = new List<Collider2D>();
+        bool _ignoreCollisions;
+        bool _canDealDamage = true;
+        
         public SlingshotItem Owner { get; set; }
-      
-        public Rigidbody2D Body;
-        public Collider2D Collider;
-        public Collider2D Trigger;
-
-        public float Attack = 1.0f;
-        public DamageType DamageType = DamageType.Crush;
-        public float ForceValue = 1;
-  
+        public float Mass => _body.mass;
+        
         public void IgnoreCollisions(bool ignore)
         {
-            mIgnoreCollisions = ignore;
+            _ignoreCollisions = ignore;
 
-            Owner.Owner.IgnoreCollisions(Collider, mIgnoreCollisions);          
+            Owner.Owner.IgnoreCollisions(_collider, _ignoreCollisions);          
         }
 
+        public void AddForce(Vector3 shotForce, ForceMode2D mode = ForceMode2D.Impulse)    
+        {
+            _body.AddForce(shotForce, mode);
+        }
+        
         void FixedUpdate()
         {          
-            for (var index = 0; index < mTriggeredItems.Count; index++)
+            for (var index = 0; index < _triggeredItems.Count; index++)
             {
-                var collider2d = mTriggeredItems[index];
+                var collider2d = _triggeredItems[index];
+                if(collider2d.isTrigger) continue;
                 
-                var damageable = collider2d.GetComponent<IDamageable>();
-                if (damageable != null)
+                if (_explosionPrefab != null)
                 {
-                    bool dealDamage = true;
-
-                    if (ReferenceEquals(damageable, Owner.Owner) && mIgnoreCollisions)
-                        dealDamage = false;
-
-                    if(dealDamage && mCanDealDamage)
+                    var explosionInstance = Instantiate(_explosionPrefab, transform.position, transform.rotation);
+                    explosionInstance.SetIgnoreList(new List<IDamageable>(){Owner.Owner});
+                    SelfDestroy();
+                    break;
+                }
+                else
+                {
+                    var damageable = collider2d.GetComponent<IDamageable>();
+                    if (damageable != null)
                     {
-                        mCanDealDamage = false;
-                        damageable.TakeDamage(this, new DamageInfo(DamageType, Attack, Body.position, ForceValue, (Body.position - (Vector2)collider2d.transform.position).normalized));
-                        StartCoroutine(Destroy());
+                        bool dealDamage = true;
+                        if (ReferenceEquals(damageable, Owner.Owner) && _ignoreCollisions)
+                            dealDamage = false;
+                        
+                        if (dealDamage && _canDealDamage)
+                        {
+                            _canDealDamage = false;
+                            damageable.TakeDamage(this, new DamageInfo(_damageType, _attack, _body.position, _forceValue, (_body.position - (Vector2)collider2d.transform.position).normalized));
+
+                            SelfDestroy();
+                            break;
+                        }
                     }
                 }
+                
             }
-            mTriggeredItems.Clear();    
+            _triggeredItems.Clear();    
         }
 
         protected virtual void OnTriggerEnter2D(Collider2D collider2d)
         {
-            if (!mTriggeredItems.Contains(collider2d))
-                mTriggeredItems.Add(collider2d);
+            if (!_triggeredItems.Contains(collider2d))
+                _triggeredItems.Add(collider2d);
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collisionInfo)
         {
-            mCanDealDamage = false;
-            StartCoroutine(Destroy());
+            _canDealDamage = false;
+
+            SelfDestroy();
         }
 
-        IEnumerator Destroy()
+        protected void SelfDestroy()
         {
-            float mTimer = 0.0f;
-
-            while (mTimer < 1.0f)
-            {
-                mTimer += Time.deltaTime;
-                yield return null;
-            }
-
+            OnDestroy?.Invoke(this);
             Destroy(this.gameObject);
         }
     }
