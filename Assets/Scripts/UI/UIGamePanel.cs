@@ -1,24 +1,27 @@
 using System.Linq;
 using Assets.Scripts.Core.Mobs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.UI
 {
     public class UIGamePanel : MonoBehaviour
     {
-        public RectTransform Root;
-        public Transform HeroHealthBarRoot;
+        [FormerlySerializedAs("Root")] [SerializeField] private RectTransform _root;
+        [FormerlySerializedAs("HeroHealthBarRoot")] [SerializeField] private Transform _heroHealthBarRoot;
 
-        public UIUserButton InventoryBtn;
-        public UIInventory Inventory;
+        [FormerlySerializedAs("InventoryBtn")] [SerializeField] private UIUserButton _inventoryBtn;
+        [FormerlySerializedAs("Inventory")] [SerializeField] private UIInventory _inventory;
+        public Transform Root => _root;
+        public Transform HeroHealthBarRoot => _heroHealthBarRoot;
 
         public void Start()
         {
-            InventoryBtn.OnClick += InventoryBtn_OnClick; 
+            _inventoryBtn.OnClick += InventoryBtn_OnClick; 
 
-            var mTarget = FindObjectOfType<Hero>();
-            mTarget.OnItemInWeaponSlotsChanged += Target_OnItemInWeaponSlotsChanged;
-            Target_OnItemInWeaponSlotsChanged(mTarget);
+            var target = FindObjectOfType<Hero>();
+            target.OnItemInWeaponSlotsChanged += Target_OnItemInWeaponSlotsChanged;
+            Target_OnItemInWeaponSlotsChanged(target);
         }
 
         private void Target_OnItemInWeaponSlotsChanged(Hero sender)
@@ -29,14 +32,14 @@ namespace Assets.Scripts.UI
                 UIItemViewInfo itemViewInfo = UIItemViewInfoManager.Instance.GetInfo(firstOrDefault.InventoryItem.ItemPrefab);
                 if (itemViewInfo != null)
                 {
-                    InventoryBtn.Image.sprite = itemViewInfo.Icon;
+                    _inventoryBtn.Image.sprite = itemViewInfo.Icon;
                 }
             }
         }
 
         private void InventoryBtn_OnClick(UIUserButton obj)
         {
-            Inventory.Show();
+            _inventory.Show();
         }
     }
 }

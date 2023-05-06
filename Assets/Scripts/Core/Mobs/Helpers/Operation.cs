@@ -43,8 +43,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
                 InnerProcess(dTime);
 
-                if (_onProcess != null)
-                    _onProcess(this);
+                _onProcess?.Invoke(this);
 
                 if (_timer > _time)
                 {
@@ -52,8 +51,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
                     InnerComplete();
 
-                    if (_onComplete != null)
-                        _onComplete(this);
+                    _onComplete?.Invoke(this);
                 }
             }
         }
@@ -77,8 +75,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         
         public virtual void Abort()
         {
-            if (_onAbort != null)
-                _onAbort(this);
+            _onAbort?.Invoke(this);
         }
 
         protected void ForceComplete()
@@ -87,8 +84,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 
             InnerComplete();
 
-            if (_onComplete != null)
-                _onComplete(this);
+            _onComplete?.Invoke(this);
         }
     }
 }

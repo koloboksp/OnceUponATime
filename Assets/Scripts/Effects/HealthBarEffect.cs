@@ -2,35 +2,36 @@ using Assets.Scripts.Core;
 using Assets.Scripts.Core.Mobs;
 using Assets.Scripts.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Effects
 {
     public class HealthBarEffect : MonoBehaviour
     {
-        public Character Owner;
-        public HealthBarUI UIPartPrefab;
-        public Vector3 Offset;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Character _owner;
+        [FormerlySerializedAs("UIPartPrefab")] [SerializeField] private HealthBarUI _uiPartPrefab;
+        [FormerlySerializedAs("Offset")] [SerializeField] private Vector3 _offset;
 
-        private HealthBarUI mInstance;
+        private HealthBarUI _instance;
         private float _timer;
-        private float mVisibleTime = 2.0f;
-        private float mHideTime = 1.0f;
+        private float _visibleTime = 2.0f;
+        private float _hideTime = 1.0f;
 
-        private UIGamePanel mCachedUIGamePanel;
+        private UIGamePanel _cachedUIGamePanel;
 
-        private State mCurrentState = State.Hide;
+        private State _currentState = State.Hide;
     
         public void OnEnable()
         {
-            Owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
+            _owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
                 
-            mCachedUIGamePanel = FindObjectOfType<UIGamePanel>();
+            _cachedUIGamePanel = FindObjectOfType<UIGamePanel>();
         }
 
         public void OnDisable()
         {
-            Owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
+            _owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
         }
 
         private void OnDestroy()
@@ -40,32 +41,32 @@ namespace Assets.Scripts.Effects
 
         private void Owner_OnLifeLevelChanged(Character sender)
         {
-            if (mInstance == null)
+            if (_instance == null)
             {
-                var instanceObj = Object.Instantiate(UIPartPrefab.gameObject);
-                mInstance = instanceObj.GetComponent<HealthBarUI>();
-                mInstance.transform.SetParent(mCachedUIGamePanel.Root);
+                var instanceObj = Object.Instantiate(_uiPartPrefab.gameObject);
+                _instance = instanceObj.GetComponent<HealthBarUI>();
+                _instance.transform.SetParent(_cachedUIGamePanel.Root);
                 UpdateScreenPosition();
             }
 
-            mInstance.Show(sender.Lives / sender.MaxLives);
+            _instance.Show(sender.Lives / sender.MaxLives);
 
-            mCurrentState = State.Show;
+            _currentState = State.Show;
             _timer = 0.0f;
         }
 
         private void UpdateScreenPosition()
         {
-            var t = Camera.main.WorldToScreenPoint(Owner.transform.position + Offset);
-            mInstance.transform.position = t;
+            var t = Camera.main.WorldToScreenPoint(_owner.transform.position + _offset);
+            _instance.transform.position = t;
         }
 
         private void DestroyInstance()
         {
-            if (mInstance != null)
+            if (_instance != null)
             {
-                Destroy(mInstance.gameObject);
-                mInstance = null;
+                Destroy(_instance.gameObject);
+                _instance = null;
             }
         }
 
@@ -78,29 +79,29 @@ namespace Assets.Scripts.Effects
 
         private void Update()
         {
-            if (mCurrentState == State.Hide)
+            if (_currentState == State.Hide)
             {
 
             }
-            if (mCurrentState == State.Show)
+            if (_currentState == State.Show)
             {
                 _timer += Time.deltaTime;
                 UpdateScreenPosition();
-                if (_timer > mVisibleTime)
+                if (_timer > _visibleTime)
                 {
-                    mCurrentState = State.StartHide;
+                    _currentState = State.StartHide;
 
-                    mInstance.Hide(mHideTime);
+                    _instance.Hide(_hideTime);
                 }
             }
 
-            if (mCurrentState == State.StartHide)
+            if (_currentState == State.StartHide)
             {
                 _timer += Time.deltaTime;
                 UpdateScreenPosition();
-                if (_timer > mVisibleTime + mHideTime)
+                if (_timer > _visibleTime + _hideTime)
                 {
-                    mCurrentState = State.Hide;
+                    _currentState = State.Hide;
 
                     DestroyInstance();
                 }

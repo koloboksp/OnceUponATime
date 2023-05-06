@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
     [ExecuteInEditMode]
     public class LevelSkybox : MonoBehaviour
     {
-        public Material SkyBoxMaterial;
+        [FormerlySerializedAs("SkyBoxMaterial")] [SerializeField] private Material _skyBoxMaterial;
 
         private void Start()
         {
-            RenderSettings.skybox = SkyBoxMaterial;
+            RenderSettings.skybox = _skyBoxMaterial;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
@@ -8,33 +9,33 @@ namespace Assets.Scripts.Core.Mobs
     {
         public event Action OnDealDamageOnContact;
 
-        private DealDamageOnContact mDealDamageOnContact;
+        private DealDamageOnContact _dealDamageOnContact;
 
-        public float DamageOnContact = 1;
-        public float DamageForceOnContact = 4;
-        public float DealDamageOnContactSpeed = 4f;
+        [FormerlySerializedAs("DamageOnContact")] [SerializeField] private float _damageOnContact = 1;
+        [FormerlySerializedAs("DamageForceOnContact")] [SerializeField] private float _damageForceOnContact = 4;
+        [FormerlySerializedAs("DealDamageOnContactSpeed")] [SerializeField] private float _dealDamageOnContactSpeed = 4f;
    
         protected virtual void Start()
         {
-            mDealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContactHelper);
+            _dealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContactHelper);
         }
 
         protected override void InnerUpdate()
         {
             base.InnerUpdate();
 
-            mDealDamageOnContact.Update(DealDamageOnContactSpeed);
+            _dealDamageOnContact.Update(_dealDamageOnContactSpeed);
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collisionInfo)
         {
            
-            mDealDamageOnContact.OnCollisionEnter2D(collisionInfo, this);
+            _dealDamageOnContact.OnCollisionEnter2D(collisionInfo, this);
         }
 
         protected virtual void OnCollisionExit2D(Collision2D collisionInfo)
         { 
-            mDealDamageOnContact.OnCollisionExit2D(collisionInfo, this);
+            _dealDamageOnContact.OnCollisionExit2D(collisionInfo, this);
         }
 
         private void OnDealDamageOnContactHelper(DealDamageOnContact.ContactInfo contactInfo)
@@ -46,15 +47,14 @@ namespace Assets.Scripts.Core.Mobs
                 forceDirection = -Vector2.right + Vector2.up;
             forceDirection.Normalize();
 
-            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, DamageOnContact, contactInfo.AveragePoint, DamageForceOnContact, forceDirection));
+            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, _damageOnContact, contactInfo.AveragePoint, _damageForceOnContact, forceDirection));
 
-            if (OnDealDamageOnContact != null)
-                OnDealDamageOnContact();
+            OnDealDamageOnContact?.Invoke();
         }
 
         protected override void Destroy()
         {
-            mDealDamageOnContact.Enable = false;
+            _dealDamageOnContact.Enable = false;
 
             base.Destroy();
         }

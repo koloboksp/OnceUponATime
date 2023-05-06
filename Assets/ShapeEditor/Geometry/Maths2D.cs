@@ -4,7 +4,6 @@ namespace Assets.ShapeEditor.Geometry
 {
     public static class Maths2D
     {
-
         public static float PseudoDistanceFromPointToLine(Vector2 a, Vector2 b, Vector2 c)
         {
             return Mathf.Abs((c.x - a.x) * (-b.y + a.y) + (c.y - a.y) * (b.x - a.x));
@@ -50,6 +49,5 @@ namespace Assets.ShapeEditor.Geometry
 
             return (r > 0 && r < 1) && (s > 0 && s < 1);
         }
-
     }
 }

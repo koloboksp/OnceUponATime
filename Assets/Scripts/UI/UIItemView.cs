@@ -1,29 +1,29 @@
 using Assets.Scripts.Core.Items;
 using Assets.Scripts.Core.Mobs.HeroMisc;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
     public class UIItemView : UIUserButton
     {
-        public Image IconImage;
-        public Text CountLabel;
+        private InventoryItem _inventoryItem;
 
-        private InventoryItem mInventoryItem;
-
+        [FormerlySerializedAs("IconImage")] [SerializeField] private Image _iconImage;
+        [FormerlySerializedAs("CountLabel")] [SerializeField] private Text _countLabel;
+        
         public InventoryItem InventoryItem
         {
             set
             {
-                mInventoryItem = value;
-                UIItemViewInfo itemViewInfo = UIItemViewInfoManager.Instance.GetInfo(mInventoryItem.ItemPrefab);
+                _inventoryItem = value;
+                UIItemViewInfo itemViewInfo = UIItemViewInfoManager.Instance.GetInfo(_inventoryItem.ItemPrefab);
 
-                IconImage.sprite = itemViewInfo.Icon;
-                CountLabel.text = mInventoryItem.Count.ToString();
+                _iconImage.sprite = itemViewInfo.Icon;
+                _countLabel.text = _inventoryItem.Count.ToString();
             }
-            get { return mInventoryItem; }
+            get { return _inventoryItem; }
         }
-      
     }
 }

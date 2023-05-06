@@ -36,21 +36,18 @@ namespace Assets.Scripts.Core.Mobs
             _lives -= damageInfo.Attack;
             _lives = Mathf.Clamp(_lives, 0, _maxLives);
 
-            if (OnTakeDamage != null)
-                OnTakeDamage(this, damageInfo);
+            OnTakeDamage?.Invoke(this, damageInfo);
 
             if (previousLives != _lives)
             {
-                if (OnLifeLevelChanged != null)
-                    OnLifeLevelChanged(this);
+                OnLifeLevelChanged?.Invoke(this);
             }
 
             if (_lives <= 0)
             {
                 if (!_deathOperation.InProcess)
                 {
-                    if (OnBeforeDestroy != null)
-                        OnBeforeDestroy(this);
+                    OnBeforeDestroy?.Invoke(this);
 
                     Destroy();
                 }
@@ -67,8 +64,7 @@ namespace Assets.Scripts.Core.Mobs
             _lives += Mathf.Min(treatmentInfo.Power, _maxLives - _lives);
             _lives = Mathf.Clamp(_lives, 0, _maxLives);
 
-            if (OnLifeLevelChanged != null)
-                OnLifeLevelChanged(this);
+            OnLifeLevelChanged?.Invoke(this);
 
             if (_lives > 0)
             {

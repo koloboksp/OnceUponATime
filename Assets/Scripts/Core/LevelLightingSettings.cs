@@ -1,13 +1,18 @@
 using Assets.Scripts.Effects;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
     public class LevelLightingSettings : MonoBehaviour
     {
-        public Color AmbientLight = Color.gray;
-        public Color FakeLightingDarknessColor = Color.black;
-        public float EnvironmentLightIntencity = 10000.0f;
+        [FormerlySerializedAs("AmbientLight")] [SerializeField] private Color _ambientLight = Color.gray;
+        [FormerlySerializedAs("FakeLightingDarknessColor")] [SerializeField] private Color _fakeLightingDarknessColor = Color.black; 
+        [FormerlySerializedAs("EnvironmentLightIntencity")] [SerializeField] private float _environmentLightIntensity = 10000.0f;
+
+        public Color AmbientLight => _ambientLight;
+        public Color FakeLightingDarknessColor => _fakeLightingDarknessColor;
+        public float EnvironmentLightIntensity => _environmentLightIntensity;
     }
 }

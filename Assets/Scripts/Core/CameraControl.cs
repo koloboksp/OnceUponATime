@@ -3,44 +3,54 @@ using System.Collections.Generic;
 using Assets.Scripts.Core.Mobs;
 using Assets.Scripts.Effects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
     public class CameraControl : MonoBehaviour
     {
-        private ChangerListener<Color> mFakeLightingDarknessColor;
+        private ChangerListener<Color> _fakeLightingDarknessColor;
 
-        public Level Owner;
-        public Hero Target;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Level _owner;
+        [FormerlySerializedAs("Target")] [SerializeField] private Hero _target;
 
-        public FakeLightingFeature FakeLight;
-
-      //  public CameraFakeLightingEffect FakeLightingEffect;
-
-      private void Start()
+        [FormerlySerializedAs("FakeLight")] [SerializeField] private FakeLightingFeature _fakeLight;
+        public Level Owner
         {
-            var component = this.GetComponent<Camera>();
-            mFakeLightingDarknessColor = new ChangerListener<Color>(Owner.Lighting.FakeLightingDarknessColor);
-            mFakeLightingDarknessColor.OnValueChanged += FakeLightingDarknessColor_OnValueChanged;
-            FakeLightingDarknessColor_OnValueChanged(mFakeLightingDarknessColor.Value);
+            get => _owner;
+            set => _owner = value;
         }
 
-      private void FakeLightingDarknessColor_OnValueChanged(Color oldColor)
+        public Hero Target
+        {
+            get => _target;
+            set => _target = value;
+        }
+
+        private void Start()
+        {
+            var component = this.GetComponent<Camera>();
+            _fakeLightingDarknessColor = new ChangerListener<Color>(_owner.Lighting.FakeLightingDarknessColor);
+            _fakeLightingDarknessColor.OnValueChanged += FakeLightingDarknessColor_OnValueChanged;
+            FakeLightingDarknessColor_OnValueChanged(_fakeLightingDarknessColor.Value);
+        }
+
+        private void FakeLightingDarknessColor_OnValueChanged(Color oldColor)
         {      
-            if (Owner.Lighting.FakeLightingDarknessColor.grayscale < 1)
+            if (_owner.Lighting.FakeLightingDarknessColor.grayscale < 1)
             {
-	            FakeLight.FillLightColor = Owner.Lighting.FakeLightingDarknessColor;
-	            FakeLight.Enabled = true;
+	            _fakeLight.FillLightColor = _owner.Lighting.FakeLightingDarknessColor;
+	            _fakeLight.Enabled = true;
             }
             else
             {
-	            FakeLight.Enabled = false;
+	            _fakeLight.Enabled = false;
             }         
         }
 
-      private void Update()
+        private void Update()
         {
-            mFakeLightingDarknessColor.CheckValue(Owner.Lighting.FakeLightingDarknessColor);
+            _fakeLightingDarknessColor.CheckValue(_owner.Lighting.FakeLightingDarknessColor);
         }    
     }
 
@@ -48,23 +58,22 @@ namespace Assets.Scripts.Core
     {
         public event Action<T> OnValueChanged;
 
-        private T mValue;
+        private T _value;
 
         public ChangerListener(T value)
         {
-            mValue = value;         
+            _value = value;         
         }
 
-        public T Value => mValue;
+        public T Value => _value;
 
         public bool CheckValue(T newValue)
         {
-            if (!mValue.Equals(newValue))
+            if (!_value.Equals(newValue))
             {
-                T oldValue = mValue;
-                mValue = newValue;
-                if (OnValueChanged != null)
-                    OnValueChanged(oldValue);
+                T oldValue = _value;
+                _value = newValue;
+                OnValueChanged?.Invoke(oldValue);
 
                 return true;
             }

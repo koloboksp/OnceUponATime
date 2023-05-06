@@ -6,22 +6,22 @@ namespace Assets.ShapeEditor
 {
     public class HolesWallsEdgesDetector
     {
-        private List<List<int>> mEdgesPointsIndexes;
-        public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
+        private readonly List<List<int>> _edgesPointsIndexes;
+        public List<List<int>> EdgesPointsIndexes => _edgesPointsIndexes;
 
         public HolesWallsEdgesDetector(Polygon polygon, List<List<int>> walkableEdgesPointsIndexes)
         {
-            mEdgesPointsIndexes = new List<List<int>>();
-            for (int hIndex = 0; hIndex < polygon.numHoles; hIndex++)
+            _edgesPointsIndexes = new List<List<int>>();
+            for (int hIndex = 0; hIndex < polygon.NumHoles; hIndex++)
             {
-                mEdgesPointsIndexes.Add(new List<int>());
-                for (int pIndex = 0; pIndex < polygon.numPointsPerHole[hIndex]; pIndex++)
+                _edgesPointsIndexes.Add(new List<int>());
+                for (int pIndex = 0; pIndex < polygon.NumPointsPerHole[hIndex]; pIndex++)
                 {
                     var indexOfPointInHole = polygon.IndexOfPointInHole(pIndex, hIndex);
-                    mEdgesPointsIndexes.Last().Add(indexOfPointInHole);
+                    _edgesPointsIndexes.Last().Add(indexOfPointInHole);
                 }
 
-                mEdgesPointsIndexes.Last().Add(polygon.IndexOfPointInHole(0, hIndex));
+                _edgesPointsIndexes.Last().Add(polygon.IndexOfPointInHole(0, hIndex));
             }             
             
         }

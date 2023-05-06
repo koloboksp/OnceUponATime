@@ -33,7 +33,7 @@ namespace Assets.ShapeEditor
             if (polygons.Length > 0)
             {
                 var polygon = polygons[0];
-                var hullPoints = polygon.points.Take(polygon.numHullPoints).ToList();
+                var hullPoints = polygon.Points.Take(polygon.NumHullPoints).ToList();
 
                 if (GenerateWalkablePart)
                 {
@@ -53,7 +53,7 @@ namespace Assets.ShapeEditor
                 
                 if (holesWallsEdgesDetector.EdgesPointsIndexes.Count > 0)
                 {
-                    holesCeilingAndWallsMeshGenerator = new CeilingAndWallsMeshGenerator(polygon.points.ToList(), holesWallsEdgesDetector.EdgesPointsIndexes, Depth);  
+                    holesCeilingAndWallsMeshGenerator = new CeilingAndWallsMeshGenerator(polygon.Points.ToList(), holesWallsEdgesDetector.EdgesPointsIndexes, Depth);  
                 }
                 if (PolygonCollider2D != null)
                     PolygonCollider2D.points = hullPoints.Select(p => p.Position).ToArray();
@@ -105,6 +105,7 @@ namespace Assets.ShapeEditor
             
         }
 
+       
         public Polygon[] Process(ShapeCreator owner)
         {
             // Generate array of valid shape data
@@ -122,25 +123,25 @@ namespace Assets.ShapeEditor
 
                     if (eligibleShapes[i].IsParentOf(eligibleShapes[j]))
                     {
-                        eligibleShapes[j].parents.Add(eligibleShapes[i]);
+                        eligibleShapes[j].Parents.Add(eligibleShapes[i]);
                     }
                 }
             }
 
             // Holes are shapes with an odd number of parents.
             CompositeShape.CompositeShapeData[] holeShapes =
-                eligibleShapes.Where(x => x.parents.Count % 2 != 0).ToArray();
+                eligibleShapes.Where(x => x.Parents.Count % 2 != 0).ToArray();
             foreach (CompositeShape.CompositeShapeData holeShape in holeShapes)
             {
                 // The most immediate parent (i.e the smallest parent shape) will be the one that has the highest number of parents of its own. 
                 CompositeShape.CompositeShapeData immediateParent =
-                    holeShape.parents.OrderByDescending(x => x.parents.Count).First();
-                immediateParent.holes.Add(holeShape);
+                    holeShape.Parents.OrderByDescending(x => x.Parents.Count).First();
+                immediateParent.Holes.Add(holeShape);
             }
 
             // Solid shapes have an even number of parents
             CompositeShape.CompositeShapeData[] solidShapes =
-                eligibleShapes.Where(x => x.parents.Count % 2 == 0).ToArray();
+                eligibleShapes.Where(x => x.Parents.Count % 2 == 0).ToArray();
             foreach (CompositeShape.CompositeShapeData solidShape in solidShapes)
             {
                 solidShape.ValidateHoles();
@@ -148,7 +149,7 @@ namespace Assets.ShapeEditor
             }
 
             // Create polygons from the solid shapes and their associated hole shapes
-            Polygon[] polygons = solidShapes.Select(x => new Polygon(x.polygon.points, x.holes.Select(h => h.polygon.points).ToArray())).ToArray();
+            Polygon[] polygons = solidShapes.Select(x => new Polygon(x.Polygon.Points, x.Holes.Select(h => h.Polygon.Points).ToArray())).ToArray();
 
             return polygons;
         } 

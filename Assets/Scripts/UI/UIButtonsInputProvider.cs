@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.UI
 {
@@ -9,19 +10,18 @@ namespace Assets.Scripts.UI
     {
         public event Action<IInputProvider> OnActiveStatusChanged;
 
-        public GameObject Root;
+        [FormerlySerializedAs("Root")] [SerializeField] private GameObject _root;
 
-        public UIUserButton MoveLeftBtn;
-        public UIUserButton MoveRightBtn;
-        public UIUserButton JumpBtn;
-        public UIAttackBtn Action1Btn;
-        public UIUserButton Action2Btn;
+        [FormerlySerializedAs("MoveLeftBtn")] [SerializeField] private UIUserButton _moveLeftBtn;
+        [FormerlySerializedAs("MoveRightBtn")] [SerializeField] private UIUserButton _moveRightBtn;
+        [FormerlySerializedAs("JumpBtn")] [SerializeField] private UIUserButton _jumpBtn;
+        [FormerlySerializedAs("Action1Btn")] [SerializeField] private UIAttackBtn _action1Btn;
+        [FormerlySerializedAs("Action2Btn")] [SerializeField] private UIUserButton _action2Btn;
 
         public InputProviderType ProviderType { get; } = InputProviderType.UI;
 
         public bool Active { get { return isActiveAndEnabled; } }
-
-
+        
         private void Awake()
         {
             InputManager.AddProvider(this);
@@ -34,63 +34,61 @@ namespace Assets.Scripts.UI
 
         private void OnEnable()
         {
-            MoveLeftBtn.AutoReturn = false;
-            MoveRightBtn.AutoReturn = false;
-            JumpBtn.AutoReturn = true;
+            _moveLeftBtn.AutoReturn = false;
+            _moveRightBtn.AutoReturn = false;
+            _jumpBtn.AutoReturn = true;
         //    Action1Btn.AutoReturn = true;
-            Action2Btn.AutoReturn = true;
+            _action2Btn.AutoReturn = true;
 
-            if (OnActiveStatusChanged != null)
-                OnActiveStatusChanged(this);
+            OnActiveStatusChanged?.Invoke(this);
         }
 
         private void OnDisable()
         {
-            if (OnActiveStatusChanged != null)
-                OnActiveStatusChanged(this);
+            OnActiveStatusChanged?.Invoke(this);
         }
 
         public void Update()
         {
             InputAction result = InputAction.None;
 
-            if (MoveLeftBtn.IsPressed)
+            if (_moveLeftBtn.IsPressed)
                 result = InputManager.AddAction(result, InputAction.MoveLeft);
-            if (MoveRightBtn.IsPressed)
+            if (_moveRightBtn.IsPressed)
                 result = InputManager.AddAction(result, InputAction.MoveRight);
-            if (JumpBtn.IsPressed)
+            if (_jumpBtn.IsPressed)
                 result = InputManager.AddAction(result, InputAction.Jump);
-            if (Action1Btn.IsPressed)
+            if (_action1Btn.IsPressed)
             {
                 result = InputManager.AddAction(result, InputAction.ActionType1);
-                InputManager.SetActionValue(InputAction.ActionType1, Action1Btn.Direction);
+                InputManager.SetActionValue(InputAction.ActionType1, _action1Btn.Direction);
             }
 
-            if (Action2Btn.IsPressed)
+            if (_action2Btn.IsPressed)
                 result = InputManager.AddAction(result, InputAction.ActionType2);
 
-            MoveLeftBtn.ManualUpdate();
-            MoveRightBtn.ManualUpdate();
-            JumpBtn.ManualUpdate();
+            _moveLeftBtn.ManualUpdate();
+            _moveRightBtn.ManualUpdate();
+            _jumpBtn.ManualUpdate();
           //  Action1Btn.ManualUpdate();
-            Action2Btn.ManualUpdate();
+            _action2Btn.ManualUpdate();
 
             InputManager.SetAction(this, result);
         }
 
         public void Show()
         {
-            Root.SetActive(true);
+            _root.SetActive(true);
         }
         public void Hide()
         {
-            Root.SetActive(false);
+            _root.SetActive(false);
 
-            MoveLeftBtn.ResetState();
-            MoveRightBtn.ResetState();
-            JumpBtn.ResetState();
-            Action1Btn.ResetState();
-            Action2Btn.ResetState();
+            _moveLeftBtn.ResetState();
+            _moveRightBtn.ResetState();
+            _jumpBtn.ResetState();
+            _action1Btn.ResetState();
+            _action2Btn.ResetState();
         }
     }
 }

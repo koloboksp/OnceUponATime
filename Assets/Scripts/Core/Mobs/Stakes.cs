@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class Stakes : Character
     {
-        public float DamageOnContact = 1;
-        public float DamageForceOnContact = 4;
-        public float DealDamageOnContactSpeed = 4.0f;
+        private DealDamageOnContact _dealDamageOnContact;
 
-        private DealDamageOnContact mDealDamageOnContact;
-
+        [FormerlySerializedAs("DamageOnContact")] [SerializeField] private float _damageOnContact = 1;
+        [FormerlySerializedAs("DamageForceOnContact")] [SerializeField] private float _damageForceOnContact = 4;
+        [FormerlySerializedAs("DealDamageOnContactSpeed")] [SerializeField] private float _dealDamageOnContactSpeed = 4.0f;
+        
         private void Awake()
         {
-            mDealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContact);
+            _dealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContact);
         }
 
         private void OnDealDamageOnContact(DealDamageOnContact.ContactInfo contactInfo)
@@ -26,22 +27,22 @@ namespace Assets.Scripts.Core.Mobs
                 forceDirection = -Vector2.right + Vector2.up;
             forceDirection.Normalize();
 
-            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, DamageOnContact, contactInfo.AveragePoint, DamageForceOnContact, forceDirection));
+            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, _damageOnContact, contactInfo.AveragePoint, _damageForceOnContact, forceDirection));
         }
 
         private void OnCollisionEnter2D(Collision2D collisionInfo)
         {
-            mDealDamageOnContact.OnCollisionEnter2D(collisionInfo, this);
+            _dealDamageOnContact.OnCollisionEnter2D(collisionInfo, this);
         }
 
         private void OnCollisionExit2D(Collision2D collisionInfo)
         {
-            mDealDamageOnContact.OnCollisionExit2D(collisionInfo, this); 
+            _dealDamageOnContact.OnCollisionExit2D(collisionInfo, this); 
         }
 
         private void Update()
         {
-            mDealDamageOnContact.Update(DealDamageOnContactSpeed);
+            _dealDamageOnContact.Update(_dealDamageOnContactSpeed);
         }
     }
 }

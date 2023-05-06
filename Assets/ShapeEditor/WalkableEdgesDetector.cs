@@ -7,18 +7,18 @@ namespace Assets.ShapeEditor
 {
     public class WalkableEdgesDetector
     {
-        private float mWalkableAngle;
-        private List<List<int>> mEdgesPointsIndexes;
+        private readonly float _walkableAngle;
+        private readonly List<List<int>> _edgesPointsIndexes;
 
-        public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
+        public List<List<int>> EdgesPointsIndexes => _edgesPointsIndexes;
 
-        public bool Found => mEdgesPointsIndexes.Count > 0;
+        public bool Found => _edgesPointsIndexes.Count > 0;
 
         public WalkableEdgesDetector(List<Point> hullPoints, float walkableAngle)
         {
-            mWalkableAngle = walkableAngle;
+            _walkableAngle = walkableAngle;
            
-            mEdgesPointsIndexes = FindWalkableEdges(hullPoints);
+            _edgesPointsIndexes = FindWalkableEdges(hullPoints);
         }
 
         private List<List<int>> FindWalkableEdges(List<Point> hullPoints)
@@ -38,8 +38,8 @@ namespace Assets.ShapeEditor
                 var angleToUp = Mathf.Acos(Vector2.Dot(segmentDir, Vector2.up)) * Mathf.Rad2Deg;
                 var angleToRight = Mathf.Acos(Vector2.Dot(segmentDir, Vector2.right)) * Mathf.Rad2Deg;
 
-                if (Mathf.PI * Mathf.Rad2Deg * 0.5f - mWalkableAngle < angleToUp
-                    && angleToUp < Mathf.PI * Mathf.Rad2Deg * 0.5f + mWalkableAngle
+                if (Mathf.PI * Mathf.Rad2Deg * 0.5f - _walkableAngle < angleToUp
+                    && angleToUp < Mathf.PI * Mathf.Rad2Deg * 0.5f + _walkableAngle
                     && angleToRight < Mathf.PI * Mathf.Rad2Deg * 0.5f)
                 {
                     isWalkable = true;

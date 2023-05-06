@@ -1,21 +1,22 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
     public class HeroHealthBarUI : MonoBehaviour
     {
-        public RectTransform HealthBarTransform;
+        private float _initialWidth;
 
-        private float mInitialWidth;
-
+        [FormerlySerializedAs("HealthBarTransform")] [SerializeField] private RectTransform _healthBarTransform;
+        
         private void OnEnable()
         {
-            mInitialWidth = HealthBarTransform.rect.width;
+            _initialWidth = _healthBarTransform.rect.width;
         }
         public void Show(float normValue)
         {
-            HealthBarTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mInitialWidth * normValue);  
+            _healthBarTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _initialWidth * normValue);  
         }
     }
 }

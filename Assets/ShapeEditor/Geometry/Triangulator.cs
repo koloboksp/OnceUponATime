@@ -4,61 +4,57 @@ using UnityEngine;
 namespace Assets.ShapeEditor.Geometry
 {
 	/*
-     * Handles triangulation of given polygon using the 'ear-clipping' algorithm.
-     * The implementation is based on the following paper:
      * https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
      */
 
 	public class Triangulator
     {
-        private LinkedList<Vertex> vertsInClippedPolygon;
-        private int[] tris;
-        private int triIndex;
+        private LinkedList<Vertex> _vertsInClippedPolygon;
+        private int[] _tris;
+        private int _triIndex;
 
         public Triangulator(Polygon polygon)
         {
-            int numHoleToHullConnectionVerts = 2 * polygon.numHoles; // 2 verts are added when connecting a hole to the hull.
-            int totalNumVerts = polygon.numPoints + numHoleToHullConnectionVerts;
-            tris = new int[(totalNumVerts - 2) * 3];
-            vertsInClippedPolygon = GenerateVertexList(polygon);
+            int numHoleToHullConnectionVerts = 2 * polygon.NumHoles;
+            int totalNumVerts = polygon.NumPoints + numHoleToHullConnectionVerts;
+            _tris = new int[(totalNumVerts - 2) * 3];
+            _vertsInClippedPolygon = GenerateVertexList(polygon);
         }
 
         public int[] Triangulate()
         {
-            while (vertsInClippedPolygon.Count >= 3)
+            while (_vertsInClippedPolygon.Count >= 3)
             {
                 bool hasRemovedEarThisIteration = false;
-                LinkedListNode<Vertex> vertexNode = vertsInClippedPolygon.First;
-                for (int i = 0; i < vertsInClippedPolygon.Count; i++)
+                LinkedListNode<Vertex> vertexNode = _vertsInClippedPolygon.First;
+                for (int i = 0; i < _vertsInClippedPolygon.Count; i++)
                 {
-                    LinkedListNode<Vertex> prevVertexNode = vertexNode.Previous ?? vertsInClippedPolygon.Last;
-                    LinkedListNode<Vertex> nextVertexNode = vertexNode.Next ?? vertsInClippedPolygon.First;
+                    LinkedListNode<Vertex> prevVertexNode = vertexNode.Previous ?? _vertsInClippedPolygon.Last;
+                    LinkedListNode<Vertex> nextVertexNode = vertexNode.Next ?? _vertsInClippedPolygon.First;
 
                     if (vertexNode.Value.isConvex)
                     {
                         if (!TriangleContainsVertex(prevVertexNode.Value, vertexNode.Value, nextVertexNode.Value))
                         {
-                            // check if removal of ear makes prev/next vertex convex (if was previously reflex)
                             if (!prevVertexNode.Value.isConvex)
                             {
-                                LinkedListNode<Vertex> prevOfPrev = prevVertexNode.Previous ?? vertsInClippedPolygon.Last;
+                                LinkedListNode<Vertex> prevOfPrev = prevVertexNode.Previous ?? _vertsInClippedPolygon.Last;
 
                                 prevVertexNode.Value.isConvex = IsConvex(prevOfPrev.Value.position, prevVertexNode.Value.position, nextVertexNode.Value.position);
                             }
                             if (!nextVertexNode.Value.isConvex)
                             {
-                                LinkedListNode<Vertex> nextOfNext = nextVertexNode.Next ?? vertsInClippedPolygon.First;
+                                LinkedListNode<Vertex> nextOfNext = nextVertexNode.Next ?? _vertsInClippedPolygon.First;
                                 nextVertexNode.Value.isConvex = IsConvex(prevVertexNode.Value.position, nextVertexNode.Value.position, nextOfNext.Value.position);
                             }
 
-                            // add triangle to tri array
-                            tris[triIndex * 3 + 2] = prevVertexNode.Value.index;
-                            tris[triIndex * 3 + 1] = vertexNode.Value.index;
-                            tris[triIndex * 3] = nextVertexNode.Value.index;
-                            triIndex++;
+                            _tris[_triIndex * 3 + 2] = prevVertexNode.Value.index;
+                            _tris[_triIndex * 3 + 1] = vertexNode.Value.index;
+                            _tris[_triIndex * 3] = nextVertexNode.Value.index;
+                            _triIndex++;
 
                             hasRemovedEarThisIteration = true;
-                            vertsInClippedPolygon.Remove(vertexNode);
+                            _vertsInClippedPolygon.Remove(vertexNode);
                             break;
                         }
                     }
@@ -73,39 +69,36 @@ namespace Assets.ShapeEditor.Geometry
                     return null;
                 }
             }
-            return tris;
+            return _tris;
         }
-
-        // Creates a linked list of all vertices in the polygon, with the hole vertices joined to the hull at optimal points.
+        
         private LinkedList<Vertex> GenerateVertexList(Polygon polygon)
         {
             LinkedList<Vertex> vertexList = new LinkedList<Vertex>();
             LinkedListNode<Vertex> currentNode = null;
 
-            // Add all hull points to the linked list
-            for (int i = 0; i < polygon.numHullPoints; i++)
+            for (int i = 0; i < polygon.NumHullPoints; i++)
             {
-                int prevPointIndex = (i - 1 + polygon.numHullPoints) % polygon.numHullPoints;
-                int nextPointIndex = (i + 1) % polygon.numHullPoints;
+                int prevPointIndex = (i - 1 + polygon.NumHullPoints) % polygon.NumHullPoints;
+                int nextPointIndex = (i + 1) % polygon.NumHullPoints;
 
-                bool vertexIsConvex = IsConvex(polygon.points[prevPointIndex].Position, polygon.points[i].Position, polygon.points[nextPointIndex].Position);
-                Vertex currentHullVertex = new Vertex(polygon.points[i].Position, i, vertexIsConvex);
+                bool vertexIsConvex = IsConvex(polygon.Points[prevPointIndex].Position, polygon.Points[i].Position, polygon.Points[nextPointIndex].Position);
+                Vertex currentHullVertex = new Vertex(polygon.Points[i].Position, i, vertexIsConvex);
 
                 if (currentNode == null)
                     currentNode = vertexList.AddFirst(currentHullVertex);
                 else
                     currentNode = vertexList.AddAfter(currentNode, currentHullVertex);
             }
-
-            // Process holes:
+            
             List<HoleData> sortedHoleData = new List<HoleData>();
 
-            for (int holeIndex = 0; holeIndex < polygon.numHoles; holeIndex++)
+            for (int holeIndex = 0; holeIndex < polygon.NumHoles; holeIndex++)
             {
                 // Find index of rightmost point in hole. This 'bridge' point is where the hole will be connected to the hull.
                 Vector2 holeBridgePoint = new Vector2(float.MinValue, 0);
                 int holeBridgeIndex = 0;
-                for (int i = 0; i < polygon.numPointsPerHole[holeIndex]; i++)
+                for (int i = 0; i < polygon.NumPointsPerHole[holeIndex]; i++)
                 {
                     if (polygon.GetHolePoint(i, holeIndex).Position.x > holeBridgePoint.x)
                     {
@@ -116,13 +109,11 @@ namespace Assets.ShapeEditor.Geometry
                 }
                 sortedHoleData.Add(new HoleData(holeIndex, holeBridgeIndex, holeBridgePoint));
             }
-            // Sort hole data so that holes furthest to the right are first
+            
             sortedHoleData.Sort((x, y) => (x.bridgePoint.x > y.bridgePoint.x) ? -1 : 1);
 
             foreach (HoleData holeData in sortedHoleData)
             {
-
-                // Find first edge which intersects with rightwards ray originating at the hole bridge point.
                 Vector2 rayIntersectPoint = new Vector2(float.MaxValue, holeData.bridgePoint.y);
                 List<LinkedListNode<Vertex>> hullNodesPotentiallyInBridgeTriangle = new List<LinkedListNode<Vertex>>();
                 LinkedListNode<Vertex> initialBridgeNodeOnHull = null;
@@ -133,10 +124,8 @@ namespace Assets.ShapeEditor.Geometry
                     Vector2 p0 = currentNode.Value.position;
                     Vector2 p1 = nextNode.Value.position;
 
-                    // at least one point must be to right of holeData.bridgePoint for intersection with ray to be possible
                     if (p0.x > holeData.bridgePoint.x || p1.x > holeData.bridgePoint.x)
                     {
-                        // one point is above, one point is below
                         if (p0.y > holeData.bridgePoint.y != p1.y > holeData.bridgePoint.y)
                         {
                             float rayIntersectX = p1.x; // only true if line p0,p1 is vertical
@@ -148,16 +137,11 @@ namespace Assets.ShapeEditor.Geometry
                                 rayIntersectX = (intersectY - c) / gradient;
                             }
 
-                            // intersection must be to right of bridge point
                             if (rayIntersectX > holeData.bridgePoint.x)
                             {
                                 LinkedListNode<Vertex> potentialNewBridgeNode = (p0.x > p1.x) ? currentNode : nextNode;
-                                // if two intersections occur at same x position this means is duplicate edge
-                                // duplicate edges occur where a hole has been joined to the outer polygon
                                 bool isDuplicateEdge = Mathf.Approximately(rayIntersectX, rayIntersectPoint.x);
 
-								// connect to duplicate edge (the one that leads away from the other, already connected hole, and back to the original hull) if the
-								// current hole's bridge point is higher up than the bridge point of the other hole (so that the new bridge connection doesn't intersect).
 								bool connectToThisDuplicateEdge = holeData.bridgePoint.y > potentialNewBridgeNode.Previous.Value.position.y;
   
                                 if (!isDuplicateEdge || connectToThisDuplicateEdge)
@@ -173,9 +157,6 @@ namespace Assets.ShapeEditor.Geometry
                         }
                     }
 
-                    // Determine if current node might lie inside the triangle formed by holeBridgePoint, rayIntersection, and bridgeNodeOnHull
-                    // We only need consider those which are reflex, since only these will be candidates for visibility from holeBridgePoint.
-                    // A list of these nodes is kept so that in next step it is not necessary to iterate over all nodes again.
                     if (currentNode != initialBridgeNodeOnHull)
                     {
                         if (!currentNode.Value.isConvex && p0.x > holeData.bridgePoint.x)
@@ -186,8 +167,6 @@ namespace Assets.ShapeEditor.Geometry
                     currentNode = currentNode.Next;
                 }
 
-                // Check triangle formed by hullBridgePoint, rayIntersection, and bridgeNodeOnHull.
-                // If this triangle contains any points, those points compete to become new bridgeNodeOnHull
                 LinkedListNode<Vertex> validBridgeNodeOnHull = initialBridgeNodeOnHull;
                 foreach (LinkedListNode<Vertex> nodePotentiallyInTriangle in hullNodesPotentiallyInBridgeTriangle)
                 {
@@ -195,14 +174,11 @@ namespace Assets.ShapeEditor.Geometry
                     {
                         continue;
                     }
-                    // if there is a point inside triangle, this invalidates the current bridge node on hull.
+                    
                     if (Maths2D.PointInTriangle(holeData.bridgePoint, rayIntersectPoint, initialBridgeNodeOnHull.Value.position, nodePotentiallyInTriangle.Value.position))
                     {
-                        // Duplicate points occur at hole and hull bridge points.
                         bool isDuplicatePoint = validBridgeNodeOnHull.Value.position == nodePotentiallyInTriangle.Value.position;
 
-                        // if multiple nodes inside triangle, we want to choose the one with smallest angle from holeBridgeNode.
-                        // if is a duplicate point, then use the one occurring later in the list
                         float currentDstFromHoleBridgeY = Mathf.Abs(holeData.bridgePoint.y - validBridgeNodeOnHull.Value.position.y);
                         float pointInTriDstFromHoleBridgeY = Mathf.Abs(holeData.bridgePoint.y - nodePotentiallyInTriangle.Value.position.y);
 
@@ -214,46 +190,41 @@ namespace Assets.ShapeEditor.Geometry
                     }
                 }
 
-                // Insert hole points (starting at holeBridgeNode) into vertex list at validBridgeNodeOnHull
                 currentNode = validBridgeNodeOnHull;
-                for (int i = holeData.bridgeIndex; i <= polygon.numPointsPerHole[holeData.holeIndex] + holeData.bridgeIndex; i++)
+                for (int i = holeData.bridgeIndex; i <= polygon.NumPointsPerHole[holeData.holeIndex] + holeData.bridgeIndex; i++)
                 {
                     int previousIndex = currentNode.Value.index;
-                    int currentIndex = polygon.IndexOfPointInHole(i % polygon.numPointsPerHole[holeData.holeIndex], holeData.holeIndex);
-                    int nextIndex = polygon.IndexOfPointInHole((i + 1) % polygon.numPointsPerHole[holeData.holeIndex], holeData.holeIndex);
+                    int currentIndex = polygon.IndexOfPointInHole(i % polygon.NumPointsPerHole[holeData.holeIndex], holeData.holeIndex);
+                    int nextIndex = polygon.IndexOfPointInHole((i + 1) % polygon.NumPointsPerHole[holeData.holeIndex], holeData.holeIndex);
 
-                    if (i == polygon.numPointsPerHole[holeData.holeIndex] + holeData.bridgeIndex) // have come back to starting point
+                    if (i == polygon.NumPointsPerHole[holeData.holeIndex] + holeData.bridgeIndex) // have come back to starting point
                     {
                         nextIndex = validBridgeNodeOnHull.Value.index; // next point is back to the point on the hull
                     }
 
-                    bool vertexIsConvex = IsConvex(polygon.points[previousIndex].Position, polygon.points[currentIndex].Position, polygon.points[nextIndex].Position);
-                    Vertex holeVertex = new Vertex(polygon.points[currentIndex].Position, currentIndex, vertexIsConvex);
+                    bool vertexIsConvex = IsConvex(polygon.Points[previousIndex].Position, polygon.Points[currentIndex].Position, polygon.Points[nextIndex].Position);
+                    Vertex holeVertex = new Vertex(polygon.Points[currentIndex].Position, currentIndex, vertexIsConvex);
                     currentNode = vertexList.AddAfter(currentNode, holeVertex);
                 }
 
-                // Add duplicate hull bridge vert now that we've come all the way around. Also set its concavity
                 Vector2 nextVertexPos = (currentNode.Next == null) ? vertexList.First.Value.position : currentNode.Next.Value.position;
                 bool isConvex = IsConvex(holeData.bridgePoint, validBridgeNodeOnHull.Value.position, nextVertexPos);
                 Vertex repeatStartHullVert = new Vertex(validBridgeNodeOnHull.Value.position, validBridgeNodeOnHull.Value.index, isConvex);
                 vertexList.AddAfter(currentNode, repeatStartHullVert);
 
-                //Set concavity of initial hull bridge vert, since it may have changed now that it leads to hole vert
                 LinkedListNode<Vertex> nodeBeforeStartBridgeNodeOnHull = (validBridgeNodeOnHull.Previous == null) ? vertexList.Last : validBridgeNodeOnHull.Previous;
                 LinkedListNode<Vertex> nodeAfterStartBridgeNodeOnHull = (validBridgeNodeOnHull.Next == null) ? vertexList.First : validBridgeNodeOnHull.Next;
                 validBridgeNodeOnHull.Value.isConvex = IsConvex(nodeBeforeStartBridgeNodeOnHull.Value.position, validBridgeNodeOnHull.Value.position, nodeAfterStartBridgeNodeOnHull.Value.position);
             }
             return vertexList;
         }
-
-
-        // check if triangle contains any verts (note, only necessary to check reflex verts).
+        
         private bool TriangleContainsVertex(Vertex v0, Vertex v1, Vertex v2)
         {
-            LinkedListNode<Vertex> vertexNode = vertsInClippedPolygon.First;
-            for (int i = 0; i < vertsInClippedPolygon.Count; i++)
+            LinkedListNode<Vertex> vertexNode = _vertsInClippedPolygon.First;
+            for (int i = 0; i < _vertsInClippedPolygon.Count; i++)
             {
-                if (!vertexNode.Value.isConvex) // convex verts will never be inside triangle
+                if (!vertexNode.Value.isConvex)
                 {
                     Vertex vertexToCheck = vertexNode.Value;
                     if (vertexToCheck.index != v0.index && vertexToCheck.index != v1.index && vertexToCheck.index != v2.index) // dont check verts that make up triangle
@@ -269,9 +240,7 @@ namespace Assets.ShapeEditor.Geometry
 
             return false;
         }
-
-
-        // v1 is considered a convex vertex if v0-v1-v2 are wound in a counter-clockwise order.
+        
         private bool IsConvex(Vector2 v0, Vector2 v1, Vector2 v2)
         {
             return Maths2D.SideOfLine(v0, v2, v1) == -1;

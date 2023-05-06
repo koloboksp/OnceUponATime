@@ -1,21 +1,22 @@
 using Assets.Scripts.Core.Mobs.Helpers;
 using Assets.Scripts.Effects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class Thorn : Character
     {
-        public ShakeEffect InteractionEffect;
-
-        public Collider2D BodyCollider;
-
-        public float DamageOnContact = 1;
-        public float DamageForceOnContact = 4;
-        public float DealDamageOnContactSpeed = 4.0f;
-
         private DealDamageOnContact mDealDamageOnContact;
 
+        [FormerlySerializedAs("InteractionEffect")] [SerializeField] private ShakeEffect _interactionEffect;
+
+        [FormerlySerializedAs("BodyCollider")] [SerializeField] private Collider2D _bodyCollider;
+
+        [FormerlySerializedAs("DamageOnContact")] [SerializeField] private float _damageOnContact = 1;
+        [FormerlySerializedAs("DamageForceOnContact")] [SerializeField] private float _damageForceOnContact = 4;
+        [FormerlySerializedAs("DealDamageOnContactSpeed")] [SerializeField] private float _dealDamageOnContactSpeed = 4.0f;
+        
         private void Awake()
         {
             mDealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContact);
@@ -30,9 +31,9 @@ namespace Assets.Scripts.Core.Mobs
                 forceDirection = -Vector2.right + Vector2.up;
             forceDirection.Normalize();
 
-            InteractionEffect.enabled = true;
+            _interactionEffect.enabled = true;
 
-            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, DamageOnContact, contactInfo.AveragePoint, DamageForceOnContact, -contactInfo.AverageNormal));
+            contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, _damageOnContact, contactInfo.AveragePoint, _damageForceOnContact, -contactInfo.AverageNormal));
         }
 
         private void OnCollisionEnter2D(Collision2D collisionInfo)
@@ -47,21 +48,21 @@ namespace Assets.Scripts.Core.Mobs
 
         private void Update()
         {
-            mDealDamageOnContact.Update(DealDamageOnContactSpeed);
+            mDealDamageOnContact.Update(_dealDamageOnContactSpeed);
         }
 
         public override void TakeDamage(object sender, DamageInfo damageInfo)
         {
             base.TakeDamage(sender, damageInfo);
 
-            InteractionEffect.enabled = true;
+            _interactionEffect.enabled = true;
         }
 
         protected override void Destroy()
         {
             base.Destroy();
 
-            BodyCollider.enabled = false;
+            _bodyCollider.enabled = false;
         }
     }
 }

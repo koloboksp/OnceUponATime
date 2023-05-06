@@ -7,35 +7,35 @@ namespace Assets.ShapeEditor.Editor
     [CustomEditor(typeof(ExtendedLight), true)]
     public class ExtendedLightEditor : UnityEditor.Editor
     {
-        ExtendedLight mTarget;
+        ExtendedLight _target;
 
-        SerializedProperty mRangeProperty;
-        SerializedProperty mColorProperty;
+        SerializedProperty _rangeProperty;
+        SerializedProperty _colorProperty;
 
         void OnEnable()
         {
-            mTarget = target as ExtendedLight;
+            _target = target as ExtendedLight;
 
-            mRangeProperty = serializedObject.FindProperty("mRange");
-            mColorProperty = serializedObject.FindProperty("mColor");
+            _rangeProperty = serializedObject.FindProperty("Range");
+            _colorProperty = serializedObject.FindProperty("Color");
         }
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
-            EditorGUILayout.PropertyField(mRangeProperty, new GUIContent("Range"));
+            EditorGUILayout.PropertyField(_rangeProperty, new GUIContent("Range"));
 
             if (GUI.changed)
             {
-                mTarget.UpdateTargets();
+                _target.UpdateTargets();
                 serializedObject.ApplyModifiedProperties();
             }
-            EditorGUILayout.PropertyField(mColorProperty, new GUIContent("Color"));
+            EditorGUILayout.PropertyField(_colorProperty, new GUIContent("Color"));
 
             if (GUI.changed)
             {
-                mTarget.UpdateTargets();
+                _target.UpdateTargets();
                 serializedObject.ApplyModifiedProperties();
             }
         }

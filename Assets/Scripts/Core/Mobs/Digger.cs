@@ -19,7 +19,7 @@ namespace Assets.Scripts.Core.Mobs
         
         public AttackOperation AttackOperation => _attackOperation;
         public Transform SmoothRotationRoot => _smoothRotationRoot;
-
+       
         private void Update()
         {
             base.InnerUpdate();
@@ -39,26 +39,22 @@ namespace Assets.Scripts.Core.Mobs
             _attackOperation.OnComplete = Attack_OnComplete;
             _attackOperation.OnAbort = Attack_Abort;
 
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_Abort(Operation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_InWaitPart(AttackOperation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_OnComplete(Operation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
     }
 }

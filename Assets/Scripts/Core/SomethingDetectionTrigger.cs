@@ -6,19 +6,19 @@ namespace Assets.Scripts.Core
 {
     public class SomethingDetectionTrigger<T> : Trigger 
     {
-        private List<T> mNoAllocForSearch = new List<T>();
-        private List<Pair> mEnemies = new List<Pair>();
+        private readonly List<T> _noAllocForSearch = new List<T>();
+        private readonly List<Pair> _enemies = new List<Pair>();
 
         public int EnemiesCount
         {
-            get { return mEnemies.Count; }
+            get { return _enemies.Count; }
         }
 
         private int IndexOf(T key)
         {
-            for (var index = 0; index < mEnemies.Count; index++)
+            for (var index = 0; index < _enemies.Count; index++)
             {
-                var enemy = mEnemies[index];
+                var enemy = _enemies[index];
                 if (ReferenceEquals(enemy.Key, key))
                     return index;
             }
@@ -30,18 +30,18 @@ namespace Assets.Scripts.Core
         {
             if (collider2d.attachedRigidbody != null && !collider2d.isTrigger)
             {
-                collider2d.gameObject.GetComponentsInChildren(mNoAllocForSearch);
-                for (var fIndex = 0; fIndex < mNoAllocForSearch.Count; fIndex++)
+                collider2d.gameObject.GetComponentsInChildren(_noAllocForSearch);
+                for (var fIndex = 0; fIndex < _noAllocForSearch.Count; fIndex++)
                 {
-                    var searchResult = mNoAllocForSearch[fIndex];
+                    var searchResult = _noAllocForSearch[fIndex];
                     var indexOf = IndexOf(searchResult);
                     if (indexOf >= 0)
                     {
-                        mEnemies[indexOf].Add(collider2d);
+                        _enemies[indexOf].Add(collider2d);
                     }
                     else
                     {
-                        mEnemies.Add(new Pair(searchResult, collider2d));
+                        _enemies.Add(new Pair(searchResult, collider2d));
                     }
                 }
             }
@@ -49,42 +49,41 @@ namespace Assets.Scripts.Core
 
         private void OnTriggerExit2D(Collider2D collider2d)
         {
-            for (var index = mEnemies.Count - 1; index >= 0; index--)
+            for (var index = _enemies.Count - 1; index >= 0; index--)
             {
-                var enemy = mEnemies[index];
+                var enemy = _enemies[index];
                 if (enemy.Remove(collider2d))
                     if (enemy.IsEmpty)
                     {
-                        mEnemies.Remove(enemy);
+                        _enemies.Remove(enemy);
                     }
             }
         }
-
-
+        
         public class Pair
         {
             public readonly T Key;
-            private readonly List<Collider2D> mValues = new List<Collider2D>();
+            private readonly List<Collider2D> _values = new List<Collider2D>();
 
             public Pair(T key, Collider2D value)
             {
                 Key = key;
-                mValues.Add(value);
+                _values.Add(value);
             }
 
             public bool IsEmpty
             {
-                get { return mValues.Count == 0; }
+                get { return _values.Count == 0; }
             }
 
             public void Add(Collider2D value)
             {
-                mValues.Add(value);
+                _values.Add(value);
             }
 
             public bool Remove(Collider2D value)
             {
-                return mValues.Remove(value);
+                return _values.Remove(value);
             }
         }
     }

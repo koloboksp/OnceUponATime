@@ -12,14 +12,13 @@ namespace Assets.ShapeEditor.Editor
     {
         public const float LineHandleRadius = ShapeEditor.HandleRadius * 10.0f;
 
-        readonly SelectionInfo mSelectionInfo = new SelectionInfo();
-        readonly MouseOverInfo mMouseOverInfo = new MouseOverInfo();
+        private  readonly SelectionInfo _selectionInfo = new SelectionInfo();
+        private readonly MouseOverInfo _mouseOverInfo = new MouseOverInfo();
 
-        InstrumentMode mInstrumentMode = InstrumentMode.AddOrMovePoints;
+        private InstrumentMode _instrumentMode = InstrumentMode.AddOrMovePoints;
 
-        Vector3 mLocalMousePosition;
-
-
+        private Vector3 _localMousePosition;
+        
         public PointsEditingTool(ShapeEditor owner) : base(owner)
         {
            
@@ -29,10 +28,10 @@ namespace Assets.ShapeEditor.Editor
         {
             base.OnEnable();
 
-            if(mSelectionInfo.mShapeIndex == -1)
+            if(_selectionInfo.ShapeIndex == -1)
                 if (Owner.ShapeCreator.Count >= 0)
                 {
-                    mSelectionInfo.mShapeIndex = 0;
+                    _selectionInfo.ShapeIndex = 0;
                     Owner.MarkSceneUIDirty();
                 }
         }
@@ -41,35 +40,35 @@ namespace Assets.ShapeEditor.Editor
         {
             if (guiEvent.modifiers == EventModifiers.Shift)
             {
-                mInstrumentMode = InstrumentMode.AddHole;         
+                _instrumentMode = InstrumentMode.AddHole;         
             }
             else if (guiEvent.modifiers == EventModifiers.Control)
             {
-                mInstrumentMode = InstrumentMode.RemovePoints;            
+                _instrumentMode = InstrumentMode.RemovePoints;            
             }
             else
             {
-                mInstrumentMode = InstrumentMode.AddOrMovePoints;
+                _instrumentMode = InstrumentMode.AddOrMovePoints;
             }
 
             if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
             {
                 if (Owner.ShapeCreator.Count == 0)
                 {
-                    CreateNewShape(mLocalMousePosition);
+                    CreateNewShape(_localMousePosition);
                     Owner.MarkShapeDirty();
                 }
                 else
                 {
-                    if (mInstrumentMode == InstrumentMode.AddHole)
+                    if (_instrumentMode == InstrumentMode.AddHole)
                     {
-                        CreateNewShape(mLocalMousePosition);
+                        CreateNewShape(_localMousePosition);
                         Owner.MarkShapeDirty();
                     }
                     else
                     {
                         
-                        if (!(mMouseOverInfo.IsOverLine || mMouseOverInfo.IsOverPoint || mMouseOverInfo.IsOverCross) &&
+                        if (!(_mouseOverInfo.IsOverLine || _mouseOverInfo.IsOverPoint || _mouseOverInfo.IsOverCross) &&
                             !Owner.ShapeCreator.IsEmpty)
                         {
                             Owner.BreakEditing();
@@ -78,22 +77,22 @@ namespace Assets.ShapeEditor.Editor
                         }
                         else
                         {
-                            if (mInstrumentMode == InstrumentMode.RemovePoints)
+                            if (_instrumentMode == InstrumentMode.RemovePoints)
                             {
                                 int pointIndex = -1;
 
-                                if (mMouseOverInfo.IsOverPoint)
-                                    pointIndex = mMouseOverInfo.PointIndex;
-                                if (mMouseOverInfo.IsOverCross)
-                                    pointIndex = mMouseOverInfo.CrossIndex;
+                                if (_mouseOverInfo.IsOverPoint)
+                                    pointIndex = _mouseOverInfo.PointIndex;
+                                if (_mouseOverInfo.IsOverCross)
+                                    pointIndex = _mouseOverInfo.CrossIndex;
 
                                 if (pointIndex != -1)
                                 {
-                                    if (Owner.ShapeCreator[mMouseOverInfo.ShapeIndex].Count <= 3)
+                                    if (Owner.ShapeCreator[_mouseOverInfo.ShapeIndex].Count <= 3)
                                     {
                                         Undo.RecordObject(Owner.ShapeCreator, "Delete shape");
-                                        Owner.ShapeCreator.RemoveAt(mMouseOverInfo.ShapeIndex);
-                                        mMouseOverInfo.Reset();
+                                        Owner.ShapeCreator.RemoveAt(_mouseOverInfo.ShapeIndex);
+                                        _mouseOverInfo.Reset();
 
                                         Owner.MarkUIDirty();
                                         Owner.MarkShapeDirty();
@@ -102,9 +101,9 @@ namespace Assets.ShapeEditor.Editor
                                     else
                                     {
                                         Undo.RecordObject(Owner.ShapeCreator, "Delete point");
-                                        Owner.ShapeCreator[mMouseOverInfo.ShapeIndex].RemoveAt(pointIndex);
-                                        mMouseOverInfo.Reset();
-                                        mSelectionInfo.DeselectPoint();
+                                        Owner.ShapeCreator[_mouseOverInfo.ShapeIndex].RemoveAt(pointIndex);
+                                        _mouseOverInfo.Reset();
+                                        _selectionInfo.DeselectPoint();
 
                                         Owner.MarkSceneUIDirty();
                                         Owner.MarkShapeDirty();
@@ -113,23 +112,23 @@ namespace Assets.ShapeEditor.Editor
                             }
                             else
                             {
-                                if (mMouseOverInfo.IsOverPoint || mMouseOverInfo.IsOverCross)
+                                if (_mouseOverInfo.IsOverPoint || _mouseOverInfo.IsOverCross)
                                 {
                                     int pointIndex = -1;
-                                    if (mMouseOverInfo.IsOverPoint)
-                                        pointIndex = mMouseOverInfo.PointIndex;
-                                    if (mMouseOverInfo.IsOverCross)
-                                        pointIndex = mMouseOverInfo.CrossIndex;
+                                    if (_mouseOverInfo.IsOverPoint)
+                                        pointIndex = _mouseOverInfo.PointIndex;
+                                    if (_mouseOverInfo.IsOverCross)
+                                        pointIndex = _mouseOverInfo.CrossIndex;
 
-                                    mSelectionInfo.SelectPointByMouse(mMouseOverInfo.ShapeIndex, pointIndex, Owner.ShapeCreator, guiEvent.mousePosition);
+                                    _selectionInfo.SelectPointByMouse(_mouseOverInfo.ShapeIndex, pointIndex, Owner.ShapeCreator, guiEvent.mousePosition);
                                 }
                                 else
                                 {
-                                    int pointIndex = mMouseOverInfo.LineIndex + 1;
+                                    int pointIndex = _mouseOverInfo.LineIndex + 1;
                                     Undo.RecordObject(Owner.ShapeCreator, "Add point");
-                                    Owner.ShapeCreator[mMouseOverInfo.ShapeIndex].Insert(pointIndex, new Point(mMouseOverInfo.LocalLineIntersection));
+                                    Owner.ShapeCreator[_mouseOverInfo.ShapeIndex].Insert(pointIndex, new Point(_mouseOverInfo.LocalLineIntersection));
 
-                                    mSelectionInfo.SelectPointByMouse(mMouseOverInfo.ShapeIndex, pointIndex, Owner.ShapeCreator, guiEvent.mousePosition);
+                                    _selectionInfo.SelectPointByMouse(_mouseOverInfo.ShapeIndex, pointIndex, Owner.ShapeCreator, guiEvent.mousePosition);
                                     Owner.MarkShapeDirty();
                                 }
                                 Owner.MarkSceneUIDirty();
@@ -143,18 +142,18 @@ namespace Assets.ShapeEditor.Editor
 
             if ((guiEvent.type == EventType.MouseUp && guiEvent.button == 0))
             {
-                if (mSelectionInfo.PointIsSelected)
+                if (_selectionInfo.PointIsSelected)
                 {
-                    mSelectionInfo.StopDrag(Owner.ShapeCreator);         
+                    _selectionInfo.StopDrag(Owner.ShapeCreator);         
                 }
 
             }
 
             if (guiEvent.type == EventType.MouseDrag && guiEvent.button == 0 && guiEvent.modifiers == EventModifiers.None)
             {
-                if (mSelectionInfo.PointIsSelected)
+                if (_selectionInfo.PointIsSelected)
                 {
-                    mSelectionInfo.DragPoint(Owner.ShapeCreator, guiEvent.mousePosition);
+                    _selectionInfo.DragPoint(Owner.ShapeCreator, guiEvent.mousePosition);
                     Owner.MarkSceneUIDirty();
                     Owner.MarkShapeDirty();
                 }
@@ -172,8 +171,8 @@ namespace Assets.ShapeEditor.Editor
                 targetPlane.Raycast(mouseRay, out distance);
 
                 var mousePosition = mouseRay.GetPoint(distance);
-                mLocalMousePosition = Owner.ShapeCreator.transform.InverseTransformPoint(mousePosition);
-                if (mMouseOverInfo.UpdateMouseOverInfo(Owner.ShapeCreator, mousePosition))
+                _localMousePosition = Owner.ShapeCreator.transform.InverseTransformPoint(mousePosition);
+                if (_mouseOverInfo.UpdateMouseOverInfo(Owner.ShapeCreator, mousePosition))
                     Owner.MarkSceneUIDirty();
             }
    
@@ -181,15 +180,15 @@ namespace Assets.ShapeEditor.Editor
 
         public override void Repaint()
         {
-            if (mInstrumentMode == InstrumentMode.AddHole)
+            if (_instrumentMode == InstrumentMode.AddHole)
             {
                 DrawInAddHoleMode(Owner.ShapeCreator);
             }
-            else if (mInstrumentMode == InstrumentMode.AddOrMovePoints)
+            else if (_instrumentMode == InstrumentMode.AddOrMovePoints)
             {
                 DrawInAddOrMoveMode(Owner.ShapeCreator);
             }
-            else if (mInstrumentMode == InstrumentMode.RemovePoints)
+            else if (_instrumentMode == InstrumentMode.RemovePoints)
             {
                 DrawInRemoveMode(Owner.ShapeCreator);
             }
@@ -210,8 +209,8 @@ namespace Assets.ShapeEditor.Editor
         {
             Undo.RecordObject(Owner.ShapeCreator, "Create shape");
             Owner.ShapeCreator.Add(new Shape());
-            mSelectionInfo.DeselectPoint();
-            mSelectionInfo.mShapeIndex = Owner.ShapeCreator.Count - 1;
+            _selectionInfo.DeselectPoint();
+            _selectionInfo.ShapeIndex = Owner.ShapeCreator.Count - 1;
 
             var points = GetNewShapePointsStartPack(lMousePosition);
             foreach (var point in points)
@@ -225,7 +224,7 @@ namespace Assets.ShapeEditor.Editor
         {
             var worldShapeNormal = owner.transform.TransformDirection(-Camera.current.transform.forward);
 
-            var points = GetNewShapePointsStartPack(mLocalMousePosition);
+            var points = GetNewShapePointsStartPack(_localMousePosition);
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -247,7 +246,7 @@ namespace Assets.ShapeEditor.Editor
             {
                 Shape shape = Owner.ShapeCreator[sIndex];
             
-                var color = (sIndex == mMouseOverInfo.ShapeIndex) ? ShapeEditor.ContoursHighlightedColor : ShapeEditor.ContoursNormalColor;
+                var color = (sIndex == _mouseOverInfo.ShapeIndex) ? ShapeEditor.ContoursHighlightedColor : ShapeEditor.ContoursNormalColor;
                 for (int i = 0; i < shape.Count; i++)
                 {
                     Vector3 worldShapePoint = owner.transform.TransformPoint(shape[i].Position);
@@ -264,9 +263,9 @@ namespace Assets.ShapeEditor.Editor
         {
             var worldShapeNormal = owner.transform.TransformDirection(-Camera.current.transform.forward);
           
-            if (mSelectionInfo.PointIsSelected)
+            if (_selectionInfo.PointIsSelected)
             {         
-                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[mSelectionInfo.ShapeIndex][mSelectionInfo.PointIndex].Position);
+                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[_selectionInfo.ShapeIndex][_selectionInfo.PointIndex].Position);
                 Handles.color = Color.blue;
         
                 Handles.DrawWireDisc(p, worldShapeNormal, ShapeEditor.GetHandelFixedScreenSize(p, 1));      
@@ -277,16 +276,16 @@ namespace Assets.ShapeEditor.Editor
         {
             var worldShapeNormal = owner.transform.TransformDirection(-Camera.current.transform.forward);
 
-            if (mMouseOverInfo.IsOverPoint)
+            if (_mouseOverInfo.IsOverPoint)
             {
-                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[mMouseOverInfo.ShapeIndex][mMouseOverInfo.PointIndex].Position);
+                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[_mouseOverInfo.ShapeIndex][_mouseOverInfo.PointIndex].Position);
                 Handles.color = highlightColor;
 
                 Handles.DrawWireDisc(p, worldShapeNormal, ShapeEditor.GetHandelFixedScreenSize(p, 1));
             }
-            if (mMouseOverInfo.IsOverCross)
+            if (_mouseOverInfo.IsOverCross)
             {
-                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[mMouseOverInfo.ShapeIndex][mMouseOverInfo.CrossIndex].Position);
+                Vector3 p = owner.transform.TransformPoint((Vector2)Owner.ShapeCreator[_mouseOverInfo.ShapeIndex][_mouseOverInfo.CrossIndex].Position);
                 Handles.color = highlightColor;
 
                 Handles.DrawWireDisc(p, worldShapeNormal, ShapeEditor.GetHandelFixedScreenSize(p, 1));
@@ -304,24 +303,24 @@ namespace Assets.ShapeEditor.Editor
 
             var worldShapeNormal = owner.transform.TransformDirection(-Camera.current.transform.forward);
 
-            if (!mSelectionInfo.DragEnable)
+            if (!_selectionInfo.DragEnable)
             {
-                if (mMouseOverInfo.IsOverLine)
+                if (_mouseOverInfo.IsOverLine)
                 {
                     Handles.color = Color.red;
 
-                    var intersectionP = owner.transform.TransformPoint((Vector2) mMouseOverInfo.LocalLineIntersection);
+                    var intersectionP = owner.transform.TransformPoint((Vector2) _mouseOverInfo.LocalLineIntersection);
                     Handles.DrawWireDisc(intersectionP, worldShapeNormal,
                         ShapeEditor.GetHandelFixedScreenSize(intersectionP));
-                    Handles.DrawDottedLine(owner.transform.TransformPoint(mLocalMousePosition), intersectionP, 4);
+                    Handles.DrawDottedLine(owner.transform.TransformPoint(_localMousePosition), intersectionP, 4);
                 }
 
-                if (mMouseOverInfo.IsOverCross)
+                if (_mouseOverInfo.IsOverCross)
                 {
                     Handles.color = Color.red;
 
-                    Vector3 cP = owner.transform.TransformPoint(Owner.ShapeCreator[mMouseOverInfo.ShapeIndex][mMouseOverInfo.CrossIndex].Position);
-                    Handles.DrawDottedLine(owner.transform.TransformPoint(mLocalMousePosition), cP, 4);
+                    Vector3 cP = owner.transform.TransformPoint(Owner.ShapeCreator[_mouseOverInfo.ShapeIndex][_mouseOverInfo.CrossIndex].Position);
+                    Handles.DrawDottedLine(owner.transform.TransformPoint(_localMousePosition), cP, 4);
                 }
             }
         }
@@ -334,11 +333,11 @@ namespace Assets.ShapeEditor.Editor
 
             var worldShapeNormal = owner.transform.TransformDirection(-Camera.current.transform.forward);
             
-            if (mMouseOverInfo.IsOverPoint || mMouseOverInfo.IsOverCross)
+            if (_mouseOverInfo.IsOverPoint || _mouseOverInfo.IsOverCross)
             {
-                if (Owner.ShapeCreator[mMouseOverInfo.ShapeIndex].Count <= 3)
+                if (Owner.ShapeCreator[_mouseOverInfo.ShapeIndex].Count <= 3)
                 {
-                    Shape shape = Owner.ShapeCreator[mMouseOverInfo.ShapeIndex];
+                    Shape shape = Owner.ShapeCreator[_mouseOverInfo.ShapeIndex];
                     for (int i = 0; i < shape.Count; i++)
                     {
                         Vector3 p = owner.transform.TransformPoint(shape[i].Position);

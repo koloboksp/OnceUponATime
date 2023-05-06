@@ -10,14 +10,12 @@ namespace Assets.Scripts.Core.Mobs
 
         private void OnTriggerEnter2D(Collider2D collider2d)
         {
-            if (OnSomethingEnter != null)
-                OnSomethingEnter(this, collider2d);
+            OnSomethingEnter?.Invoke(this, collider2d);
         }
 
         private void OnTriggerExit2D(Collider2D collider2d)
         {
-            if (OnSomethingExit != null)
-                OnSomethingExit(this, collider2d);
+            OnSomethingExit?.Invoke(this, collider2d);
         }
     }
 }

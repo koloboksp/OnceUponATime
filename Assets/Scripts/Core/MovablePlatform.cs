@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Comparers;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
@@ -16,10 +17,10 @@ namespace Assets.Scripts.Core
     {
         private const float ShiftThreshold = 0.01f;
 
-        private readonly PathTraveler mPathTraveler = new PathTraveler();
+        private readonly PathTraveler _pathTraveler = new PathTraveler();
 
-        public MovablePlatformMovePart MovablePart;
-        public float Speed = 1.5f;
+        [FormerlySerializedAs("MovablePart")] [SerializeField] private MovablePlatformMovePart _movablePart;
+        [FormerlySerializedAs("Speed")] [SerializeField] private float _speed = 1.5f;
         
         public int Order { get { return 1; } }
 
@@ -35,27 +36,27 @@ namespace Assets.Scripts.Core
 
         private void Start()
         {
-            mPathTraveler.RebuildPath(gameObject.GetComponentsInChildren<IPoint>());
-            mPathTraveler.Move(Speed, Time.fixedDeltaTime);
+            _pathTraveler.RebuildPath(gameObject.GetComponentsInChildren<IPoint>());
+            _pathTraveler.Move(_speed, Time.fixedDeltaTime);
         }
       
         public void OrderedFixedUpdate()
         {
-            var previousPositionShift = mPathTraveler.Position - mPathTraveler.PreviousPosition;
-            mPathTraveler.Move(Speed, Time.fixedDeltaTime);
-            var nextPositionShift = mPathTraveler.Position - mPathTraveler.PreviousPosition;
+            var previousPositionShift = _pathTraveler.Position - _pathTraveler.PreviousPosition;
+            _pathTraveler.Move(_speed, Time.fixedDeltaTime);
+            var nextPositionShift = _pathTraveler.Position - _pathTraveler.PreviousPosition;
 
             bool speedChanged = false;
             bool directionChanged = false;
 
-            if (mPathTraveler.IsReachedTheEnd)
-                mPathTraveler.MovingDirection = -mPathTraveler.MovingDirection;
+            if (_pathTraveler.IsReachedTheEnd)
+                _pathTraveler.MovingDirection = -_pathTraveler.MovingDirection;
 
             var deltaShift = (nextPositionShift - previousPositionShift) / Time.fixedDeltaTime;
             if (deltaShift.magnitude > ShiftThreshold)
                 speedChanged = true;
           
-            MovablePart.MovePosition(mPathTraveler.PreviousPosition, nextPositionShift / Time.fixedDeltaTime, previousPositionShift / Time.fixedDeltaTime, speedChanged, directionChanged);
+            _movablePart.MovePosition(_pathTraveler.PreviousPosition, nextPositionShift / Time.fixedDeltaTime, previousPositionShift / Time.fixedDeltaTime, speedChanged, directionChanged);
         }
 
         private void OnDrawGizmos()

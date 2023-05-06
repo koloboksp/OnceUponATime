@@ -1,165 +1,172 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class TrailEffect : MonoBehaviour
     {
-        public Vector3 Axis = Vector3.up;
-        public bool Emit = false;
-        public float Offset = 0.0f;
-        public float Width = 1.0f;
-        public float MaxVertexDistance = 0.05f;
-        public float MaxAngle = 5.0f;
-        public float LifeTime = 0.3f;
-        public Material Material;
+        private readonly List<int> _indexesOfFreePoints = new List<int>();
+        private readonly List<int> _indexesOfUsedPoints = new List<int>();
+        private readonly List<Point> _points = new List<Point>();
 
-        private readonly List<int> mIndexesOfFreePoints = new List<int>();
-        private readonly List<int> mIndexesOfUsedPoints = new List<int>();
-        private readonly List<Point> mPoints = new List<Point>();
+        private readonly ReallocArray<Vector3> _meshVertices = new ReallocArray<Vector3>();
+        private readonly ReallocArray<Vector2> _meshUVs = new ReallocArray<Vector2>();
+        private readonly ReallocArray<int> _meshTriangles = new ReallocArray<int>();
+        private readonly ReallocArray<Color> _meshVertexColors = new ReallocArray<Color>();
 
-        private readonly ReallocArray<Vector3> mMeshVertices = new ReallocArray<Vector3>();
-        private readonly ReallocArray<Vector2> mMeshUVs = new ReallocArray<Vector2>();
-        private readonly ReallocArray<int> mMeshTriangles = new ReallocArray<int>();
-        private readonly ReallocArray<Color> mMeshVertexColors = new ReallocArray<Color>();
+        private Vector3 _previousPosition;
+        private Quaternion _previousRotation;
 
-        private Vector3 mPreviousPosition;
-        private Quaternion mPreviousRotation;
+        private GameObject _trailObject = null;
+        private Mesh _trailMesh = null;
+        private Material _instanceMaterial;
 
-        private GameObject mTrailObject = null;
-        private Mesh mTrailMesh = null;
-        private Material mInstanceMaterial;
+        [FormerlySerializedAs("Axis")] [SerializeField] private Vector3 _axis = Vector3.up;
+        [FormerlySerializedAs("Emit")] [SerializeField] private bool _emit = false;
+        [FormerlySerializedAs("Offset")] [SerializeField] private float _offset = 0.0f;
+        [FormerlySerializedAs("Width")] [SerializeField] private float _width = 1.0f;
+        [FormerlySerializedAs("MaxVertexDistance")] [SerializeField] private float _maxVertexDistance = 0.05f;
+        [FormerlySerializedAs("MaxAngle")] [SerializeField] private float _maxAngle = 5.0f;
+        [FormerlySerializedAs("LifeTime")] [SerializeField] private float _lifeTime = 0.3f;
+        [FormerlySerializedAs("Material")] [SerializeField] private Material _material;
+        
+        public bool Emit
+        {
+            get => _emit;
+            set => _emit = value;
+        }
 
         private void Start()
         {
-            mPreviousPosition = transform.position;
-            mPreviousRotation = transform.rotation;
+            _previousPosition = transform.position;
+            _previousRotation = transform.rotation;
 
-            if (mTrailObject == null)
+            if (_trailObject == null)
             {
-                mTrailObject = new GameObject(gameObject.name + Mathf.Round(Random.Range(1, 256)));
+                _trailObject = new GameObject(gameObject.name + Mathf.Round(Random.Range(1, 256)));
 
-                mTrailObject.transform.parent = null;
-                mTrailObject.transform.position = Vector3.zero;
-                mTrailObject.transform.rotation = Quaternion.identity;
-                mTrailObject.transform.localScale = Vector3.one;
+                _trailObject.transform.parent = null;
+                _trailObject.transform.position = Vector3.zero;
+                _trailObject.transform.rotation = Quaternion.identity;
+                _trailObject.transform.localScale = Vector3.one;
 
 
-                mTrailMesh = new Mesh();
-                mTrailMesh.name = "Trail";
-                MeshFilter meshFilter = mTrailObject.AddComponent<MeshFilter>();
-                meshFilter.mesh = mTrailMesh;
-                MeshRenderer meshRenderer = mTrailObject.AddComponent<MeshRenderer>();
+                _trailMesh = new Mesh();
+                _trailMesh.name = "Trail";
+                MeshFilter meshFilter = _trailObject.AddComponent<MeshFilter>();
+                meshFilter.mesh = _trailMesh;
+                MeshRenderer meshRenderer = _trailObject.AddComponent<MeshRenderer>();
 
-                mInstanceMaterial = new Material(Material);
-                meshRenderer.material = mInstanceMaterial;
+                _instanceMaterial = new Material(_material);
+                meshRenderer.material = _instanceMaterial;
             }
         }
 
         private void OnDestroy()
         {
-            mPoints.Clear();
-            mIndexesOfFreePoints.Clear();
-            mIndexesOfUsedPoints.Clear();
+            _points.Clear();
+            _indexesOfFreePoints.Clear();
+            _indexesOfUsedPoints.Clear();
 
-            if (mTrailObject != null)
+            if (_trailObject != null)
             {
-                Destroy(mTrailObject);
-                mTrailObject = null;
+                Destroy(_trailObject);
+                _trailObject = null;
             }
-            if (mInstanceMaterial != null)
+            if (_instanceMaterial != null)
             {
-                Destroy(mInstanceMaterial);
-                mInstanceMaterial = null;
+                Destroy(_instanceMaterial);
+                _instanceMaterial = null;
             }
-            if (mTrailMesh != null)
+            if (_trailMesh != null)
             {
-                Destroy(mTrailMesh);
-                mTrailMesh = null;
+                Destroy(_trailMesh);
+                _trailMesh = null;
             }
         }
       
         public void OnEnable()
         {
-            if (mTrailObject != null)
+            if (_trailObject != null)
             {
-                mTrailObject.SetActive(true);
+                _trailObject.SetActive(true);
             }
         }
 
         public void OnDisable()
         {
-            if (mTrailObject != null)
+            if (_trailObject != null)
             {
-                mTrailObject.SetActive(false);
+                _trailObject.SetActive(false);
             }
         }
 
         internal void AddNewPoint()
         {
-            if (mIndexesOfFreePoints.Count > 0)
+            if (_indexesOfFreePoints.Count > 0)
             {
-                int freePointIndex = mIndexesOfFreePoints[mIndexesOfFreePoints.Count - 1];
-                mIndexesOfFreePoints.RemoveAt(mIndexesOfFreePoints.Count - 1);
-                mIndexesOfUsedPoints.Add(freePointIndex);
+                int freePointIndex = _indexesOfFreePoints[_indexesOfFreePoints.Count - 1];
+                _indexesOfFreePoints.RemoveAt(_indexesOfFreePoints.Count - 1);
+                _indexesOfUsedPoints.Add(freePointIndex);
 
-                Point reusedPoint = mPoints[freePointIndex];
-                reusedPoint.Reset(LifeTime, this.transform); 
+                Point reusedPoint = _points[freePointIndex];
+                reusedPoint.Reset(_lifeTime, this.transform); 
             }
             else
             {
-                mPoints.Add(new Point(LifeTime, this.transform));
-                mIndexesOfUsedPoints.Add(mPoints.Count - 1);
+                _points.Add(new Point(_lifeTime, this.transform));
+                _indexesOfUsedPoints.Add(_points.Count - 1);
             }
         }
 
 
         private void Update()
         {
-            if (Emit)
+            if (_emit)
             {             
-                if (mIndexesOfUsedPoints.Count >= 2)
+                if (_indexesOfUsedPoints.Count >= 2)
                 {
-                    Point lastPoint = mPoints[mIndexesOfUsedPoints[mIndexesOfUsedPoints.Count - 1]];
-                    Point penultPoint = mPoints[mIndexesOfUsedPoints[mIndexesOfUsedPoints.Count - 2]];
+                    Point lastPoint = _points[_indexesOfUsedPoints[_indexesOfUsedPoints.Count - 1]];
+                    Point penultPoint = _points[_indexesOfUsedPoints[_indexesOfUsedPoints.Count - 2]];
 
                     float distance = (penultPoint.Position - lastPoint.Position).magnitude;
-                    if (distance >= MaxVertexDistance ||
-                        Quaternion.Angle(penultPoint.Rotation, lastPoint.Rotation) >= MaxAngle)
+                    if (distance >= _maxVertexDistance ||
+                        Quaternion.Angle(penultPoint.Rotation, lastPoint.Rotation) >= _maxAngle)
                     {
                         AddNewPoint();
                     }   
                 }
                 else
                 {
-                    if (mPreviousPosition != transform.position ||
-                        mPreviousRotation != transform.rotation)
+                    if (_previousPosition != transform.position ||
+                        _previousRotation != transform.rotation)
                     {
                         AddNewPoint();
                         AddNewPoint();
                     }
                     else
                     {
-                        mPreviousPosition = transform.position;
-                        mPreviousRotation = transform.rotation;
+                        _previousPosition = transform.position;
+                        _previousRotation = transform.rotation;
                     }
                 }
   
-                if (mIndexesOfUsedPoints.Count > 0)
+                if (_indexesOfUsedPoints.Count > 0)
                 {
-                    Point lastPoint = mPoints[mIndexesOfUsedPoints[mIndexesOfUsedPoints.Count - 1]];
+                    Point lastPoint = _points[_indexesOfUsedPoints[_indexesOfUsedPoints.Count - 1]];
                     lastPoint.UpdatePose(this.transform);
                 }  
             }
 
-            if(mIndexesOfUsedPoints.Count > 0)
+            if(_indexesOfUsedPoints.Count > 0)
             {
-                if (mIndexesOfUsedPoints.Count > 2)
+                if (_indexesOfUsedPoints.Count > 2)
                 {
-                    for (int iupIndex = 0; iupIndex < mIndexesOfUsedPoints.Count - 2; iupIndex++)
+                    for (int iupIndex = 0; iupIndex < _indexesOfUsedPoints.Count - 2; iupIndex++)
                     {
-                        Point point = mPoints[mIndexesOfUsedPoints[iupIndex]];
-                        Point previousPoint = mPoints[mIndexesOfUsedPoints[iupIndex + 1]];
+                        Point point = _points[_indexesOfUsedPoints[iupIndex]];
+                        Point previousPoint = _points[_indexesOfUsedPoints[iupIndex + 1]];
 
                         if (point.ElapsedTime >= point.LifeTime && 
                             previousPoint.ElapsedTime >= previousPoint.LifeTime)
@@ -168,8 +175,8 @@ namespace Assets.Scripts.Effects
                 }
                 else
                 {
-                    Point point = mPoints[mIndexesOfUsedPoints[0]];
-                    Point previousPoint = mPoints[mIndexesOfUsedPoints[1]];
+                    Point point = _points[_indexesOfUsedPoints[0]];
+                    Point previousPoint = _points[_indexesOfUsedPoints[1]];
                     if (point.ElapsedTime >= point.LifeTime && 
                         previousPoint.ElapsedTime >= previousPoint.LifeTime)
                     {
@@ -178,30 +185,30 @@ namespace Assets.Scripts.Effects
                     }
                 }
 
-                for (int iupIndex = mIndexesOfUsedPoints.Count - 1; iupIndex >= 0; iupIndex--)
+                for (int iupIndex = _indexesOfUsedPoints.Count - 1; iupIndex >= 0; iupIndex--)
                 {
-                    var indexOfUsedPoint = mIndexesOfUsedPoints[iupIndex];
-                    Point point = mPoints[indexOfUsedPoint];
+                    var indexOfUsedPoint = _indexesOfUsedPoints[iupIndex];
+                    Point point = _points[indexOfUsedPoint];
                     
                     if (point.NeedToRemove)
                     {
-                        mIndexesOfUsedPoints.RemoveAt(iupIndex);
-                        mIndexesOfFreePoints.Add(indexOfUsedPoint);
+                        _indexesOfUsedPoints.RemoveAt(iupIndex);
+                        _indexesOfFreePoints.Add(indexOfUsedPoint);
                     }
                     else
                         point.Update(Time.deltaTime);
                 }
 
-                mMeshVertices.CheckSize(mIndexesOfUsedPoints.Count * 2);
-                mMeshUVs.CheckSize(mIndexesOfUsedPoints.Count * 2);
-                mMeshTriangles.CheckSize((mIndexesOfUsedPoints.Count - 1) * 6);
-                mMeshVertexColors.CheckSize(mIndexesOfUsedPoints.Count * 2);
+                _meshVertices.CheckSize(_indexesOfUsedPoints.Count * 2);
+                _meshUVs.CheckSize(_indexesOfUsedPoints.Count * 2);
+                _meshTriangles.CheckSize((_indexesOfUsedPoints.Count - 1) * 6);
+                _meshVertexColors.CheckSize(_indexesOfUsedPoints.Count * 2);
 
                 Vector3 anchorPosition = Vector3.zero;
-                for (int iupIndex = 0, pointQueueIndex = 0; iupIndex < mIndexesOfUsedPoints.Count; iupIndex++, pointQueueIndex++)
+                for (int iupIndex = 0, pointQueueIndex = 0; iupIndex < _indexesOfUsedPoints.Count; iupIndex++, pointQueueIndex++)
                 {
-                    int indexesOfUsedPoint = mIndexesOfUsedPoints[iupIndex];
-                    Point point = mPoints[indexesOfUsedPoint];
+                    int indexesOfUsedPoint = _indexesOfUsedPoints[iupIndex];
+                    Point point = _points[indexesOfUsedPoint];
                     if (pointQueueIndex == 0)
                         anchorPosition = point.Position;
                     
@@ -209,77 +216,77 @@ namespace Assets.Scripts.Effects
 
                     Color color = Color.Lerp(Color.white, Color.clear, normLifeTime);
 
-                    mMeshVertexColors[pointQueueIndex * 2] = color;
-                    mMeshVertexColors[(pointQueueIndex * 2) + 1] = color;
+                    _meshVertexColors[pointQueueIndex * 2] = color;
+                    _meshVertexColors[(pointQueueIndex * 2) + 1] = color;
 
-                    float width = Width;
+                    float width = _width;
                  
-                    mMeshVertices[pointQueueIndex * 2] = point.Position + point.Rotation * Axis * (Offset + width * 0.5f) - anchorPosition;
-                    mMeshVertices[(pointQueueIndex * 2) + 1] = point.Position + point.Rotation * Axis * (Offset - width * 0.5f) - anchorPosition;
+                    _meshVertices[pointQueueIndex * 2] = point.Position + point.Rotation * _axis * (_offset + width * 0.5f) - anchorPosition;
+                    _meshVertices[(pointQueueIndex * 2) + 1] = point.Position + point.Rotation * _axis * (_offset - width * 0.5f) - anchorPosition;
 
                     float uvRatio = normLifeTime;
-                    mMeshUVs[pointQueueIndex * 2] = new Vector2(uvRatio, 0);
-                    mMeshUVs[(pointQueueIndex * 2) + 1] = new Vector2(uvRatio, 1);
+                    _meshUVs[pointQueueIndex * 2] = new Vector2(uvRatio, 0);
+                    _meshUVs[(pointQueueIndex * 2) + 1] = new Vector2(uvRatio, 1);
 
                     if (pointQueueIndex != 0)
                     {
                         int triIndex = (pointQueueIndex - 1) * 6;
                         int vertIndex = pointQueueIndex * 2;
-                        mMeshTriangles[triIndex + 0] = vertIndex - 2;
-                        mMeshTriangles[triIndex + 1] = vertIndex - 1;
-                        mMeshTriangles[triIndex + 2] = vertIndex - 0;
+                        _meshTriangles[triIndex + 0] = vertIndex - 2;
+                        _meshTriangles[triIndex + 1] = vertIndex - 1;
+                        _meshTriangles[triIndex + 2] = vertIndex - 0;
 
-                        mMeshTriangles[triIndex + 3] = vertIndex + 1;
-                        mMeshTriangles[triIndex + 4] = vertIndex + 0;
-                        mMeshTriangles[triIndex + 5] = vertIndex - 1;
+                        _meshTriangles[triIndex + 3] = vertIndex + 1;
+                        _meshTriangles[triIndex + 4] = vertIndex + 0;
+                        _meshTriangles[triIndex + 5] = vertIndex - 1;
                     }
                 }
 
-                if (mIndexesOfUsedPoints.Count > 0)
+                if (_indexesOfUsedPoints.Count > 0)
                 {
-                    for (int i = (mIndexesOfUsedPoints.Count - 1) * 6; i < mMeshTriangles.Length; i++)
+                    for (int i = (_indexesOfUsedPoints.Count - 1) * 6; i < _meshTriangles.Length; i++)
                     {
-                        mMeshTriangles[i] = 0;
+                        _meshTriangles[i] = 0;
                     }
                 }
 
-                if (mTrailObject != null)
+                if (_trailObject != null)
                 {
-                    mTrailObject.transform.position = anchorPosition;
-                    mTrailObject.transform.rotation = Quaternion.identity;
+                    _trailObject.transform.position = anchorPosition;
+                    _trailObject.transform.rotation = Quaternion.identity;
                 }
 
-                mTrailMesh.Clear();
-                mTrailMesh.vertices = mMeshVertices.Array;
-                mTrailMesh.colors = mMeshVertexColors.Array;
-                mTrailMesh.uv = mMeshUVs.Array;
-                mTrailMesh.triangles = mMeshTriangles.Array;
-                mTrailMesh.UploadMeshData(false);
+                _trailMesh.Clear();
+                _trailMesh.vertices = _meshVertices.Array;
+                _trailMesh.colors = _meshVertexColors.Array;
+                _trailMesh.uv = _meshUVs.Array;
+                _trailMesh.triangles = _meshTriangles.Array;
+                _trailMesh.UploadMeshData(false);
             }
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(this.gameObject.transform.position + this.gameObject.transform.rotation * Axis * (Offset + Width * 0.5f), 
-                this.gameObject.transform.position + this.gameObject.transform.rotation * Axis * (Offset - Width * 0.5f));
+            Gizmos.DrawLine(this.gameObject.transform.position + this.gameObject.transform.rotation * _axis * (_offset + _width * 0.5f), 
+                this.gameObject.transform.position + this.gameObject.transform.rotation * _axis * (_offset - _width * 0.5f));
         }
 
         public class ReallocArray<T>
         {
-            private T[] mArray;
+            private T[] _mArray;
 
             public void CheckSize(int newSize)
             {
                 if (newSize > 0)
                 {
-                    if (mArray == null)
+                    if (_mArray == null)
                     {
-                        mArray = new T[newSize];
+                        _mArray = new T[newSize];
                     }
-                    else if (mArray.Length < newSize)
+                    else if (_mArray.Length < newSize)
                     {
-                        mArray = new T[newSize];
+                        _mArray = new T[newSize];
                     }
                     else
                     {
@@ -289,22 +296,22 @@ namespace Assets.Scripts.Effects
             }
             public T this[int key]
             {
-                get { return mArray[key]; }
+                get { return _mArray[key]; }
                 set
                 {
-                    mArray[key] = value;
+                    _mArray[key] = value;
                 }
             }
             public T[] Array
             {
-                get { return mArray; }
+                get { return _mArray; }
             }
             public int Length
             {
                 get
                 {
-                    if (mArray != null)
-                        return mArray.Length;
+                    if (_mArray != null)
+                        return _mArray.Length;
 
                     return 0;
                 }
@@ -313,12 +320,12 @@ namespace Assets.Scripts.Effects
 
         private class Point
         {
+            private bool _remove;
             public float ElapsedTime;
             public float LifeTime;
             public Vector3 Position;
             public Quaternion Rotation;
-            private bool mRemove;
-
+            
             public Point(float lifeTime, Transform transform)
             {
                 Reset(lifeTime, transform);
@@ -331,7 +338,7 @@ namespace Assets.Scripts.Effects
                 LifeTime = lifeTime;
                 ElapsedTime = 0.0f;
 
-                mRemove = false;
+                _remove = false;
             }
 
             public void Update(float deltaTime)
@@ -341,10 +348,10 @@ namespace Assets.Scripts.Effects
 
             public void MarkToRemove()
             {
-                mRemove = true;
+                _remove = true;
             }
 
-            public bool NeedToRemove { get { return mRemove; } }
+            public bool NeedToRemove { get { return _remove; } }
 
             public void UpdatePose(Transform transform)
             {

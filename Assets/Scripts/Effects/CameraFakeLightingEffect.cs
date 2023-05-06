@@ -1,24 +1,26 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class CameraFakeLightingEffect : MonoBehaviour
     {
-        private Camera mEffectCamera;
-        private RenderTexture mEffectRenderTexture;
-        public Material EffectMaterial;
-        private Color mDarknessColor = Color.black;
+        private Camera _effectCamera;
+        private RenderTexture _effectRenderTexture;
+        private Color _darknessColor = Color.black;
 
+        [FormerlySerializedAs("EffectMaterial")] [SerializeField] private Material _effectMaterial;
+        
         public Color DarknessColor
         {
-            get => mDarknessColor;
+            get => _darknessColor;
             set
             {
-                mDarknessColor = value;
-                if (mEffectCamera != null)
+                _darknessColor = value;
+                if (_effectCamera != null)
                 {
-                    mEffectCamera.backgroundColor = mDarknessColor;
+                    _effectCamera.backgroundColor = _darknessColor;
                 }
             }
         }
@@ -27,35 +29,35 @@ namespace Assets.Scripts.Effects
         {
             var srcCamera = gameObject.GetComponent<Camera>();
    
-            mEffectRenderTexture = new RenderTexture(Screen.width / 16, Screen.height / 16, 0, GraphicsFormat.R8G8B8A8_UNorm);
-            mEffectRenderTexture.name = "FakeLighting";
-            mEffectRenderTexture.autoGenerateMips = false;
+            _effectRenderTexture = new RenderTexture(Screen.width / 16, Screen.height / 16, 0, GraphicsFormat.R8G8B8A8_UNorm);
+            _effectRenderTexture.name = "FakeLighting";
+            _effectRenderTexture.autoGenerateMips = false;
             
             var cameraObj = new GameObject("FakeLightEffectCamera");
             cameraObj.transform.SetParent(transform);
             cameraObj.transform.localPosition = Vector3.zero;
             cameraObj.transform.localRotation = Quaternion.identity;
-            mEffectCamera = cameraObj.AddComponent<Camera>();
-            mEffectCamera.fieldOfView = srcCamera.fieldOfView;
-            mEffectCamera.nearClipPlane = srcCamera.nearClipPlane;
-            mEffectCamera.farClipPlane = srcCamera.farClipPlane;
-            mEffectCamera.cullingMask = 1 << 26;
-            mEffectCamera.clearFlags = CameraClearFlags.Color;
-            mEffectCamera.backgroundColor = mDarknessColor;
-            mEffectCamera.targetTexture = mEffectRenderTexture;
+            _effectCamera = cameraObj.AddComponent<Camera>();
+            _effectCamera.fieldOfView = srcCamera.fieldOfView;
+            _effectCamera.nearClipPlane = srcCamera.nearClipPlane;
+            _effectCamera.farClipPlane = srcCamera.farClipPlane;
+            _effectCamera.cullingMask = 1 << 26;
+            _effectCamera.clearFlags = CameraClearFlags.Color;
+            _effectCamera.backgroundColor = _darknessColor;
+            _effectCamera.targetTexture = _effectRenderTexture;
 
-            EffectMaterial.SetTexture("_LightingTex", mEffectRenderTexture);
+            _effectMaterial.SetTexture("_LightingTex", _effectRenderTexture);
         }
 
         private void OnDisable()
         {
-            Destroy(mEffectCamera.gameObject);
-            Destroy(mEffectRenderTexture);
+            Destroy(_effectCamera.gameObject);
+            Destroy(_effectRenderTexture);
         }
 
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            Graphics.Blit(source, destination, EffectMaterial);
+            Graphics.Blit(source, destination, _effectMaterial);
         }  
     }
 }

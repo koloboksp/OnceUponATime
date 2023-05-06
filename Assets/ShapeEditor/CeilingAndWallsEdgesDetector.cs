@@ -6,13 +6,13 @@ namespace Assets.ShapeEditor
 {
     public class CeilingAndWallsEdgesDetector
     {
-        private List<List<int>> mEdgesPointsIndexes;
+        private readonly List<List<int>> _edgesPointsIndexes;
 
-        public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
+        public List<List<int>> EdgesPointsIndexes => _edgesPointsIndexes;
 
         public CeilingAndWallsEdgesDetector(List<Point> hullPoints, List<List<int>> walkableEdgesPointsIndexes)
         {
-            mEdgesPointsIndexes = new List<List<int>>();
+            _edgesPointsIndexes = new List<List<int>>();
             if (walkableEdgesPointsIndexes != null && walkableEdgesPointsIndexes.Count > 0)
             {
                 for (var index = 0; index < walkableEdgesPointsIndexes.Count; index++)
@@ -20,7 +20,7 @@ namespace Assets.ShapeEditor
                     var walkableEdgePointsIndex = walkableEdgesPointsIndexes[index];
                     var nextWalkableEdgePointsIndex = walkableEdgesPointsIndexes[(index + 1) % walkableEdgesPointsIndexes.Count];
 
-                    mEdgesPointsIndexes.Add(new List<int>());
+                    _edgesPointsIndexes.Add(new List<int>());
 
                     int startIndex = walkableEdgePointsIndex.Last();
                     int endIndex = nextWalkableEdgePointsIndex.First();
@@ -29,14 +29,14 @@ namespace Assets.ShapeEditor
 
                     for (int i = startIndex; i <= endIndex; i++)
                     {
-                        mEdgesPointsIndexes.Last().Add(i % hullPoints.Count);
+                        _edgesPointsIndexes.Last().Add(i % hullPoints.Count);
                     }
                 }
             }
             else
             {
-                mEdgesPointsIndexes.Add(hullPoints.Select((p,i)=>i).ToList());
-                mEdgesPointsIndexes.Last().Add(0);
+                _edgesPointsIndexes.Add(hullPoints.Select((p,i)=>i).ToList());
+                _edgesPointsIndexes.Last().Add(0);
             }
         }
     }

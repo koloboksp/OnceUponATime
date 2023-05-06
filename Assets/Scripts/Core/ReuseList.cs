@@ -1,48 +1,59 @@
+using System;
 using System.Collections.Generic;
 
 namespace Assets.Scripts.Core
 {
-    public class ReuseList<T> where T : new()
+    public class ReuseList<T> where T : class
     {
-        private readonly List<int> mFree = new List<int>();
-        private readonly List<int> mUsed = new List<int>();
-        private readonly List<T> mElements = new List<T>();
+        readonly Func<T> _getInstance;
+        readonly List<int> _free = new List<int>();
+        readonly List<int> _used = new List<int>();
+        readonly List<T> _elements = new List<T>();
 
-        public T Get()
+        public int Count => _used.Count;
+
+        public ReuseList(Func<T> getInstance)
         {
-            if (mFree.Count == 0)
+            _getInstance = getInstance;
+        }
+
+        public T Get(out int index)
+        {
+            if (_free.Count == 0)
             {
-                mUsed.Add(mUsed.Count);
-                var newElement = new T();
-                mElements.Add(newElement);
+                index = _used.Count;
+                _used.Add(_used.Count);
+
+                var newElement = _getInstance();        
+                _elements.Add(newElement);
                 return newElement;
             }
 
-            var freeElementIndex = mFree[mFree.Count - 1];
-            mFree.RemoveAt(mFree.Count - 1);
-            mUsed.Add(freeElementIndex);
-            return mElements[freeElementIndex];
+            var freeElementIndex = _free[_free.Count - 1];
+            _free.RemoveAt(_free.Count - 1);
+            index = freeElementIndex;
+            _used.Add(freeElementIndex);
+            return _elements[freeElementIndex];
         }
 
         public void Return(int index)
         {
-            mFree.Add(mUsed[index]);
-            mUsed.RemoveAt(index);
+            var indexOfIndex = _used.IndexOf(index);
+            _free.Add(_used[indexOfIndex]);
+            _used.RemoveAt(indexOfIndex);
         }
-
-        public int Count => mUsed.Count;
-
+     
         public T this[int index]
         {
-            get { return mElements[mUsed[index]]; }
+            get { return _elements[_used[index]]; }
         }
 
         public void Clear()
         {
-            for (int i = 0; i < mUsed.Count; i++)
-                mFree.Add(mUsed[i]);
+            for (int i = 0; i < _used.Count; i++)
+                _free.Add(_used[i]);
 
-            mUsed.Clear();
+            _used.Clear();
         }
     }
 }

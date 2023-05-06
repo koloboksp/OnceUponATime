@@ -55,14 +55,12 @@ namespace Assets.Scripts.Core
 
         private void OnEnable()
         {
-            if (OnActiveStatusChanged != null)
-                OnActiveStatusChanged(this);
+            OnActiveStatusChanged?.Invoke(this);
         }
 
         private void OnDisable()
         {
-            if (OnActiveStatusChanged != null)
-                OnActiveStatusChanged(this);
+            OnActiveStatusChanged?.Invoke(this);
         }
 
         public void Update()
@@ -95,8 +93,7 @@ namespace Assets.Scripts.Core
         public static void UpdateUserKeys(InputAction inputAction, IEnumerable<KeyCode> keyCodes)
         {
             Association foundAssociation = mUserKeysAssociations.Find(i => i.Action == inputAction);
-            if (foundAssociation != null)
-                foundAssociation.ChangeKeyCodes(keyCodes);
+            foundAssociation?.ChangeKeyCodes(keyCodes);
         }
 
         public static IEnumerable<Association> UserKeysAssociations { get { return mUserKeysAssociations; } }

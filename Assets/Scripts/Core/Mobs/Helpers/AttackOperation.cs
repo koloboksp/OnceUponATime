@@ -125,8 +125,7 @@ namespace Assets.Scripts.Core.Mobs.Helpers
                     if (_itemUsingType == WeaponItemUsingType.Ranged)
                         EndRangedAttack();
 
-                    if (_onInWaitPart != null)
-                        _onInWaitPart(this);
+                    _onInWaitPart?.Invoke(this);
                 }
             }
         }

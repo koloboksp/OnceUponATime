@@ -41,26 +41,22 @@ namespace Assets.Scripts.Core.Mobs
             mAttackOperation.OnComplete = Attack_OnComplete;
             mAttackOperation.OnAbort = Attack_Abort;
 
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_Abort(Operation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_InWaitPart(AttackOperation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
 
         private void Attack_OnComplete(Operation obj)
         {
-            if (OnAttackStateChanged != null)
-                OnAttackStateChanged(this);
+            OnAttackStateChanged?.Invoke(this);
         }
     }
 }

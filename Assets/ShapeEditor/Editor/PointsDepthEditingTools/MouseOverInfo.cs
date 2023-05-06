@@ -5,17 +5,15 @@ namespace Assets.ShapeEditor.Editor.PointsDepthEditingTools
 {
     public class MouseOverInfo
     {
-        int mShapeIndex = -1;
-        int mPointIndex = -1;
-        Side mPointSide;
+        private int _shapeIndex = -1;
+        private int _pointIndex = -1;
+        private Side _pointSide;
 
-        public int ShapeIndex => mShapeIndex;
-        public int PointIndex => mPointIndex;
-        public Side PointSide => mPointSide;
-
-        public bool IsOverPoint => mPointIndex != -1;
-
-       
+        public int ShapeIndex => _shapeIndex;
+        public int PointIndex => _pointIndex;
+        public Side PointSide => _pointSide;
+        public bool IsOverPoint => _pointIndex != -1;
+        
         public bool UpdateMouseOverInfo(ShapeCreator owner, Vector3 mousePosition)
         {
             Vector3 ssMousePosition = Camera.current.WorldToScreenPoint(mousePosition);
@@ -34,7 +32,7 @@ namespace Assets.ShapeEditor.Editor.PointsDepthEditingTools
                     {
                         mouseOverPointIndex = i;
                         mouseOverShapeIndex = shapeIndex;
-                        mPointSide = Side.Front;
+                        _pointSide = Side.Front;
                         break;
                     }
                     var ssBackP = Camera.current.WorldToScreenPoint(owner.transform.TransformPoint(shape[i].GetPosition(owner.Depth, Side.Back)));
@@ -42,16 +40,16 @@ namespace Assets.ShapeEditor.Editor.PointsDepthEditingTools
                     {
                         mouseOverPointIndex = i;
                         mouseOverShapeIndex = shapeIndex;
-                        mPointSide = Side.Back;
+                        _pointSide = Side.Back;
                         break;
                     }
                 }
             }
 
-            if (mouseOverShapeIndex != mShapeIndex || mouseOverPointIndex != mPointIndex)
+            if (mouseOverShapeIndex != _shapeIndex || mouseOverPointIndex != _pointIndex)
             {
-                mShapeIndex = mouseOverShapeIndex;
-                mPointIndex = mouseOverPointIndex;
+                _shapeIndex = mouseOverShapeIndex;
+                _pointIndex = mouseOverPointIndex;
 
                 return true;
             }

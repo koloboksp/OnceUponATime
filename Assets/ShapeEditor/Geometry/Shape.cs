@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.ShapeEditor.Geometry
 {
     [System.Serializable]
     public class Shape 
     {
-        public List<Vector2> points = new List<Vector2>();
-
-        [SerializeField] private List<Point> mPoints = new List<Point>();
+        [FormerlySerializedAs("mPoints")] [SerializeField] private List<Point> _points = new List<Point>();
 
         public Point this[int index]
         {
-            get { return mPoints[index]; }
-            set { mPoints[index] = value; }
+            get { return _points[index]; }
+            set { _points[index] = value; }
         }
 
-        public int Count => mPoints.Count;
-        public IEnumerable<Point> Points => mPoints;
+        public int Count => _points.Count;
+        public IEnumerable<Point> Points => _points;
 
         public void RemoveAt(int index)
         {
-            mPoints.RemoveAt(index);
+            _points.RemoveAt(index);
         }
 
         public void Insert(int index, Point point)
         {
-            mPoints.Insert(index, point);
+            _points.Insert(index, point);
         }
 
         public void Add(Point point)
         {
-            mPoints.Add(point);
+            _points.Add(point);
         }
     }
     [Serializable]

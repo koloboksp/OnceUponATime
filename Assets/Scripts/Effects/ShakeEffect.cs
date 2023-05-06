@@ -1,43 +1,44 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class ShakeEffect : MonoBehaviour
     {
-        public Transform Target;
+        private float _elapsedTime;
+        private Vector3 _startPosition;
+        private Quaternion _startRotation;
+        
+        [FormerlySerializedAs("Target")] [SerializeField] private Transform _target;
 
-        public float ShakePositionAmount = 0.05f;
-        public float ShakeAngleAmount = 3.0f;
+        [FormerlySerializedAs("ShakePositionAmount")] [SerializeField] private float _shakePositionAmount = 0.05f;
+        [FormerlySerializedAs("ShakeAngleAmount")] [SerializeField] private float _shakeAngleAmount = 3.0f;
 
-        public float ShakeDuration = 1.0f;
-
-        private float mElapsedTime;
-        private Vector3 mStartPosition;
-        private Quaternion mStartRotation;
-
+        [FormerlySerializedAs("ShakeDuration")] [SerializeField] private  float _shakeDuration = 1.0f;
+        
         public void OnEnable()
         {
-            mStartPosition = Target.transform.localPosition;
-            mStartRotation = Target.transform.localRotation;
+            _startPosition = _target.transform.localPosition;
+            _startRotation = _target.transform.localRotation;
 
-            mElapsedTime = 0.0f;
+            _elapsedTime = 0.0f;
         }
 
         public void OnDisable()
         {
-            Target.transform.localPosition = mStartPosition;
-            Target.transform.localRotation = mStartRotation;
+            _target.transform.localPosition = _startPosition;
+            _target.transform.localRotation = _startRotation;
         }
         public void Update()
         {
-            var elapsedNormTime = Mathf.Clamp01(mElapsedTime / ShakeDuration);
+            var elapsedNormTime = Mathf.Clamp01(_elapsedTime / _shakeDuration);
 
             var shakeRandom = UnityEngine.Random.onUnitSphere;
             
-            Target.localPosition = mStartPosition + shakeRandom * ShakePositionAmount * (1.0f - elapsedNormTime);
+            _target.localPosition = _startPosition + shakeRandom * _shakePositionAmount * (1.0f - elapsedNormTime);
 
-            Target.localRotation = Quaternion.Euler(shakeRandom * ShakeAngleAmount * (1.0f - elapsedNormTime));
-            mElapsedTime += Time.deltaTime;
+            _target.localRotation = Quaternion.Euler(shakeRandom * _shakeAngleAmount * (1.0f - elapsedNormTime));
+            _elapsedTime += Time.deltaTime;
 
             if (elapsedNormTime >= 1)
                 enabled = false;

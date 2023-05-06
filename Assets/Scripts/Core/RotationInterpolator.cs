@@ -4,39 +4,39 @@ namespace Assets.Scripts.Core.Mobs
 {
     public class RotationInterpolator
     {
-        private Quaternion mDesiredValue;
-        private Quaternion mInterpolatedValue;
+        private Quaternion _desiredValue;
+        private Quaternion _interpolatedValue;
 
-        private float mSpeed = 50.0f;
-        private bool mReset = true;
+        private float _speed = 50.0f;
+        private bool _reset = true;
 
         public Quaternion Value
         {
             set
             {
-                mDesiredValue = value;
-                if (mReset)
+                _desiredValue = value;
+                if (_reset)
                 {
-                    mReset = false;
-                    mInterpolatedValue = mDesiredValue;
+                    _reset = false;
+                    _interpolatedValue = _desiredValue;
                 }
             }
         }
 
         public Quaternion InterpolatedValue
         {
-            get { return mInterpolatedValue; }
+            get { return _interpolatedValue; }
         }
 
         public void Update(float dTime)
         {
-            mInterpolatedValue = Quaternion.RotateTowards(mInterpolatedValue, mDesiredValue, mSpeed * dTime);
+            _interpolatedValue = Quaternion.RotateTowards(_interpolatedValue, _desiredValue, _speed * dTime);
         }
 
         public void Reset(Quaternion value)
         {
-            mDesiredValue = value;
-            mInterpolatedValue = mDesiredValue;
+            _desiredValue = value;
+            _interpolatedValue = _desiredValue;
         }
     }
 }

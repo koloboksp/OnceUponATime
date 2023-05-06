@@ -6,21 +6,24 @@ namespace Assets.ShapeEditor.Editor
 {
     public class VertexSnapping : EditorWindow
     {
-        private static FieldInfo freeMode, dragging, offset;
+        private static readonly FieldInfo FreeMode;
+        private static readonly FieldInfo Dragging;
+        private static readonly FieldInfo Offset;
+
         static VertexSnapping()
         {
-            freeMode = GetField("s_FreeMoveMode", typeof(Handles));
-            dragging = GetField("vertexDragging", typeof(Tools));
-            offset = GetField("handleOffset", typeof(Tools));
+            FreeMode = GetField("s_FreeMoveMode", typeof(Handles));
+            Dragging = GetField("vertexDragging", typeof(Tools));
+            Offset = GetField("handleOffset", typeof(Tools));
         }
 
         [MenuItem("Edit/Vertex Snapping")]
         public static void Snapping()
         {
-            var b = (bool)freeMode.GetValue(null);
-            dragging.SetValue(null, !b);
-            freeMode.SetValue(null, !b);
-            offset.SetValue(null, Vector3.zero);
+            var b = (bool)FreeMode.GetValue(null);
+            Dragging.SetValue(null, !b);
+            FreeMode.SetValue(null, !b);
+            Offset.SetValue(null, Vector3.zero);
             SceneView.RepaintAll();
         }
 

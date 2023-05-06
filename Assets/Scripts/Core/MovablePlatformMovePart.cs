@@ -1,30 +1,31 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
     public class MovablePlatformMovePart : MonoBehaviour, IManualMoved
     {
-        public Rigidbody2D Body;
+        private Vector2 _nextSpeed;
+        private Vector2 _speed;
+        private bool _speedChanged;
+        private bool _directionChanged;
+        
+        [FormerlySerializedAs("Body")] [SerializeField] private Rigidbody2D _body;
          
-        public Vector2 NextStepSpeed => mNextSpeed;
-        public bool SpeedChanged => mSpeedChanged;
-        public Vector2 CurrentStepSpeed => mSpeed;
-        public bool DirectionChanged => mDirectionChanged;
-
-        private Vector2 mNextSpeed;
-        private Vector2 mSpeed;
-        private bool mSpeedChanged;
-        private bool mDirectionChanged;
-
+        public Vector2 NextStepSpeed => _nextSpeed;
+        public bool SpeedChanged => _speedChanged;
+        public Vector2 CurrentStepSpeed => _speed;
+        public bool DirectionChanged => _directionChanged;
+        
         public void MovePosition(Vector2 position, Vector2 nextStepSpeed, Vector2 speed, bool speedChanged, bool directionChanged)
         {
-            Body.MovePosition(position);
+            _body.MovePosition(position);
 
-            mSpeedChanged = speedChanged;
-            mDirectionChanged = directionChanged;
+            _speedChanged = speedChanged;
+            _directionChanged = directionChanged;
 
-            mNextSpeed = nextStepSpeed;
-            mSpeed = speed;
+            _nextSpeed = nextStepSpeed;
+            _speed = speed;
         }
     }
 }

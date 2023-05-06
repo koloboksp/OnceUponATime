@@ -4,24 +4,25 @@ using System.Collections.Generic;
 using Assets.Scripts.Effects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Object = System.Object;
 
 namespace Assets.Scripts.Core
 {
     public class SceneChanger : MonoBehaviour
     {  
-        public string NextLevelName = "";
-        public string CurrentLevelName = "";
+        [FormerlySerializedAs("NextLevelName")] [SerializeField] private string _nextLevelName = "";
+        [FormerlySerializedAs("CurrentLevelName")] [SerializeField] private string _currentLevelName = "";
 
-        public bool UnpausedAfter = true;
-        public float WaitBeforeTime = 1.0f;
-        public float DarknesEffectTime = 0.25f;
+        [FormerlySerializedAs("UnpausedAfter")] [SerializeField] private bool _unpausedAfter = true;
+        [FormerlySerializedAs("WaitBeforeTime")] [SerializeField] private float _waitBeforeTime = 1.0f;
+        [FormerlySerializedAs("DarknessEffectTime")] [SerializeField] private float _darknessEffectTime = 0.25f;
 
-        private AsyncOperation mLoadSceneResult;
-        private string mLoadingSceneName;
-        private Scene mLoadingScene;
-        private SceneChangerLoadingBar mLoadingBar;
-        private List<CanvasSettings> mLoadedSceneSavedCanvasSettings;
+        private AsyncOperation _loadSceneResult;
+        private string _loadingSceneName;
+        private Scene _loadingScene;
+        private SceneChangerLoadingBar _loadingBar;
+        private List<CanvasSettings> _loadedSceneSavedCanvasSettings;
 
         public object Sender;
         public object UserData;
@@ -30,14 +31,14 @@ namespace Assets.Scripts.Core
 
         private void StartChange(string nextLevelName, string currentLevelName, bool unpauseAfter, object sender, object userData, float waitBeforeTime, float darknesEffectTime)
         {
-            NextLevelName = nextLevelName;
-            CurrentLevelName = currentLevelName;
+            _nextLevelName = nextLevelName;
+            _currentLevelName = currentLevelName;
 
-            UnpausedAfter = unpauseAfter;
+            _unpausedAfter = unpauseAfter;
             Sender = sender;
             UserData = userData;
-            WaitBeforeTime = waitBeforeTime;
-            DarknesEffectTime = darknesEffectTime;
+            _waitBeforeTime = waitBeforeTime;
+            _darknessEffectTime = darknesEffectTime;
 
             StartCoroutine(Execute());
         }
@@ -45,7 +46,7 @@ namespace Assets.Scripts.Core
         private IEnumerator Execute()
         {
             CameraDarkness();
-            yield return new WaitForSeconds(DarknesEffectTime);
+            yield return new WaitForSeconds(_darknessEffectTime);
 
             WaitForOldLevelUnloaded();
             while (!mOldSceneUnloaded)
@@ -63,7 +64,7 @@ namespace Assets.Scripts.Core
                 yield return null;
 
             CameraBrighten();
-            yield return new WaitForSeconds(DarknesEffectTime);
+            yield return new WaitForSeconds(_darknessEffectTime);
 
             Logic_OnComplete();
         }
@@ -76,7 +77,7 @@ namespace Assets.Scripts.Core
             {
                 if (findedCamera.gameObject.scene == currentActiveScene)
                 {
-                    CameraDarknessEffect.PlungeIntoDarkness(findedCamera, DarknesEffectTime, CameraDarknessEffect.DarknessValues.Zero, CameraDarknessEffect.DarknessValues.One, this);
+                    CameraDarknessEffect.PlungeIntoDarkness(findedCamera, _darknessEffectTime, CameraDarknessEffect.DarknessValues.Zero, CameraDarknessEffect.DarknessValues.One, this);
                 }
             }
 
@@ -111,7 +112,7 @@ namespace Assets.Scripts.Core
 
             GameObject backgroundPrefab = Resources.Load<GameObject>("BuildIn/Objects/BackgroundOfTransitionScene");
             GameObject backgroundInstance = GameObject.Instantiate(backgroundPrefab);
-            mLoadingBar = backgroundInstance.GetComponent<SceneChangerLoadingBar>();
+            _loadingBar = backgroundInstance.GetComponent<SceneChangerLoadingBar>();
             SceneManager.MoveGameObjectToScene(backgroundInstance, transitionScene);
 
             SceneManager.SetActiveScene(transitionScene);
@@ -132,37 +133,37 @@ namespace Assets.Scripts.Core
 
         private void StartLoadingLevel()
         {
-            mLoadingSceneName = NextLevelName;
-            mLoadSceneResult = SceneManager.LoadSceneAsync(mLoadingSceneName, LoadSceneMode.Additive);
+            _loadingSceneName = _nextLevelName;
+            _loadSceneResult = SceneManager.LoadSceneAsync(_loadingSceneName, LoadSceneMode.Additive);
 
-            if (mLoadSceneResult == null)
+            if (_loadSceneResult == null)
             {
-                mLoadingSceneName = CurrentLevelName;
-                mLoadSceneResult = SceneManager.LoadSceneAsync(CurrentLevelName, LoadSceneMode.Additive);
+                _loadingSceneName = _currentLevelName;
+                _loadSceneResult = SceneManager.LoadSceneAsync(_currentLevelName, LoadSceneMode.Additive);
             }
 
 
-            mLoadSceneResult.allowSceneActivation = true;
-            mLoadSceneResult.completed += LoadSceneResultOnCompleted;
+            _loadSceneResult.allowSceneActivation = true;
+            _loadSceneResult.completed += LoadSceneResultOnCompleted;
         }
 
         private void LoadSceneResultOnCompleted(AsyncOperation asyncOperation)
         {
             mNewSceneLoaded = true;
-            mLoadingScene = SceneManager.GetSceneByName(mLoadingSceneName);
+            _loadingScene = SceneManager.GetSceneByName(_loadingSceneName);
         }
 
         private void CheckLevelLoading()
         {
-            if (mLoadingScene.IsValid())
+            if (_loadingScene.IsValid())
             {
-                ChangeCanvasSettins(mLoadingScene, out mLoadedSceneSavedCanvasSettings);
+                ChangeCanvasSettins(_loadingScene, out _loadedSceneSavedCanvasSettings);
                 mObjectsOfNewSceneLoaded = true;
             }
             else
             {
-                if (mLoadingBar != null)
-                    mLoadingBar.SetProgress(mLoadSceneResult.progress);
+                if (_loadingBar != null)
+                    _loadingBar.SetProgress(_loadSceneResult.progress);
             }
         }
 
@@ -224,11 +225,11 @@ namespace Assets.Scripts.Core
         {
             Scene previousActiveScene = SceneManager.GetActiveScene();
 
-            Camera findedCameraInLoadedScene = CameraDarknessEffect.FindCameraInScene(mLoadingScene);
+            Camera findedCameraInLoadedScene = CameraDarknessEffect.FindCameraInScene(_loadingScene);
             findedCameraInLoadedScene.enabled = true;
 
             CameraDarknessEffect.PlungeIntoDarkness(findedCameraInLoadedScene, CameraDarknessEffect.DarknessValues.One, this);
-            SceneManager.SetActiveScene(mLoadingScene);
+            SceneManager.SetActiveScene(_loadingScene);
 
             AsyncOperation unloadSceneAsync = SceneManager.UnloadSceneAsync(previousActiveScene);
             unloadSceneAsync.completed += TransitionSceneUnloaded_OnCompleted;
@@ -242,7 +243,7 @@ namespace Assets.Scripts.Core
         private void CameraBrighten()
         {
             Camera findedCameraInLoadedScene = null;
-            GameObject[] rootGameObjects = mLoadingScene.GetRootGameObjects();
+            GameObject[] rootGameObjects = _loadingScene.GetRootGameObjects();
             foreach (GameObject rootGameObject in rootGameObjects)
             {
                 Camera findedCamera = rootGameObject.GetComponentInChildren<Camera>();
@@ -252,14 +253,13 @@ namespace Assets.Scripts.Core
                     break;
                 }
             }
-            CameraDarknessEffect.PlungeIntoDarkness(findedCameraInLoadedScene, DarknesEffectTime, CameraDarknessEffect.DarknessValues.One, CameraDarknessEffect.DarknessValues.Zero, this);
+            CameraDarknessEffect.PlungeIntoDarkness(findedCameraInLoadedScene, _darknessEffectTime, CameraDarknessEffect.DarknessValues.One, CameraDarknessEffect.DarknessValues.Zero, this);
         }
         private void Logic_OnComplete()
         {
-            RestoreCanvasSettings(mLoadedSceneSavedCanvasSettings);
+            RestoreCanvasSettings(_loadedSceneSavedCanvasSettings);
 
-            if (OnComplete != null)
-                OnComplete(this);
+            OnComplete?.Invoke(this);
 
             Destroy(this.gameObject, 3.0f);
         }

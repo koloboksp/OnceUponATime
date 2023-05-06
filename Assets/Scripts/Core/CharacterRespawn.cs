@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
@@ -7,11 +8,11 @@ namespace Assets.Scripts.Core
     {
         private const string GizmosIconName = "MonsterRespawn";
 
-        public GameObject Prefab;
+        [FormerlySerializedAs("Prefab")] [SerializeField] private GameObject _prefab;
 
         protected virtual void Start()
         {
-            var instance = Instantiate(Prefab, transform.position, Quaternion.identity);
+            var instance = Instantiate(_prefab, transform.position, Quaternion.identity);
             SceneManager.MoveGameObjectToScene(instance, gameObject.scene);
         }
 

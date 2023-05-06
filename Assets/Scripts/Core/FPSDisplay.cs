@@ -5,15 +5,15 @@ namespace Assets.Scripts.Core
 {
     public class FPSDisplay : MonoBehaviour
     {
-        private float mUpdateTime = 1.0f;
+        private float _updateTime = 1.0f;
 
-        private float mAvergeTimer = 0.0f;
-        private int mFrameCount = 0;
+        private float _averageTimer = 0.0f;
+        private int _frameCount = 0;
 
-        private float mAvergeTime = 0.0f;
-        private float mAvergeFPS = 0.0f;
+        private float _averageTime = 0.0f;
+        private float _averageFPS = 0.0f;
 
-        private Text mText;
+        private Text _text;
 
         private void Start()
         {
@@ -27,27 +27,27 @@ namespace Assets.Scripts.Core
             rectTransform.pivot = new Vector2(0, 1);
             rectTransform.anchoredPosition = Vector2.zero;
 
-            mText = fpsDrawer.AddComponent<Text>();
-            mText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            mText.color = Color.yellow;
-            mText.text = "";
+            _text = fpsDrawer.AddComponent<Text>();
+            _text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            _text.color = Color.yellow;
+            _text.text = "";
         }
 
         private void Update()
         {
-            mAvergeTimer += Time.deltaTime;
-            mFrameCount += 1;
-            if (mAvergeTimer >= mUpdateTime)
+            _averageTimer += Time.deltaTime;
+            _frameCount += 1;
+            if (_averageTimer >= _updateTime)
             {
-                mAvergeTime = mAvergeTimer / mFrameCount;
-                mAvergeFPS = mFrameCount / mUpdateTime;
+                _averageTime = _averageTimer / _frameCount;
+                _averageFPS = _frameCount / _updateTime;
 
 
-                mAvergeTimer = mAvergeTimer - mUpdateTime;
-                mFrameCount = 0;
+                _averageTimer = _averageTimer - _updateTime;
+                _frameCount = 0;
 
-                if(mText != null)
-                    mText.text = (mAvergeTime * 1000.0f).ToString() + "#" + mAvergeFPS.ToString();
+                if(_text != null)
+                    _text.text = (_averageTime * 1000.0f).ToString() + "#" + _averageFPS.ToString();
             }
         }    
     }

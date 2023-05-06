@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.Core.Items;
 using Assets.Scripts.Core.Mobs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
@@ -32,24 +33,24 @@ namespace Assets.Scripts.Core
     {
         public event Action<CheckPoint> OnActivate;
 
-        public Transform WobbleEffectRoot;
-        private CheckPointData mData;
+        private CheckPointData _data;
 
-        private bool mActivated;
-        private float mTimer;
+        private bool _activated;
+        private float _timer;
+        
+        [FormerlySerializedAs("WobbleEffectRoot")] [SerializeField] private Transform _wobbleEffectRoot;
         
         public virtual void TakeDamage(object sender, DamageInfo damageInfo)
         {
-            if (!mActivated)
+            if (!_activated)
             {
-                mActivated = true;
+                _activated = true;
                 var hero = Level.ActiveLevel.Hero;
 
 
-                mData = CollectData(hero);
+                _data = CollectData(hero);
 
-                if (OnActivate != null)
-                    OnActivate(this);
+                OnActivate?.Invoke(this);
 
             }
         }
@@ -58,16 +59,16 @@ namespace Assets.Scripts.Core
         {
             get
             {
-                return mData;
+                return _data;
             }
         }
 
         private void Update()
         {
-            if (mActivated)
+            if (_activated)
             {
-                mTimer += Time.deltaTime;
-                WobbleEffectRoot.localRotation = Quaternion.Euler(0,0,Mathf.Sin(mTimer* 4) * 20) * Quaternion.Euler(0, Mathf.Clamp01(mTimer / 1) * Mathf.PI * Mathf.Rad2Deg, 0);
+                _timer += Time.deltaTime;
+                _wobbleEffectRoot.localRotation = Quaternion.Euler(0,0,Mathf.Sin(_timer* 4) * 20) * Quaternion.Euler(0, Mathf.Clamp01(_timer / 1) * Mathf.PI * Mathf.Rad2Deg, 0);
             }      
         }
         

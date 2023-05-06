@@ -1,60 +1,70 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class Fly : MonoBehaviour
     {
-        private Vector3 mCenterPoint;
+        private float _speed = 2.0f;
+        
+        private Vector3 _destination;
+        private State _currentState = State.Move;
 
-        private float mSpeed = 2.0f;
-        public float RandomRangeRadius = 0.5f;
+        private float _delayTimer;
+        private float _delay;
 
-        private Vector3 mDestination;
-        private State mCurrentState = State.Move;
+        private float _dieEffectTime;
+        private float _dieEffectTimer;
+        private Vector3 _initialLocalScale;
+        
+        private float _effectSpeed;
+        private float _effectForceValue;
 
-        public Vector3 CenterPoint
+        private float _stunEffectTime;
+        private float _stunEffectTimer;
+        
+        [FormerlySerializedAs("RandomRangeRadius")] [SerializeField] private float _randomRangeRadius = 0.5f;
+
+        public float RandomRangeRadius
         {
-            set
-            {
-                mCenterPoint = value;
-            }
+            get => _randomRangeRadius; 
+            set => _randomRangeRadius = value;
         }
 
         private void Start()
         {  
             SelectNewRandomDestinationPoint();
-            transform.localPosition = mDestination;
+            transform.localPosition = _destination;
             SelectNewRandomDestinationPoint();
         }
 
         public void SetLocalDestination(Vector3 localPoint)
         {
-            mDestination = localPoint;
+            _destination = localPoint;
         }
 
         private void SelectNewRandomDestinationPoint()
         {
-            mDestination = UnityEngine.Random.insideUnitSphere * RandomRangeRadius;
+            _destination = UnityEngine.Random.insideUnitSphere * _randomRangeRadius;
         }
 
         private void Update()
         {
-            if (mCurrentState == State.Move)
+            if (_currentState == State.Move)
             {
                 if (MoveToDestination(Time.deltaTime))
                     SelectNewRandomDestinationPoint();
             }
-
-            else if (mCurrentState == State.WaitBeforeDie)
+            else if (_currentState == State.WaitBeforeDie)
             {
-                mDelayTimer += Time.deltaTime;
-                if (mDelayTimer >= mDelay)
+                _delayTimer += Time.deltaTime;
+                if (_delayTimer >= _delay)
                 {
-                    mCurrentState = State.Die;
-                    mSpeed = 0.0f;
+                    _currentState = State.Die;
+                    _speed = 0.0f;
                     Vector3 gravity = Physics2D.gravity;
-                    mDestination = mDestination + gravity * mDieEffectTime * mDieEffectTime * 0.5f;
-                    mInitialLocalScale = transform.localScale;
+                    _destination = _destination + gravity * _dieEffectTime * _dieEffectTime * 0.5f;
+                    _initialLocalScale = transform.localScale;
                 }
                 else
                 {
@@ -62,46 +72,42 @@ namespace Assets.Scripts.Core.Mobs
                         SelectNewRandomDestinationPoint();
                 }
             }
-            else if(mCurrentState == State.Die)
+            else if(_currentState == State.Die)
             {
-                mDieEffectTimer += Time.deltaTime;
-                mSpeed += Physics2D.gravity.magnitude * Time.deltaTime;
+                _dieEffectTimer += Time.deltaTime;
+                _speed += Physics2D.gravity.magnitude * Time.deltaTime;
 
                 MoveToDestination(Time.deltaTime);
 
-                if (mDieEffectTimer > mDieEffectTime * 0.8f)
+                if (_dieEffectTimer > _dieEffectTime * 0.8f)
                 {
-                    float f = mDieEffectTimer - mDieEffectTime * 0.8f;
-                    float d = f / (mDieEffectTime * 0.2f);
+                    float f = _dieEffectTimer - _dieEffectTime * 0.8f;
+                    float d = f / (_dieEffectTime * 0.2f);
                     d = Mathf.Clamp01(d);
-                    transform.localScale = mInitialLocalScale * ( 1 - d);
+                    transform.localScale = _initialLocalScale * ( 1 - d);
                 }
                 
             }
-            else if(mCurrentState == State.TakeDamage)
+            else if(_currentState == State.TakeDamage)
             {
-                MoveToDestination2(Time.deltaTime, mEffectSpeed);
+                MoveToDestination2(Time.deltaTime, _effectSpeed);
 
-                mEffectSpeed -= mEffectForceValue * Time.deltaTime;
-                mEffectSpeed = Mathf.Max(0, mEffectSpeed);
-
+                _effectSpeed -= _effectForceValue * Time.deltaTime;
+                _effectSpeed = Mathf.Max(0, _effectSpeed);
                 
-                //var vecToDestination = mDestination - transform.localPosition;
-                //var dirToDestination = vecToDestination.normalized;
-                //transform.localPosition += dirToDestination * mSpeed;
-                mStunEffectTimer += Time.deltaTime;
-                if (mStunEffectTimer >= mStunEffectTime)
+                _stunEffectTimer += Time.deltaTime;
+                if (_stunEffectTimer >= _stunEffectTime)
                 {
-                    mCurrentState = State.Move;
+                    _currentState = State.Move;
 
-                    mStunEffectTimer = 0.0f;
+                    _stunEffectTimer = 0.0f;
                 }
             }
         }
 
         private bool MoveToDestination2(float dTime, float speed)
         {
-            var vecToDestination = mDestination - transform.localPosition;
+            var vecToDestination = _destination - transform.localPosition;
             var timeToDestination = vecToDestination.magnitude / speed;
 
             float timeParts = timeToDestination / dTime;
@@ -111,7 +117,7 @@ namespace Assets.Scripts.Core.Mobs
             }
             else
             {
-                transform.localPosition = mDestination;
+                transform.localPosition = _destination;
                 return true;
             }
 
@@ -120,8 +126,8 @@ namespace Assets.Scripts.Core.Mobs
 
         private bool MoveToDestination(float dTime)
         {
-            var vecToDestination = mDestination - transform.localPosition;
-            var timeToDestination = vecToDestination.magnitude / mSpeed;
+            var vecToDestination = _destination - transform.localPosition;
+            var timeToDestination = vecToDestination.magnitude / _speed;
 
             float timeParts = timeToDestination / dTime;
             if (timeParts > 1)
@@ -131,50 +137,37 @@ namespace Assets.Scripts.Core.Mobs
             }
             else
             {
-                transform.localPosition = mDestination;
+                transform.localPosition = _destination;
                 return true;
             }
 
             return false;
         }
 
-        private float mDelayTimer;
-        private float mDelay;
-
-        private float mDieEffectTime;
-        private float mDieEffectTimer;
-        private Vector3 mInitialLocalScale;
-        public Vector3 rot;
         public void Die(float effectDelay, float effectTime)
         {
-            mCurrentState = State.WaitBeforeDie;
+            _currentState = State.WaitBeforeDie;
             
-            mDelay = effectDelay;
-            mDelayTimer = 0.0f;
+            _delay = effectDelay;
+            _delayTimer = 0.0f;
 
-            mDieEffectTime = effectTime;
-            mDieEffectTimer = 0.0f;
+            _dieEffectTime = effectTime;
+            _dieEffectTimer = 0.0f;
         }
-
-        private float mEffectSpeed;
-        private float mEffectForceValue;
-
-        private float mStunEffectTime;
-        private float mStunEffectTimer;
-
+        
         public void StunEffect(Vector3 localForcePoint, float forceValue, float effectTime)
         {
-            mStunEffectTime = effectTime;
+            _stunEffectTime = effectTime;
 
-            mCurrentState = State.TakeDamage;
-            mEffectForceValue = forceValue;
+            _currentState = State.TakeDamage;
+            _effectForceValue = forceValue;
 
-            float distanceToTravel = mEffectForceValue * effectTime * effectTime * 0.5f;
-            mEffectSpeed = mEffectForceValue * effectTime;
+            float distanceToTravel = _effectForceValue * effectTime * effectTime * 0.5f;
+            _effectSpeed = _effectForceValue * effectTime;
 
             var vecToForce = transform.localPosition - localForcePoint;
             var dirToForce = vecToForce.normalized;
-            mDestination += dirToForce * distanceToTravel; 
+            _destination += dirToForce * distanceToTravel; 
         }
         
         private enum State

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core.Items;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.UI
 {
@@ -9,39 +10,39 @@ namespace Assets.Scripts.UI
     public class UIItemViewInfoManager : ScriptableObject
     {
         public const string ResourceName = "UIItemViewInfoManager";
+        
+        private static UIItemViewInfoManager _instance;
 
-        public List<UIItemViewInfo> ItemsInfos = new List<UIItemViewInfo>();
-
+        [FormerlySerializedAs("ItemsInfos")] [SerializeField] private List<UIItemViewInfo> _itemsInfos = new List<UIItemViewInfo>();
+        
         public UIItemViewInfo GetInfo(Item item)
         {
-            for (var iIndex = 0; iIndex < ItemsInfos.Count; iIndex++)
+            for (var iIndex = 0; iIndex < _itemsInfos.Count; iIndex++)
             {
-                var itemViewInfo = ItemsInfos[iIndex];
+                var itemViewInfo = _itemsInfos[iIndex];
                 if (itemViewInfo.Target == item)
                     return itemViewInfo;
             }
 
             return null;
         }
-
-        private static UIItemViewInfoManager mInstance;
+        
         public static UIItemViewInfoManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
                     var obj = Resources.Load(ResourceName) ;
                     if (obj == null)
                         throw new Exception($"Resource '{ResourceName}' not created.");
 
-                    mInstance = obj as UIItemViewInfoManager;
-                    if (mInstance == null)
+                    _instance = obj as UIItemViewInfoManager;
+                    if (_instance == null)
                         throw new Exception($"Resource '{ResourceName}'  is not '{nameof(UIItemViewInfoManager)}'.");
                 }
-                return mInstance;
+                return _instance;
             }
         }
-        
     }
 }

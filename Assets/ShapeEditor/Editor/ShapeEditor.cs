@@ -9,33 +9,32 @@ namespace Assets.ShapeEditor.Editor
     {
         public static Color ContoursHighlightedColor = Color.gray + new Color(0.2f, 0.2f, 0.2f, 0);
         public static Color ContoursNormalColor = Color.gray;
-
-
+        
         public const float HandleRadius = 10.0f;
 
-        private const float k_EditColliderButtonWidth = 33;
-        private const float k_EditColliderButtonHeight = 23;
-        private const float k_SpaceBetweenLabelAndButton = 5;
+        private const float EditColliderButtonWidth = 33;
+        private const float EditColliderButtonHeight = 23;
+        private const float SpaceBetweenLabelAndButton = 5;
 
         public ShapeCreator ShapeCreator { get; private set; }
 
-        PointsEditingTool mPointsEditingTool ;
-        PointsDepthEditingTool mPointsDepthEditingTool;
+        private PointsEditingTool _pointsEditingTool ;
+        private PointsDepthEditingTool _pointsDepthEditingTool;
 
-        EditingTool mActiveTool;
+        private EditingTool _activeTool;
 
-        bool mMoveInDepthModeActivated = false;
+        private bool _moveInDepthModeActivated = false;
 
-        int mMouseBtn0ClickCycle = 0;
-        bool mMouseBtn0Down;
+        private int _mouseBtn0ClickCycle = 0;
+        private bool _mouseBtn0Down;
 
-        bool shapeChangedSinceLastRepaint;
-        bool instrumentSceneUIChangedSinceLastRepaint;
-        bool instrumentUIChangedSinceLastRepaint;
+        private bool _shapeChangedSinceLastRepaint;
+        private bool _instrumentSceneUIChangedSinceLastRepaint;
+        private bool _instrumentUIChangedSinceLastRepaint;
 
-        bool mEditEnable;
+        private bool _editEnable;
 
-        public int MouseBtn0ClickCycle => mMouseBtn0ClickCycle;
+        public int MouseBtn0ClickCycle => _mouseBtn0ClickCycle;
 
         protected virtual GUIContent editModeButton { get { return EditorGUIUtility.IconContent("EditCollider"); } }
 
@@ -44,17 +43,17 @@ namespace Assets.ShapeEditor.Editor
             base.OnInspectorGUI();
 
             Rect rect = EditorGUILayout.GetControlRect(true, 23, GUI.skin.button);
-            Rect buttonRect = new Rect(rect.xMin + EditorGUIUtility.labelWidth, rect.yMin, k_EditColliderButtonWidth, k_EditColliderButtonHeight);
+            Rect buttonRect = new Rect(rect.xMin + EditorGUIUtility.labelWidth, rect.yMin, EditColliderButtonWidth, EditColliderButtonHeight);
             GUIContent labelContent = new GUIContent("Edit");
             Vector2 labelSize = GUI.skin.label.CalcSize(labelContent);
 
             Rect labelRect = new Rect(
-                buttonRect.xMax + k_SpaceBetweenLabelAndButton,
+                buttonRect.xMax + SpaceBetweenLabelAndButton,
                 rect.yMin + (rect.height - labelSize.y) * .5f,
                 labelSize.x,
                 rect.height);
 
-            mEditEnable = GUI.Toggle(buttonRect, mEditEnable, editModeButton, GUI.skin.button);
+            _editEnable = GUI.Toggle(buttonRect, _editEnable, editModeButton, GUI.skin.button);
             GUI.Label(labelRect, "Edit");
            
             string helpMessage = "'B' start/stop editing.\n" +
@@ -67,26 +66,26 @@ namespace Assets.ShapeEditor.Editor
 
             if (GUI.changed)
             {
-                shapeChangedSinceLastRepaint = true;
+                _shapeChangedSinceLastRepaint = true;
                 SceneView.RepaintAll();
             }
 
-            instrumentUIChangedSinceLastRepaint = false;
+            _instrumentUIChangedSinceLastRepaint = false;
         }
 
         void OnSceneGUI()
         {
-            Tools.hidden = mEditEnable;     
+            Tools.hidden = _editEnable;     
             Event guiEvent = Event.current;
 
             if (guiEvent.type == EventType.Repaint)
             {
-                if (mEditEnable)
+                if (_editEnable)
                 {
-                    mActiveTool.Repaint(); 
+                    _activeTool.Repaint(); 
                 }
 
-                if (shapeChangedSinceLastRepaint)
+                if (_shapeChangedSinceLastRepaint)
                 {
                     try
                     {
@@ -99,41 +98,40 @@ namespace Assets.ShapeEditor.Editor
                 }
 
               
-                shapeChangedSinceLastRepaint = false;
-                instrumentSceneUIChangedSinceLastRepaint = false;
+                _shapeChangedSinceLastRepaint = false;
+                _instrumentSceneUIChangedSinceLastRepaint = false;
                 
             }
             else if (guiEvent.type == EventType.Layout)
             {
-                if (mEditEnable)
+                if (_editEnable)
                 {   
                     HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));           
                 }
             }     
             else
             {
-
                 if (guiEvent.type == EventType.KeyUp)
                 {
                     if (guiEvent.keyCode == KeyCode.B)
                     {
-                        mEditEnable = !mEditEnable;
+                        _editEnable = !_editEnable;
                         MarkUIDirty();
                     }
                 }
 
-                if (mEditEnable)
+                if (_editEnable)
                 {
                     if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
                     {
-                        mMouseBtn0Down = true;
+                        _mouseBtn0Down = true;
                     }
                     if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
                     {
-                        if (mMouseBtn0Down)
+                        if (_mouseBtn0Down)
                         {
-                            mMouseBtn0Down = false;
-                            mMouseBtn0ClickCycle++;
+                            _mouseBtn0Down = false;
+                            _mouseBtn0ClickCycle++;
                         }
                     }
 
@@ -141,24 +139,24 @@ namespace Assets.ShapeEditor.Editor
                     {
                         if (guiEvent.keyCode == KeyCode.D)
                         {
-                            mMoveInDepthModeActivated = !mMoveInDepthModeActivated;
+                            _moveInDepthModeActivated = !_moveInDepthModeActivated;
 
-                            if(mMoveInDepthModeActivated)
-                                ChangeTool(mPointsDepthEditingTool);
+                            if(_moveInDepthModeActivated)
+                                ChangeTool(_pointsDepthEditingTool);
                             else
-                                ChangeTool(mPointsEditingTool);          
+                                ChangeTool(_pointsEditingTool);          
                         }
                     }
 
-                    mActiveTool.HandleInput(guiEvent);           
+                    _activeTool.HandleInput(guiEvent);           
                 }
 
-                if (shapeChangedSinceLastRepaint || instrumentSceneUIChangedSinceLastRepaint)
+                if (_shapeChangedSinceLastRepaint || _instrumentSceneUIChangedSinceLastRepaint)
                 {
                     HandleUtility.Repaint();
                 }
 
-                if (instrumentUIChangedSinceLastRepaint)
+                if (_instrumentUIChangedSinceLastRepaint)
                 {
                     Repaint();
                 }
@@ -168,10 +166,10 @@ namespace Assets.ShapeEditor.Editor
 
         void ChangeTool(EditingTool newTool)
         {
-            if (newTool != mActiveTool)
+            if (newTool != _activeTool)
             {
-                mActiveTool = newTool;
-                mActiveTool.OnEnable();
+                _activeTool = newTool;
+                _activeTool.OnEnable();
                 MarkSceneUIDirty(); 
             }
             
@@ -187,14 +185,14 @@ namespace Assets.ShapeEditor.Editor
 
         void OnEnable()
         {
-            instrumentSceneUIChangedSinceLastRepaint = true;
+            _instrumentSceneUIChangedSinceLastRepaint = true;
 
             ShapeCreator = target as GroundCreator;
 
-            mPointsEditingTool = new PointsEditingTool(this);
-            mPointsDepthEditingTool = new PointsDepthEditingTool(this);
+            _pointsEditingTool = new PointsEditingTool(this);
+            _pointsDepthEditingTool = new PointsDepthEditingTool(this);
 
-            ChangeTool(mPointsEditingTool);
+            ChangeTool(_pointsEditingTool);
            
             Undo.undoRedoPerformed += OnUndoOrRedo;
         }
@@ -211,22 +209,22 @@ namespace Assets.ShapeEditor.Editor
 
         public void MarkUIDirty()
         {
-            instrumentUIChangedSinceLastRepaint = true;
+            _instrumentUIChangedSinceLastRepaint = true;
         }
 
         public void MarkSceneUIDirty()
         {
-            instrumentSceneUIChangedSinceLastRepaint = true;
+            _instrumentSceneUIChangedSinceLastRepaint = true;
         }
 
         public void MarkShapeDirty()
         {
-            shapeChangedSinceLastRepaint = true;
+            _shapeChangedSinceLastRepaint = true;
         }
 
         public void BreakEditing()
         {
-            mEditEnable = false;
+            _editEnable = false;
             Tools.hidden = false;
             MarkUIDirty();
         }

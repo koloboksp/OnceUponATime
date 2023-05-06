@@ -9,6 +9,7 @@ using Assets.Scripts.Shared.Tags;
 using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core
 {
@@ -23,25 +24,25 @@ namespace Assets.Scripts.Core
     public class Level : MonoBehaviour
     {
         public static Level ActiveLevel;
-        public Hero Hero;
-        public TagHolder Id;
+       
+        private CheckPointData _checkPointDataAtTheStart;
+        private readonly List<CheckPoint> _checkPoints = new List<CheckPoint>();
+        private CheckPoint _lastActivatedCheckPoint = null;
+        private readonly List<HopelessPlace> _hopelessPlaces = new List<HopelessPlace>();
 
-        private CheckPointData mCheckPointDataAtTheStart;
-        private readonly List<CheckPoint> mCheckPoints = new List<CheckPoint>();
-        private CheckPoint mLastActivatedCheckPoint = null;
-
+        [FormerlySerializedAs("Hero")] [SerializeField] private Hero _hero;
+        [FormerlySerializedAs("Id")] [SerializeField] private TagHolder _id;
         [SerializeField] private LevelLighting _levelLighting;
+        [FormerlySerializedAs("Bounds")] [SerializeField] private Rect _bounds = new Rect(new Vector2(0,0), new Vector2(10,10));
 
-        private readonly List<HopelessPlace> mHopelessPlaces = new List<HopelessPlace>();
-
-        public Rect Bounds = new Rect(new Vector2(0,0), new Vector2(10,10));
-
-       public LevelLighting Lighting => _levelLighting;
+        public Hero Hero => _hero; 
+        public TagHolder Id => _id; 
+        public Rect Bounds => _bounds; 
+        public LevelLighting Lighting => _levelLighting;
 
         public void Awake()
         {
             ActiveLevel = this;
-
             
             var cameraControlInstance = Instantiate(LevelDefaultPrefabsLinker.Instance.CameraControlPrefab);
             SceneManager.MoveGameObjectToScene(cameraControlInstance.gameObject, gameObject.scene);
@@ -109,21 +110,21 @@ namespace Assets.Scripts.Core
             }
 
             
-            mCheckPointDataAtTheStart = CheckPoint.CollectData(heroInstance);
-            mCheckPointDataAtTheStart.Position = checkPointPosition;
+            _checkPointDataAtTheStart = CheckPoint.CollectData(heroInstance);
+            _checkPointDataAtTheStart.Position = checkPointPosition;
 
             heroInstance.OnBeforeDestroy += Hero_OnBeforeDestroy;
-            gameObject.GetComponentsInChildren(mCheckPoints);
+            gameObject.GetComponentsInChildren(_checkPoints);
 
-            foreach (var checkPoint in mCheckPoints)
+            foreach (var checkPoint in _checkPoints)
                 checkPoint.OnActivate += CheckPoint_OnBeforeDestroy;
 
-            gameObject.GetComponentsInChildren(mHopelessPlaces);
+            gameObject.GetComponentsInChildren(_hopelessPlaces);
 
-            foreach (var hopelessPlace in mHopelessPlaces)
+            foreach (var hopelessPlace in _hopelessPlaces)
                 hopelessPlace.OnHeroEnter += HopelessPlace_OnHeroEnter;
 
-            Hero = heroInstance;
+            _hero = heroInstance;
         }
 
         private void HopelessPlace_OnHeroEnter(HopelessPlace obj)
@@ -135,7 +136,7 @@ namespace Assets.Scripts.Core
 
         private void CheckPoint_OnBeforeDestroy(CheckPoint sender)
         {
-            mLastActivatedCheckPoint = sender;
+            _lastActivatedCheckPoint = sender;
         }
 
         private void Hero_OnBeforeDestroy(Character sender)
@@ -148,13 +149,13 @@ namespace Assets.Scripts.Core
         {
             yield return new WaitForSeconds(1);
 
-            var checkPointData = (mLastActivatedCheckPoint != null) ? mLastActivatedCheckPoint.Data : mCheckPointDataAtTheStart;
-            Hero.transform.position = checkPointData.Position;
+            var checkPointData = (_lastActivatedCheckPoint != null) ? _lastActivatedCheckPoint.Data : _checkPointDataAtTheStart;
+            _hero.transform.position = checkPointData.Position;
 
             yield return null;
 
-            Hero.ChangeDirection(checkPointData.Direction);
-            Hero.Treat(this, new TreatmentInfo(checkPointData.HeroLives - Hero.Lives));
+            _hero.ChangeDirection(checkPointData.Direction);
+            _hero.Treat(this, new TreatmentInfo(checkPointData.HeroLives - _hero.Lives));
           //  foreach (var item in checkPointData.HeroInventoryItems)
           //      Hero.AddNewItemInInventory(item);
           //  foreach (var slotInfo in checkPointData.HeroWeaponSlotInfos)
@@ -172,10 +173,10 @@ namespace Assets.Scripts.Core
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            var rtC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(0.5f, 0.5f));
-            var rbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(0.5f, -0.5f));
-            var lbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(-0.5f, -0.5f));
-            var tbC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(-0.5f, 0.5f));
+            var rtC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(0.5f, 0.5f));
+            var rbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(0.5f, -0.5f));
+            var lbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(-0.5f, -0.5f));
+            var tbC = transform.position + transform.rotation * (_bounds.center + _bounds.size * new Vector2(-0.5f, 0.5f));
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(rtC, rbC);

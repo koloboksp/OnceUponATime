@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
@@ -11,11 +12,11 @@ namespace Assets.Scripts.Effects
 		public const string FakeLightTextureName = "_FakeLightRenderTexture";
 		public const RenderPassEvent FirePassEvent = RenderPassEvent.AfterRenderingOpaques;
 
-		private RenderTargetHandle _FakeLightRenderTexture;
-		private FakeLightPass mFakeLightPass;
-		private LightingMixPass mLightingMixPass;
+		private RenderTargetHandle _fakeLightRenderTexture;
+		private FakeLightPass _fakeLightPass;
+		private LightingMixPass _lightingMixPass;
 
-		public Settings settings;
+		[FormerlySerializedAs("settings")] [SerializeField] private Settings _settings;
 		
 		[NonSerialized]
 		public bool Enabled = true;
@@ -24,23 +25,22 @@ namespace Assets.Scripts.Effects
 
 		public override void Create()
 		{
+			_fakeLightRenderTexture.Init(FakeLightTextureName);
 			
-			_FakeLightRenderTexture.Init(FakeLightTextureName);
-			
-			mFakeLightPass = new FakeLightPass(_FakeLightRenderTexture, FakeLightRenderTextureDownSample);
-			mFakeLightPass.renderPassEvent = FirePassEvent;
+			_fakeLightPass = new FakeLightPass(_fakeLightRenderTexture, FakeLightRenderTextureDownSample);
+			_fakeLightPass.renderPassEvent = FirePassEvent;
 
-			mLightingMixPass = new LightingMixPass(settings);
-			mLightingMixPass.renderPassEvent = FirePassEvent;
+			_lightingMixPass = new LightingMixPass(_settings);
+			_lightingMixPass.renderPassEvent = FirePassEvent;
 		}
 
 		public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
 		{
 			if (Enabled)
 			{	
-				mFakeLightPass.FillColor = FillLightColor;
-				renderer.EnqueuePass(mFakeLightPass);
-				renderer.EnqueuePass(mLightingMixPass);
+				_fakeLightPass.FillColor = FillLightColor;
+				renderer.EnqueuePass(_fakeLightPass);
+				renderer.EnqueuePass(_lightingMixPass);
 			}
 		}
 

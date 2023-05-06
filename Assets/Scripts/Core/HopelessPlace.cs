@@ -10,12 +10,9 @@ namespace Assets.Scripts.Core
 
         private void OnTriggerEnter2D(Collider2D collider2d)
         {
-            var component = collider2d.gameObject.GetComponent<Hero>();
-            if (component != null)
-            {
-                if(OnHeroEnter != null)
-                    OnHeroEnter(this);
-            }
+            var hero = collider2d.gameObject.GetComponent<Hero>();
+            if (hero != null)
+                OnHeroEnter?.Invoke(this);
         }
     }
 }

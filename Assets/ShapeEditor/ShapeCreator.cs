@@ -4,58 +4,60 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.ShapeEditor.Geometry;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.ShapeEditor
 {
 
     public class ShapeCreator : MonoBehaviour, ISerializationCallbackReceiver
     {
-        public MeshFilter MeshFilter;
-
-       // public List<Shape> shapes = new List<Shape>();
-        public float Depth = 1.0f;
-
+        [FormerlySerializedAs("MeshFilter")] [SerializeField] private MeshFilter _meshFilter;
+        [FormerlySerializedAs("Depth")] [SerializeField] private float _depth = 1.0f;
+        [FormerlySerializedAs("mShapes")]
         [HideInInspector]
         [SerializeField]
-        private List<Shape> mShapes = new List<Shape>();
+        private List<Shape> _shapes = new List<Shape>();
 
-        public IEnumerable<Shape> Shapes => mShapes;
+        public IEnumerable<Shape> Shapes => _shapes;
+
+        public float Depth => _depth;
+        public MeshFilter MeshFilter => _meshFilter;
 
         public virtual void UpdateMeshDisplay()
         {
-            CompositeShape compShape = new CompositeShape(mShapes);
+            CompositeShape compShape = new CompositeShape(_shapes);
 
-            MeshFilter.mesh = compShape.GetMesh(this);        
+            _meshFilter.mesh = compShape.GetMesh(this);        
         }
 
         public Shape this[int index]
         {
-            get { return mShapes[index]; }
-            set { mShapes[index] = value; }
+            get { return _shapes[index]; }
+            set { _shapes[index] = value; }
         }
 
         public int Count
         {
-            get { return mShapes.Count; }
+            get { return _shapes.Count; }
         }
 
         public void Add(Shape shape)
         {
-            mShapes.Add(shape);
+            _shapes.Add(shape);
         }
 
         public void RemoveAt(int index)
         {
-            mShapes.RemoveAt(index);
+            _shapes.RemoveAt(index);
         }
 
         public bool IsEmpty
         {
             get
             {
-                for (var sIndex = 0; sIndex < mShapes.Count; sIndex++)
+                for (var sIndex = 0; sIndex < _shapes.Count; sIndex++)
                 {
-                    var shape = mShapes[sIndex];
+                    var shape = _shapes[sIndex];
                     if (shape.Count != 0)
                         return false;
                 }

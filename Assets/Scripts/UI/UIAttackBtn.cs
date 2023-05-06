@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -7,81 +8,74 @@ namespace Assets.Scripts.UI
 {
     public class UIAttackBtn : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
-        public Image DragArea;
-        public Image NormalState;
-        public Image PressedState;
-
-        private bool mMouseDown;
-
-        private Vector2 mInputVector;
-        public bool IsPressed => mMouseDown;
-        public Vector2 Direction => mInputVector;
+        private bool _mouseDown;
+        private Vector2 _inputVector;
+        private Vector2 _startPointerPosition;
+        private Vector2 _btnStartPosition;
+        
+        [FormerlySerializedAs("DragArea")] [SerializeField] private Image _dragArea;
+        [FormerlySerializedAs("NormalState")] [SerializeField] private Image _normalState;
+        [FormerlySerializedAs("PressedState")] [SerializeField] private Image _pressedState;
+        
+        public bool IsPressed => _mouseDown;
+        public Vector2 Direction => _inputVector;
 
         public void Start()
         {
-            DragArea.enabled = true;
+            _dragArea.enabled = true;
         }
         public void OnDrag(PointerEventData eventData)
         {
-            if (mMouseDown)
+            if (_mouseDown)
             {
-                Vector2 pos;
+                var deltaPosition = eventData.position - _startPointerPosition;
+                var btnHalfHeight = _pressedState.rectTransform.sizeDelta.y * 0.5f;
+
+                var halfDragSize = _dragArea.rectTransform.sizeDelta.y * 0.5f;
                 
-                var deltaPosition = eventData.position - mStartPointerPosition;
-                var btnHalfHeight = PressedState.rectTransform.sizeDelta.y * 0.5f;
-
-                var halfDragSize = DragArea.rectTransform.sizeDelta.y * 0.5f;
-
-
-                PressedState.rectTransform.anchoredPosition = mBtnStartPosition + new Vector2(0, 
+                _pressedState.rectTransform.anchoredPosition = _btnStartPosition + new Vector2(0, 
                                                                   Mathf.Clamp(deltaPosition.y, 
-                                                                      -halfDragSize + btnHalfHeight - mBtnStartPosition.y, 
-                                                                      halfDragSize - btnHalfHeight - mBtnStartPosition.y));
+                                                                      -halfDragSize + btnHalfHeight - _btnStartPosition.y, 
+                                                                      halfDragSize - btnHalfHeight - _btnStartPosition.y));
 
-                var deltaPositionY = PressedState.rectTransform.anchoredPosition.y / (halfDragSize - btnHalfHeight);  
+                var deltaPositionY = _pressedState.rectTransform.anchoredPosition.y / (halfDragSize - btnHalfHeight);  
 
                 deltaPositionY = Mathf.Clamp(deltaPositionY, -1, 1);
                 deltaPositionY = deltaPositionY * 60;
-                mInputVector = new Vector2(0, deltaPositionY);
-
-              
+                _inputVector = new Vector2(0, deltaPositionY);
             }
         }
-
-
-        private Vector2 mStartPointerPosition;
-        private Vector2 mBtnStartPosition;
-
+        
         public void OnPointerDown(PointerEventData eventData)
         {
-            NormalState.enabled = false;
-            PressedState.enabled = true;
+            _normalState.enabled = false;
+            _pressedState.enabled = true;
             //DragArea.enabled = true;
 
-            mStartPointerPosition = eventData.position;
-            mBtnStartPosition = PressedState.rectTransform.anchoredPosition;
+            _startPointerPosition = eventData.position;
+            _btnStartPosition = _pressedState.rectTransform.anchoredPosition;
 
-            mMouseDown = true;
+            _mouseDown = true;
             OnDrag(eventData);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            NormalState.enabled = true;
-            PressedState.enabled = false;
+            _normalState.enabled = true;
+            _pressedState.enabled = false;
           //  DragArea.enabled = false;
 
-            mMouseDown = false;
-            NormalState.rectTransform.anchoredPosition = PressedState.rectTransform.anchoredPosition;
+            _mouseDown = false;
+            _normalState.rectTransform.anchoredPosition = _pressedState.rectTransform.anchoredPosition;
 
         }
 
         public void ResetState()
         {
-            mMouseDown = false;
+            _mouseDown = false;
 
-            NormalState.enabled = true;
-            PressedState.enabled = false;
+            _normalState.enabled = true;
+            _pressedState.enabled = false;
         }
     }
 }

@@ -1,26 +1,27 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class Body2dRotationEffect : MonoBehaviour
     {
-        public Rigidbody2D Body;
-        public float AngleSpeed = 30.0f;
-        public bool FixPosition = true;
+        private Vector2 _startPosition;
 
-        private Vector2 mStartPosition;
-
+        [FormerlySerializedAs("Body")] [SerializeField] private Rigidbody2D _body;
+        [FormerlySerializedAs("AngleSpeed")] [SerializeField] private float _angleSpeed = 30.0f;
+        [FormerlySerializedAs("FixPosition")] [SerializeField] private bool _fixPosition = true;
+        
         private void Start()
         {
-            mStartPosition = Body.position;
+            _startPosition = _body.position;
         }
 
         private void FixedUpdate()
         {
-            if(FixPosition)
-                Body.MovePosition(mStartPosition);
+            if(_fixPosition)
+                _body.MovePosition(_startPosition);
 
-            Body.MoveRotation(Body.rotation + AngleSpeed * Time.fixedDeltaTime);
+            _body.MoveRotation(_body.rotation + _angleSpeed * Time.fixedDeltaTime);
         }
     }
 }

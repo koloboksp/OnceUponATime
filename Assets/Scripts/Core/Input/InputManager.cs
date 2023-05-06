@@ -76,8 +76,7 @@ namespace Assets.Scripts.Core
 
             try
             {
-                if (OnProviderAdded != null)
-                    OnProviderAdded(provider);
+                OnProviderAdded?.Invoke(provider);
             }
             catch (Exception e)
             {
@@ -95,8 +94,7 @@ namespace Assets.Scripts.Core
 
             try
             {
-                if (OnProviderRemoved != null)
-                    OnProviderRemoved(provider);
+                OnProviderRemoved?.Invoke(provider);
             }
             catch (Exception e)
             {
@@ -110,8 +108,7 @@ namespace Assets.Scripts.Core
 
             try
             {
-                if (OnProviderActiveStatusChanged != null)
-                    OnProviderActiveStatusChanged(provider);
+                OnProviderActiveStatusChanged?.Invoke(provider);
             }
             catch (Exception e)
             {
@@ -142,8 +139,7 @@ namespace Assets.Scripts.Core
             {
                 try
                 {
-                    if (OnInputActionChanged != null)
-                        OnInputActionChanged(mActions, previousResult);
+                    OnInputActionChanged?.Invoke(mActions, previousResult);
                 }
                 catch (Exception e)
                 {
@@ -154,8 +150,7 @@ namespace Assets.Scripts.Core
             {
                 try
                 {
-                    if (OnInputActionEnded != null)
-                        OnInputActionEnded(mEndedActions, previousEndedActionsResult);
+                    OnInputActionEnded?.Invoke(mEndedActions, previousEndedActionsResult);
                 }
                 catch (Exception e)
                 {
@@ -166,8 +161,7 @@ namespace Assets.Scripts.Core
             {
                 try
                 {
-                    if (OnInputActionStarted != null)
-                        OnInputActionStarted(mStartedActions, previousStartedActionsResult);
+                    OnInputActionStarted?.Invoke(mStartedActions, previousStartedActionsResult);
                 }
                 catch (Exception e)
                 {

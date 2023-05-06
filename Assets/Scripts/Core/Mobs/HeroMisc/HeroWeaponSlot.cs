@@ -23,15 +23,11 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         public void ChangeItem(InventoryItem item)
         {
-            if(_inventoryItem != null)
-                _inventoryItem.ItemInstance.DestroyEquipmentViewPart();
+            _inventoryItem?.ItemInstance.DestroyEquipmentViewPart();
 
             _inventoryItem = item;
 
-            if (_inventoryItem != null)
-            {
-                _inventoryItem.ItemInstance.CreateEquipmentViewPart(Anchor);
-            }
+            _inventoryItem?.ItemInstance.CreateEquipmentViewPart(Anchor);
         }
     }
 }

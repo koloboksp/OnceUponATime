@@ -8,125 +8,58 @@ namespace Assets.Scripts.Effects
 {
     public class CameraDarknessEffect : MonoBehaviour
     {
-        public enum DarknessValues
-        {
-            Zero,
-            One,
-        }
-        public static float ConvertDarknessValue(DarknessValues value)
-        {
-            if (value == DarknessValues.One)
-                return 1.0f;
+        private readonly List<HolderInfo> _holderInfos = new List<HolderInfo>();
 
-            return 0.0f;
-        }
-
-        [NonSerialized] private Shader mUsingShader;
-        [NonSerialized] private float mDarknessValue = 0.0f;
-        [NonSerialized] private Material mMaterial;
+        [NonSerialized] private Shader _usingShader;
+        [NonSerialized] private float _darknessValue = 0.0f;
+        [NonSerialized] private Material _material;
 
         private void Awake()
         {
-            if (mUsingShader == null)
+            if (_usingShader == null)
+                _usingShader = Resources.Load<Shader>("BuildIn/Shaders/CameraDarkness");
+            
+            if (_usingShader != null && _material == null)
             {
-                mUsingShader = Resources.Load<Shader>("BuildIn/Shaders/CameraDarkness");
-            }
-            if (mUsingShader != null && mMaterial == null)
-            {
-                mMaterial = new Material(mUsingShader);
-                mMaterial.hideFlags = HideFlags.HideAndDontSave;
+                _material = new Material(_usingShader);
+                _material.hideFlags = HideFlags.HideAndDontSave;
             }
         }
 
         private void Start()
         {
-            if (!mUsingShader && !mUsingShader.isSupported)
+            if (!_usingShader && !_usingShader.isSupported)
                 enabled = false;
         }
 
         private void OnDestroy()
         {
-            if (mMaterial)
+            if (_material)
             {
-                DestroyImmediate(mMaterial);
-                mMaterial = null;
+                DestroyImmediate(_material);
+                _material = null;
             }
         }
-
-
+        
         private void OnRenderImage(RenderTexture sourceTexture, RenderTexture destTexture)
         {
-            mMaterial.SetFloat("_DarknessValue", mDarknessValue);
-            Graphics.Blit(sourceTexture, destTexture, mMaterial);
+            _material.SetFloat("_DarknessValue", _darknessValue);
+            Graphics.Blit(sourceTexture, destTexture, _material);
         }
-
-        private List<HolderInfo> mHolderInfos = new List<HolderInfo>();
-
-        private class HolderInfo
-        {
-            public readonly object Holder;
-            private float mTimer;
-            private float mTime;
-            private DarknessValues mStartDarknessValue;
-            private DarknessValues mEndDarknessValue;
-
-            public bool CalculationCompleted { get; private set; }
-            public DarknessValues EndDarknessValue { get { return mEndDarknessValue; } }
-
-            public HolderInfo(object holder)
-            {
-                Holder = holder;
-            }
-            public void PlungeIntoDarkness(float time, DarknessValues startDarknessValue, DarknessValues endDarknessValue)
-            {
-                mTimer = 0.0f;
-                mTime = time;
-                mStartDarknessValue = startDarknessValue;
-                mEndDarknessValue = endDarknessValue;
-
-                CalculationCompleted = false;
-            }
-            public void PlungeIntoDarkness(DarknessValues darknessValue)
-            {
-                mTimer = 0.0f;
-                mTime = 0;
-                mStartDarknessValue = darknessValue;
-                mEndDarknessValue = darknessValue;
-
-                CalculationCompleted = true;
-            }
-
-            public float GetValue()
-            {
-                if (mTime > float.Epsilon)
-                {
-                    float param = Mathf.Clamp01(mTimer / mTime);
-                    return Mathf.Lerp(ConvertDarknessValue(mStartDarknessValue), ConvertDarknessValue(mEndDarknessValue), param);
-                }
-
-                return ConvertDarknessValue(mEndDarknessValue);
-            }
-            public void Update(float dTime)
-            {
-                mTimer += dTime;
-                if (mTimer >= mTime)
-                    CalculationCompleted = true;
-            }
-        }
-
+        
         private void SetDarkness(DarknessValues value, object holder)
         {
-            var fHolderInfo = mHolderInfos.Find(i => i.Holder == holder);
+            var fHolderInfo = _holderInfos.Find(i => i.Holder == holder);
             if (value == DarknessValues.One)
             {
                 if (fHolderInfo == null)
-                    mHolderInfos.Add(fHolderInfo = new HolderInfo(holder));
+                    _holderInfos.Add(fHolderInfo = new HolderInfo(holder));
                 fHolderInfo.PlungeIntoDarkness((value));
             }
             else
             {
                 if (fHolderInfo != null)
-                    mHolderInfos.Remove(fHolderInfo);
+                    _holderInfos.Remove(fHolderInfo);
             }
 
             UpdateDarknessDerivedValue();
@@ -134,9 +67,9 @@ namespace Assets.Scripts.Effects
 
         private void PlungeIntoDarkness(float time, DarknessValues startDarknessValue, DarknessValues endDarknessValue, object holder)
         {
-            var fHolderInfo = mHolderInfos.Find(i => i.Holder == holder);
+            var fHolderInfo = _holderInfos.Find(i => i.Holder == holder);
             if (fHolderInfo == null)
-                mHolderInfos.Add(fHolderInfo = new HolderInfo(holder));
+                _holderInfos.Add(fHolderInfo = new HolderInfo(holder));
             fHolderInfo.PlungeIntoDarkness(time, startDarknessValue, endDarknessValue);
 
             StartCoroutine(ManualUpdate());
@@ -145,16 +78,16 @@ namespace Assets.Scripts.Effects
         private void UpdateDarknessDerivedValue()
         {
             float maxDarknessValue = 0.0f;
-            for (int hiIndex = 0; hiIndex < mHolderInfos.Count; hiIndex++)
+            for (int hiIndex = 0; hiIndex < _holderInfos.Count; hiIndex++)
             {
-                HolderInfo hi = mHolderInfos[hiIndex];
+                HolderInfo hi = _holderInfos[hiIndex];
                 maxDarknessValue = Mathf.Max(hi.GetValue(), maxDarknessValue);
             }
 
-            if (mDarknessValue != maxDarknessValue)
+            if (_darknessValue != maxDarknessValue)
             {
-                mDarknessValue = Mathf.Clamp(maxDarknessValue, 0.0f, 1.0f);
-                if (mDarknessValue <= float.Epsilon)
+                _darknessValue = Mathf.Clamp(maxDarknessValue, 0.0f, 1.0f);
+                if (_darknessValue <= float.Epsilon)
                     this.enabled = false;
                 else
                     this.enabled = true;
@@ -167,14 +100,14 @@ namespace Assets.Scripts.Effects
             {
                 bool calculationsCompleted = true;
 
-                for (int hiIndex = mHolderInfos.Count - 1; hiIndex >= 0; hiIndex--)
+                for (int hiIndex = _holderInfos.Count - 1; hiIndex >= 0; hiIndex--)
                 {
-                    var holderInfo = mHolderInfos[hiIndex];
+                    var holderInfo = _holderInfos[hiIndex];
                     holderInfo.Update(Time.deltaTime);
                     if (holderInfo.CalculationCompleted)
                     {
                         if (holderInfo.EndDarknessValue == DarknessValues.Zero)
-                            mHolderInfos.RemoveAt(hiIndex);
+                            _holderInfos.RemoveAt(hiIndex);
                     }
                     else
                         calculationsCompleted = false;
@@ -212,8 +145,7 @@ namespace Assets.Scripts.Effects
 
             cameraDarknesEffect.SetDarkness(darknessValue, holder);
         }
-
-
+        
         public static Camera FindCameraInScene(Scene scene)
         {
             Camera foundCamera = null;
@@ -230,6 +162,75 @@ namespace Assets.Scripts.Effects
             }
 
             return foundCamera;
+        }
+        
+        public static float ConvertDarknessValue(DarknessValues value)
+        {
+            if (value == DarknessValues.One)
+                return 1.0f;
+
+            return 0.0f;
+        }
+        
+        public enum DarknessValues
+        {
+            Zero,
+            One,
+        }
+        
+        private class HolderInfo
+        {
+            public readonly object Holder;
+            private float _timer;
+            private float _time;
+            private DarknessValues _startDarknessValue;
+            private DarknessValues _endDarknessValue;
+
+            public bool CalculationCompleted { get; private set; }
+            public DarknessValues EndDarknessValue { get { return _endDarknessValue; } }
+
+            public HolderInfo(object holder)
+            {
+                Holder = holder;
+            }
+            
+            public void PlungeIntoDarkness(float time, DarknessValues startDarknessValue, DarknessValues endDarknessValue)
+            {
+                _timer = 0.0f;
+                _time = time;
+                _startDarknessValue = startDarknessValue;
+                _endDarknessValue = endDarknessValue;
+
+                CalculationCompleted = false;
+            }
+            
+            public void PlungeIntoDarkness(DarknessValues darknessValue)
+            {
+                _timer = 0.0f;
+                _time = 0;
+                _startDarknessValue = darknessValue;
+                _endDarknessValue = darknessValue;
+
+                CalculationCompleted = true;
+            }
+
+            public float GetValue()
+            {
+                if (_time > float.Epsilon)
+                {
+                    float param = Mathf.Clamp01(_timer / _time);
+                    return Mathf.Lerp(ConvertDarknessValue(_startDarknessValue), ConvertDarknessValue(_endDarknessValue), param);
+                }
+
+                return ConvertDarknessValue(_endDarknessValue);
+            }
+            
+            public void Update(float dTime)
+            {
+                _timer += dTime;
+                if (_timer >= _time)
+                    CalculationCompleted = true;
+            }
         }
     }
 }

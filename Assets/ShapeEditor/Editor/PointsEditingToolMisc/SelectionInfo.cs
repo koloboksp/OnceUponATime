@@ -6,81 +6,86 @@ namespace Assets.ShapeEditor.Editor.PointsEditingToolMisc
 {
     public class SelectionInfo
     {
-        public int mShapeIndex = -1;
-        int mPointIndex = -1;    
+        private int _shapeIndex = -1;
+        private int _pointIndex = -1;    
         
-        bool mDragEnable;
-        bool mDragHappened;
+        private bool _dragEnable;
+        private bool _dragHappened;
 
-        Plane mDragPlane;
-        Point mPointStateAtDragStart;
-        Vector2 mLocalPointPositionAtStartOfDrag;
-        Vector2 mLocalMouseOffsetAtStartOfDrag;
+        private Plane _dragPlane;
+        private Point _pointStateAtDragStart;
+        private Vector2 _localPointPositionAtStartOfDrag;
+        private Vector2 _localMouseOffsetAtStartOfDrag;
 
-        public int ShapeIndex => mShapeIndex;
-        public int PointIndex => mPointIndex;
+        public int ShapeIndex
+        {
+            get => _shapeIndex;
+            set => _shapeIndex = value;
+        }
+
+        public int PointIndex => _pointIndex;
         public bool PointIsSelected => PointIndex != -1;
-        public bool DragHappened => mDragHappened;
-        public bool DragEnable => mDragEnable;
+        public bool DragHappened => _dragHappened;
+        public bool DragEnable => _dragEnable;
 
         public void DeselectPoint()
         {
-            mPointIndex = -1;
+            _pointIndex = -1;
         }
         public void SelectPointByMouse(int shapeIndex, int pointIndex, ShapeCreator target, Vector2 ssMousePosition)
         {
-            mShapeIndex = shapeIndex;
-            mPointIndex = pointIndex;
+            _shapeIndex = shapeIndex;
+            _pointIndex = pointIndex;
   
-            mDragPlane = new Plane(
+            _dragPlane = new Plane(
                 target.transform.position,
                 target.transform.position + target.transform.right,
                 target.transform.position + target.transform.up);
 
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(ssMousePosition);
             float distance;
-            mDragPlane.Raycast(mouseRay, out distance);
+            _dragPlane.Raycast(mouseRay, out distance);
             var mousePosition = mouseRay.GetPoint(distance);
             var lMousePosition = target.transform.InverseTransformPoint(mousePosition);
 
-            mPointStateAtDragStart = target[shapeIndex][mPointIndex];
-            mLocalPointPositionAtStartOfDrag = target[shapeIndex][mPointIndex].Position;
-            mLocalMouseOffsetAtStartOfDrag = mLocalPointPositionAtStartOfDrag - (Vector2)lMousePosition;
+            _pointStateAtDragStart = target[shapeIndex][_pointIndex];
+            _localPointPositionAtStartOfDrag = target[shapeIndex][_pointIndex].Position;
+            _localMouseOffsetAtStartOfDrag = _localPointPositionAtStartOfDrag - (Vector2)lMousePosition;
            
-            mDragHappened = false;
-            mDragEnable = true;
+            _dragHappened = false;
+            _dragEnable = true;
         }
   
         public void DragPoint(ShapeCreator target, Vector2 ssMousePosition)
         {
-            if (!mDragEnable)
+            if (!_dragEnable)
                 return;
 
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(ssMousePosition);
             float distance;
-            mDragPlane.Raycast(mouseRay, out distance);
+            _dragPlane.Raycast(mouseRay, out distance);
             var mousePosition = mouseRay.GetPoint(distance);
             var lMousePosition = target.transform.InverseTransformPoint(mousePosition);
 
-            var point = target[mShapeIndex][mPointIndex];
-            point.Position = (Vector2)lMousePosition + mLocalMouseOffsetAtStartOfDrag;
-            target[mShapeIndex][mPointIndex] = point;
+            var point = target[_shapeIndex][_pointIndex];
+            point.Position = (Vector2)lMousePosition + _localMouseOffsetAtStartOfDrag;
+            target[_shapeIndex][_pointIndex] = point;
 
-            mDragHappened = true;
+            _dragHappened = true;
         }
 
         public void StopDrag(ShapeCreator target)
         {
-            mDragEnable = false;
-            if (mDragHappened)
+            _dragEnable = false;
+            if (_dragHappened)
             {
-                var pointCurrentState = target[mShapeIndex][mPointIndex];
-                target[mShapeIndex][mPointIndex] = mPointStateAtDragStart;
+                var pointCurrentState = target[_shapeIndex][_pointIndex];
+                target[_shapeIndex][_pointIndex] = _pointStateAtDragStart;
                 Undo.RecordObject(target, "Drag point");
-                target[mShapeIndex][mPointIndex] = pointCurrentState;
+                target[_shapeIndex][_pointIndex] = pointCurrentState;
             }
 
-            mDragHappened = false;
+            _dragHappened = false;
         }
 
     }

@@ -2,44 +2,45 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
     public class UIUserButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        private enum State
-        {
-            Normal,
-            Pressed,
-            Disabled,
-        }
+       
         public const float DefaultPressedSize = 0.9f;
         public event Action<UIUserButton> OnPress;
         public event Action<UIUserButton> OnClick;
 
-        public Color DisabledColor = new Color(0.5f, 0.5f, 0.5f, 1);
-        public Color PressedColor = new Color(1.0f, 1.0f, 1.0f, 1);
-        public bool AutoReturn;
-        public Image Image;
+        private bool _isPressed = false;
+        private readonly List<Graphic> _allInnerGraphicComponents = new List<Graphic>();
+        private readonly Dictionary<Graphic, Color> _savedNormalColors = new Dictionary<Graphic, Color>();
+        private bool _initialized;
+        private int _updateCycleIndexOnPointerDown;
+        private int _currentUpdateCycleIndex = 0;
+        private bool _ignoreInput = false;
+        
+        [FormerlySerializedAs("DisabledColor")] [SerializeField] private Color _disabledColor = new Color(0.5f, 0.5f, 0.5f, 1);
+        [FormerlySerializedAs("PressedColor")] [SerializeField] private Color _pressedColor = new Color(1.0f, 1.0f, 1.0f, 1);
+        [FormerlySerializedAs("AutoReturn")] [SerializeField] private bool _autoReturn;
+        [FormerlySerializedAs("Image")] [SerializeField] private Image _image;
 
-        public object UserData;
+        public bool AutoReturn
+        {
+            get => _autoReturn;
+            set => _autoReturn = value;
+        }
 
-        private bool mIsPressed = false;
-       // bool mIsManualUpdated = false;
-       private readonly List<Graphic> mAllInnerGraphicConponents = new List<Graphic>();
-       private readonly Dictionary<Graphic, Color> mSavedNormalColors = new Dictionary<Graphic, Color>();
-       private bool mInitialized;
-       private int mUpdateCycleIndexOnPointerDown;
-       private int mCurrentUpdateCycleIndex = 0;
-       private bool mIgnoreInput = false;
-
+        public Image Image => _image;
+        
         public bool IgnoreInput
         {
-            get { return mIgnoreInput; }
+            get { return _ignoreInput; }
             set
             {
-                mIgnoreInput = value;
+                _ignoreInput = value;
             }
         }
 
@@ -62,17 +63,17 @@ namespace Assets.Scripts.UI
 
         private void CheckInitialization()
         {
-            if (!mInitialized)
+            if (!_initialized)
             {
-                mInitialized = true;
+                _initialized = true;
 
-                mAllInnerGraphicConponents.Clear();
-                gameObject.GetComponents<Graphic>(mAllInnerGraphicConponents);
-                gameObject.GetComponentsInChildren<Graphic>(true, mAllInnerGraphicConponents);
+                _allInnerGraphicComponents.Clear();
+                gameObject.GetComponents<Graphic>(_allInnerGraphicComponents);
+                gameObject.GetComponentsInChildren<Graphic>(true, _allInnerGraphicComponents);
 
-                mSavedNormalColors.Clear();
-                for (int iIndex = 0; iIndex < mAllInnerGraphicConponents.Count; iIndex++)
-                    mSavedNormalColors.Add(mAllInnerGraphicConponents[iIndex], mAllInnerGraphicConponents[iIndex].color);
+                _savedNormalColors.Clear();
+                for (int iIndex = 0; iIndex < _allInnerGraphicComponents.Count; iIndex++)
+                    _savedNormalColors.Add(_allInnerGraphicComponents[iIndex], _allInnerGraphicComponents[iIndex].color);
             }
         }
 
@@ -102,22 +103,22 @@ namespace Assets.Scripts.UI
 
             if (state == State.Pressed)
             {
-                for (int iColor = 0; iColor < mAllInnerGraphicConponents.Count; iColor++)
-                    mAllInnerGraphicConponents[iColor].color *= PressedColor;
+                for (int iColor = 0; iColor < _allInnerGraphicComponents.Count; iColor++)
+                    _allInnerGraphicComponents[iColor].color *= _pressedColor;
 
                 this.transform.localScale = DefaultPressedSize * Vector3.one;
             }
             else if (state == State.Disabled)
             {
-                for (int iColor = 0; iColor < mAllInnerGraphicConponents.Count; iColor++)
-                    mAllInnerGraphicConponents[iColor].color *= DisabledColor;
+                for (int iColor = 0; iColor < _allInnerGraphicComponents.Count; iColor++)
+                    _allInnerGraphicComponents[iColor].color *= _disabledColor;
 
                 this.transform.localScale = Vector3.one;
             }
             else
             {
-                for (int iColor = 0; iColor < mAllInnerGraphicConponents.Count; iColor++)
-                    mAllInnerGraphicConponents[iColor].color = mSavedNormalColors[mAllInnerGraphicConponents[iColor]];
+                for (int iColor = 0; iColor < _allInnerGraphicComponents.Count; iColor++)
+                    _allInnerGraphicComponents[iColor].color = _savedNormalColors[_allInnerGraphicComponents[iColor]];
 
                 this.transform.localScale = Vector3.one;
             }
@@ -127,15 +128,14 @@ namespace Assets.Scripts.UI
         {
             if (!enabled)
                 return;
-            if (mIgnoreInput)
+            if (_ignoreInput)
                 return;
 
-            mUpdateCycleIndexOnPointerDown = mCurrentUpdateCycleIndex;
-            mIsPressed = true;
+            _updateCycleIndexOnPointerDown = _currentUpdateCycleIndex;
+            _isPressed = true;
             UpdateGraphical(State.Pressed);
 
-            if (OnPress != null)
-                OnPress(this);
+            OnPress?.Invoke(this);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -143,49 +143,47 @@ namespace Assets.Scripts.UI
             if (!enabled)
                 return;
 
-            if (mIsPressed)
+            if (_isPressed)
             {
-                mIsPressed = false;
+                _isPressed = false;
                 UpdateGraphical(State.Normal);
 
-                if (OnClick != null)
-                    OnClick(this);
+                OnClick?.Invoke(this);
             }
         }
 
         public void ManualUpdate()
         {
-            if (mUpdateCycleIndexOnPointerDown != mCurrentUpdateCycleIndex)
+            if (_updateCycleIndexOnPointerDown != _currentUpdateCycleIndex)
             {
-                if (AutoReturn)
+                if (_autoReturn)
                 {
-                    if (mIsPressed)
+                    if (_isPressed)
                     {
-                        mIsPressed = false;
+                        _isPressed = false;
                         UpdateGraphical(State.Normal);
                     }
                 }
                 else
                 {
-                    if (mIsPressed)
+                    if (_isPressed)
                     {
-                        if (OnPress != null)
-                            OnPress(this);
+                        OnPress?.Invoke(this);
                     }
                 }
             }
 
-            mCurrentUpdateCycleIndex++;
+            _currentUpdateCycleIndex++;
         }
 
         public void ResetState()
         {
             enabled = true;
-            mIgnoreInput = true;
+            _ignoreInput = true;
 
-            if (mIsPressed)
+            if (_isPressed)
             {
-                mIsPressed = false;
+                _isPressed = false;
                 UpdateGraphical(State.Normal);
             }
         }
@@ -194,17 +192,26 @@ namespace Assets.Scripts.UI
         {
             get
             {
-                return mIsPressed;
+                return _isPressed;
             }
         }
 
+      
         public void Hide()
         {
             gameObject.SetActive(false);
         }
+        
         public void Show()
         {
             gameObject.SetActive(true);
+        }
+        
+        private enum State
+        {
+            Normal,
+            Pressed,
+            Disabled,
         }
     }
 }

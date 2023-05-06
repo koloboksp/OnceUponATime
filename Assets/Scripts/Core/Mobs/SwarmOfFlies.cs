@@ -2,80 +2,67 @@ using System.Collections.Generic;
 using Assets.Scripts.Core.Items;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class SwarmOfFlies : Character
     {
-        private enum State
-        {
-            WaitForTarget,
-            MoveToTarget,
-            Attack,
-            SearchTarget,
-            Return,
-            GetCriticalDamage,
-            Die,
-        }
+        private Level _level;
 
-        public Fly FlyPrefab;
-       // public float Radius = 0.5f;
-        public CircleCollider2D BodyTrigger;
+        private State _currentState = State.WaitForTarget;
 
-        public Trigger ReactionTrigger;
+        private Vector3 _startPosition;
+
+        private bool _enemyDetected = false;
+        private Hero _enemy;
+
+        private float _searchTime = 2.0f;
+        private float _searchTimer = 0.0f;
+
+        private bool _canAttack = true;
+        private float _attackSpeed = 1.0f;
+        private float _attackTimer = 0.0f;
+
+        private float _attackDistance = 0.3f;
+
+        private float _dieEffectTimer;
         
+        private float _getCriticalDamageEffectTimer;
+        private float _getCriticalDamageEffectTime = 0.5f;
 
-        public float Speed = 1.0f;
-        public float Damage = 1.0f;
+        private readonly List<Fly> _flies = new List<Fly>();
 
-        public float DamageReduce = 0.1f;
-        public DropDownItemsLevel DropDownItemsLevel = DropDownItemsLevel.CoinsAndMomentBonuses50;
+        [FormerlySerializedAs("FlyPrefab")] [SerializeField] private Fly _flyPrefab;
+        [FormerlySerializedAs("BodyTrigger")] [SerializeField] private CircleCollider2D _bodyTrigger;
 
-        private Level mLevel;
+        [FormerlySerializedAs("ReactionTrigger")] [SerializeField] private Trigger _reactionTrigger;
+        
+        [FormerlySerializedAs("Speed")] [SerializeField] private float _speed = 1.0f;
+        [FormerlySerializedAs("Damage")] [SerializeField] private float _damage = 1.0f;
 
-        private State mCurrentState = State.WaitForTarget;
-
-        private Vector3 mStartPosition;
-
-        private bool mEnemyDetected = false;
-        private Hero mEnemy;
-
-        private float mSearchTime = 2.0f;
-        private float mSearchTimer = 0.0f;
-
-        private bool mCanAttack = true;
-        private float mAttackSpeed = 1.0f;
-        private float mAttackTimer = 0.0f;
-
-        private float mAttackDistance = 0.3f;
-
-        private float mDieEffectTimer;
-
-
-        private float mGetCriticalDamageEffectTimer;
-        private float mGetCriticalDamageEffectTime = 0.5f;
-
-        private readonly List<Fly> mFlies = new List<Fly>();
-
+        [FormerlySerializedAs("DamageReduce")] [SerializeField] private float _damageReduce = 0.1f;
+        [FormerlySerializedAs("DropDownItemsLevel")] [SerializeField] private DropDownItemsLevel _dropDownItemsLevel = DropDownItemsLevel.CoinsAndMomentBonuses50;
+        
         private void Start()
         {
-            mStartPosition = transform.position;
-            mLevel = FindObjectOfType<Level>();
+            _startPosition = transform.position;
+            _level = FindObjectOfType<Level>();
 
             for (int i = 0; i < 5; i++)
             {
-                var instantiate = Instantiate(FlyPrefab.gameObject);
-                var component = instantiate.GetComponent<Fly>();
+                var instantiate = Instantiate(_flyPrefab.gameObject);
+                var fly = instantiate.GetComponent<Fly>();
 
-                component.RandomRangeRadius = BodyTrigger.radius;
-                component.transform.SetParent(transform, false);
-                component.transform.position = Vector3.zero;
+                fly.RandomRangeRadius = _bodyTrigger.radius;
+                fly.transform.SetParent(transform, false);
+                fly.transform.position = Vector3.zero;
 
-                mFlies.Add(component);
+                _flies.Add(fly);
             }
 
-            ReactionTrigger.OnSomethingEnter += ReactionTrigger_OnSomethingEnter;
-            ReactionTrigger.OnSomethingExit += ReactionTrigger_OnSomethingExit;
+            _reactionTrigger.OnSomethingEnter += ReactionTrigger_OnSomethingEnter;
+            _reactionTrigger.OnSomethingExit += ReactionTrigger_OnSomethingExit;
         }
 
         private static List<Hero> mNoAllocGetComponent = new List<Hero>();
@@ -87,8 +74,8 @@ namespace Assets.Scripts.Core.Mobs
 
             if (mNoAllocGetComponent.Count > 0)
             {
-                mEnemyDetected = true;
-                mEnemy = mNoAllocGetComponent[0];
+                _enemyDetected = true;
+                _enemy = mNoAllocGetComponent[0];
             }
         }
 
@@ -98,27 +85,27 @@ namespace Assets.Scripts.Core.Mobs
 
             if (mNoAllocGetComponent.Count > 0)
             {
-                mEnemyDetected = false;
+                _enemyDetected = false;
                 //mEnemy = null;
             }
         }
 
         private void Update()
         {  
-            if (mCurrentState == State.WaitForTarget)
+            if (_currentState == State.WaitForTarget)
             {
-                if (mEnemyDetected)
-                    mCurrentState = State.MoveToTarget;
+                if (_enemyDetected)
+                    _currentState = State.MoveToTarget;
             }
-            else if (mCurrentState == State.MoveToTarget)
+            else if (_currentState == State.MoveToTarget)
             {
-                var point = mEnemy.GetPoint("Neck");
+                var point = _enemy.GetPoint("Neck");
 
                 var vecToDestination = point.position - this.transform.position;
                 var distanceToDestination = vecToDestination.magnitude;
-                var timeToDestination = distanceToDestination / Speed;
+                var timeToDestination = distanceToDestination / _speed;
 
-                if (distanceToDestination > mAttackDistance)
+                if (distanceToDestination > _attackDistance)
                 {
                     float timeParts = timeToDestination / Time.deltaTime;
                     if (timeParts > 1)
@@ -128,29 +115,29 @@ namespace Assets.Scripts.Core.Mobs
                 }
                 else
                 {
-                    mCurrentState = State.Attack;
+                    _currentState = State.Attack;
                 }
 
-                if (!mEnemyDetected)
+                if (!_enemyDetected)
                 {
-                    mCurrentState = State.SearchTarget;
-                    mSearchTimer = 0.0f;
+                    _currentState = State.SearchTarget;
+                    _searchTimer = 0.0f;
                 }
             }
-            else if (mCurrentState == State.SearchTarget)
+            else if (_currentState == State.SearchTarget)
             {
-                mSearchTimer += Time.deltaTime;
-                if (mSearchTimer > mSearchTime)
+                _searchTimer += Time.deltaTime;
+                if (_searchTimer > _searchTime)
                 {
-                    mCurrentState = State.Return;
+                    _currentState = State.Return;
                 }
 
-                var point = mEnemy.GetPoint("Neck");
+                var point = _enemy.GetPoint("Neck");
 
                 var vecToDestination = point.position - this.transform.position;
                 var distanceToDestination = vecToDestination.magnitude;
 
-                var timeToDestination = distanceToDestination / Speed;
+                var timeToDestination = distanceToDestination / _speed;
     
                 float timeParts = timeToDestination / Time.deltaTime;
                 if (timeParts > 1)
@@ -158,17 +145,17 @@ namespace Assets.Scripts.Core.Mobs
                     this.transform.position += vecToDestination * (1.0f / timeParts);
                 }
                 
-                if (mEnemyDetected)
+                if (_enemyDetected)
                 {
-                    mCurrentState = State.MoveToTarget;
+                    _currentState = State.MoveToTarget;
                 }
             }
-            else if (mCurrentState == State.Return)
+            else if (_currentState == State.Return)
             {
-                var vecToDestination = mStartPosition - this.transform.position;
+                var vecToDestination = _startPosition - this.transform.position;
                 var distanceToDestination = vecToDestination.magnitude;
 
-                var timeToDestination = distanceToDestination / Speed;
+                var timeToDestination = distanceToDestination / _speed;
 
                 float timeParts = timeToDestination / Time.deltaTime;
                 if (timeParts > 1)
@@ -177,59 +164,59 @@ namespace Assets.Scripts.Core.Mobs
                 }
                 else
                 {
-                    this.transform.position = mStartPosition;
-                    mCurrentState = State.WaitForTarget;
+                    this.transform.position = _startPosition;
+                    _currentState = State.WaitForTarget;
                 }
             }
-            else if (mCurrentState == State.Attack)
+            else if (_currentState == State.Attack)
             {
-                 var point = mEnemy.GetPoint("Neck");
+                 var point = _enemy.GetPoint("Neck");
 
-                if (mCanAttack)
+                if (_canAttack)
                 {
-                    mCanAttack = false;
-                    mAttackTimer = 0.0f;
+                    _canAttack = false;
+                    _attackTimer = 0.0f;
                     
-                    foreach (var fly in mFlies)
+                    foreach (var fly in _flies)
                     {
                         fly.SetLocalDestination(transform.InverseTransformPoint(point.position));
                     }
-                    mAttackTimer = 0.0f;
+                    _attackTimer = 0.0f;
 
-                    mEnemy.TakeDamage(null, new DamageInfo(DamageType.Prick, Damage, point.position, 0, Vector2.zero));
+                    _enemy.TakeDamage(null, new DamageInfo(DamageType.Prick, _damage, point.position, 0, Vector2.zero));
                 }
                 var vecToDestination = point.position - this.transform.position;
                 var distanceToDestination = vecToDestination.magnitude;
 
-                if (distanceToDestination > mAttackDistance)
+                if (distanceToDestination > _attackDistance)
                 {
-                    mCurrentState = State.MoveToTarget;
+                    _currentState = State.MoveToTarget;
                 }
             }
-            else if (mCurrentState == State.GetCriticalDamage)
+            else if (_currentState == State.GetCriticalDamage)
             {
-                mGetCriticalDamageEffectTimer += Time.deltaTime;
-                if (mGetCriticalDamageEffectTimer >= mGetCriticalDamageEffectTime)
+                _getCriticalDamageEffectTimer += Time.deltaTime;
+                if (_getCriticalDamageEffectTimer >= _getCriticalDamageEffectTime)
                 {
-                    mCurrentState = State.SearchTarget;
-                    mGetCriticalDamageEffectTimer = 0.0f;
+                    _currentState = State.SearchTarget;
+                    _getCriticalDamageEffectTimer = 0.0f;
                 } 
             }
-            else if (mCurrentState == State.Die)
+            else if (_currentState == State.Die)
             {
-                mDieEffectTimer += Time.deltaTime;
-                if (mDieEffectTimer >= DeathTime)
+                _dieEffectTimer += Time.deltaTime;
+                if (_dieEffectTimer >= DeathTime)
                 {
                     Object.Destroy(this.gameObject);
                 }
             }
 
-            if (!mCanAttack)
+            if (!_canAttack)
             {
-                mAttackTimer += Time.deltaTime;
-                if (mAttackTimer > 1.0f / mAttackSpeed)
+                _attackTimer += Time.deltaTime;
+                if (_attackTimer > 1.0f / _attackSpeed)
                 {
-                    mCanAttack = true;
+                    _canAttack = true;
                 }
             }
         }
@@ -241,16 +228,16 @@ namespace Assets.Scripts.Core.Mobs
                 (damageInfo.Type & DamageType.Push) != 0)
             {
                 newDamageInfo = new DamageInfo(damageInfo.Type, damageInfo.Attack, damageInfo.Point, damageInfo.ForceValue, damageInfo.ForceDirection);
-                mCurrentState = State.GetCriticalDamage;
+                _currentState = State.GetCriticalDamage;
 
-                foreach (var fly in mFlies)
+                foreach (var fly in _flies)
                 {
-                    fly.StunEffect(transform.InverseTransformPoint(damageInfo.Point), damageInfo.ForceValue, mGetCriticalDamageEffectTime);
+                    fly.StunEffect(transform.InverseTransformPoint(damageInfo.Point), damageInfo.ForceValue, _getCriticalDamageEffectTime);
                 }
             }
             else
             {
-                newDamageInfo = new DamageInfo(damageInfo.Type, damageInfo.Attack * DamageReduce, damageInfo.Point, damageInfo.ForceValue, damageInfo.ForceDirection);
+                newDamageInfo = new DamageInfo(damageInfo.Type, damageInfo.Attack * _damageReduce, damageInfo.Point, damageInfo.ForceValue, damageInfo.ForceDirection);
             }
 
             base.TakeDamage(sender, newDamageInfo);        
@@ -262,12 +249,12 @@ namespace Assets.Scripts.Core.Mobs
         protected override void Destroy()
         {
             base.Destroy();
-            mCurrentState = State.Die;
+            _currentState = State.Die;
 
-            BodyTrigger.enabled = false;
-            ReactionTrigger.enabled = false;
+            _bodyTrigger.enabled = false;
+            _reactionTrigger.enabled = false;
 
-            foreach (var fly in mFlies)
+            foreach (var fly in _flies)
             {
                 fly.Die(UnityEngine.Random.Range(0.0f, DeathTime * 0.2f), UnityEngine.Random.Range(DeathTime * 0.6f, DeathTime * 0.8f));
             }
@@ -276,9 +263,20 @@ namespace Assets.Scripts.Core.Mobs
 
         protected override void DeathOperation_OnComplete(Operation sender)
         {
-            DropDownItemsManager.Instance.GenerateItem(DropDownItemsLevel, transform.position);
+            DropDownItemsManager.Instance.GenerateItem(_dropDownItemsLevel, transform.position);
 
             base.DeathOperation_OnComplete(sender);
+        }
+        
+        private enum State
+        {
+            WaitForTarget,
+            MoveToTarget,
+            Attack,
+            SearchTarget,
+            Return,
+            GetCriticalDamage,
+            Die,
         }
     }
     

@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Core
 {
     public class SceneChangerLoadingBar : MonoBehaviour
     {
-        public Image ProgressBar;
+        [FormerlySerializedAs("ProgressBar")] [SerializeField] private Image _progressBar;
 
         public void SetProgress(float progress)
         {
-            ProgressBar.fillAmount = progress;
+            _progressBar.fillAmount = progress;
         }
     }
 }

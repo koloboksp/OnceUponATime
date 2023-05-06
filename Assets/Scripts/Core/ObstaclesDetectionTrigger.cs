@@ -6,25 +6,24 @@ namespace Assets.Scripts.Core
 {
     public class ObstaclesDetectionTrigger : Trigger
     {
-        private List<Collider2D> mColliders = new List<Collider2D>();
+        private readonly List<Collider2D> _colliders = new List<Collider2D>();
 
         private void OnTriggerEnter2D(Collider2D collider2d)
         {
             if(collider2d.attachedRigidbody == null && !collider2d.isTrigger)
-                if (!mColliders.Contains(collider2d))
-                    mColliders.Add(collider2d);
+                if (!_colliders.Contains(collider2d))
+                    _colliders.Add(collider2d);
         }
 
         private void OnTriggerExit2D(Collider2D collider2d)
         {
-            if (mColliders.Contains(collider2d))
-                mColliders.Remove(collider2d);
+            if (_colliders.Contains(collider2d))
+                _colliders.Remove(collider2d);
         }
-    
-
+        
         public bool WallDetected 
         {
-            get { return mColliders.Count > 0; }
+            get { return _colliders.Count > 0; }
         }
     }
 }

@@ -9,22 +9,22 @@ namespace Assets.ShapeEditor.Editor.PointsEditingToolMisc
 {
     public class MouseOverInfo
     {
-        int mShapeIndex = -1;
-        int mPointIndex = -1;
-        int mLineIndex = -1;
-        int mCrossIndex = -1;
-        Vector3 mLocalLineIntersection;
+        private int _shapeIndex = -1;
+        private int _pointIndex = -1;
+        private int _lineIndex = -1;
+        private int _crossIndex = -1;
+        private Vector3 _localLineIntersection;
 
-        public int ShapeIndex => mShapeIndex;
-        public int PointIndex => mPointIndex;
-        public int LineIndex => mLineIndex;
-        public int CrossIndex => mCrossIndex;
+        public int ShapeIndex => _shapeIndex;
+        public int PointIndex => _pointIndex;
+        public int LineIndex => _lineIndex;
+        public int CrossIndex => _crossIndex;
         
-        public Vector3 LocalLineIntersection => mLocalLineIntersection;
+        public Vector3 LocalLineIntersection => _localLineIntersection;
 
-        public bool IsOverPoint => mPointIndex != -1;
-        public bool IsOverLine => mLineIndex != -1;
-        public bool IsOverCross => mCrossIndex != -1;
+        public bool IsOverPoint => _pointIndex != -1;
+        public bool IsOverLine => _lineIndex != -1;
+        public bool IsOverCross => _crossIndex != -1;
 
         public bool UpdateMouseOverInfo(ShapeCreator target, Vector3 mousePosition)
         {
@@ -56,13 +56,13 @@ namespace Assets.ShapeEditor.Editor.PointsEditingToolMisc
 
             if (pointFound)
             {
-                mLineIndex = -1;
-                mCrossIndex = -1;
+                _lineIndex = -1;
+                _crossIndex = -1;
 
-                if (newPointIndex != mPointIndex)
+                if (newPointIndex != _pointIndex)
                 {
-                    mShapeIndex = newShapeIndex;
-                    mPointIndex = newPointIndex;
+                    _shapeIndex = newShapeIndex;
+                    _pointIndex = newPointIndex;
 
                     return true;
                 }
@@ -136,13 +136,13 @@ namespace Assets.ShapeEditor.Editor.PointsEditingToolMisc
 
             if (crossFound)
             {
-                mPointIndex = -1;
-                mLineIndex = -1;
+                _pointIndex = -1;
+                _lineIndex = -1;
       
-                if (newCrossIndex != mCrossIndex)
+                if (newCrossIndex != _crossIndex)
                 {
-                    mShapeIndex = newShapeIndex;
-                    mCrossIndex = newCrossIndex;     
+                    _shapeIndex = newShapeIndex;
+                    _crossIndex = newCrossIndex;     
                 }
 
                 return true;
@@ -150,34 +150,34 @@ namespace Assets.ShapeEditor.Editor.PointsEditingToolMisc
 
             if (lineFound)
             {
-                mPointIndex = -1;
-                mCrossIndex = -1;
-                mLocalLineIntersection = lineIntersection;
+                _pointIndex = -1;
+                _crossIndex = -1;
+                _localLineIntersection = lineIntersection;
 
-                if (newLineIndex != mLineIndex)
+                if (newLineIndex != _lineIndex)
                 {
-                    mShapeIndex = newShapeIndex;
-                    mLineIndex = newLineIndex;       
+                    _shapeIndex = newShapeIndex;
+                    _lineIndex = newLineIndex;       
                 }
               
                 
                 return true;
             }
 
-            mPointIndex = -1;
-            mCrossIndex = -1;
-            mLineIndex = -1;
-            mShapeIndex = -1;
+            _pointIndex = -1;
+            _crossIndex = -1;
+            _lineIndex = -1;
+            _shapeIndex = -1;
 
             return false;
         }
 
         public void Reset()
         {
-            mPointIndex = -1;
-            mCrossIndex = -1;
-            mLineIndex = -1;
-            mShapeIndex = -1;
+            _pointIndex = -1;
+            _crossIndex = -1;
+            _lineIndex = -1;
+            _shapeIndex = -1;
         }
 
         public struct CalculationResult

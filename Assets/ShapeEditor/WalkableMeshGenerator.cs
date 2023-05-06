@@ -7,27 +7,25 @@ namespace Assets.ShapeEditor
 {
     public class WalkableMeshGenerator
     {
-        private float mHorizontalOffsetOfExtremePoints;
-        private float mThickness;
-        private float mDepth;
-
-
-        private List<int> mTriangles = new List<int>();
-        private List<Vector3> mVertices = new List<Vector3>();
-        private List<Vector3> mNormals = new List<Vector3>();
-        private List<Vector2> mUVs = new List<Vector2>();
-
-       
-        public List<int> Triangles => mTriangles;
-        public List<Vector3> Vertices => mVertices;
-        public List<Vector3> Normals => mNormals;
-        public List<Vector2> UVs => mUVs;
+        private readonly float _horizontalOffsetOfExtremePoints;
+        private readonly float _thickness;
+        private readonly float _depth;
+        
+        private readonly List<int> _triangles = new List<int>();
+        private readonly List<Vector3> _vertices = new List<Vector3>();
+        private readonly List<Vector3> _normals = new List<Vector3>();
+        private readonly List<Vector2> _uvs = new List<Vector2>();
+        
+        public List<int> Triangles => _triangles;
+        public List<Vector3> Vertices => _vertices;
+        public List<Vector3> Normals => _normals;
+        public List<Vector2> UVs => _uvs;
        
         public WalkableMeshGenerator(List<Point> hullPoints, List<List<int>> edgesPointsIndexes, float depth, float thickness,  float horizontalOffsetOfExtremePoints)
         {
-            mDepth = depth;
-            mThickness = thickness;
-            mHorizontalOffsetOfExtremePoints = horizontalOffsetOfExtremePoints;
+            _depth = depth;
+            _thickness = thickness;
+            _horizontalOffsetOfExtremePoints = horizontalOffsetOfExtremePoints;
  
             var walkableEdgesPoints = edgesPointsIndexes.Select(epi => epi.Select(pi => hullPoints[pi]).ToList()).ToList();
             ApplyHorizontalOffsetToExtremeEdgePoints(walkableEdgesPoints);
@@ -41,12 +39,12 @@ namespace Assets.ShapeEditor
             {
                 var startEdgeDirection = (edgePoints[0].Position - edgePoints[1].Position).normalized;
                 var startPoint = edgePoints[0];
-                startPoint.Position = edgePoints[0].Position + startEdgeDirection * mHorizontalOffsetOfExtremePoints;
+                startPoint.Position = edgePoints[0].Position + startEdgeDirection * _horizontalOffsetOfExtremePoints;
                 edgePoints[0] = startPoint;
 
                 var endEdgeDirection = (edgePoints[edgePoints.Count - 2].Position - edgePoints[edgePoints.Count - 1].Position).normalized;
                 var endPoint = edgePoints[edgePoints.Count - 1];
-                endPoint.Position = edgePoints[edgePoints.Count - 1].Position - endEdgeDirection * mHorizontalOffsetOfExtremePoints;
+                endPoint.Position = edgePoints[edgePoints.Count - 1].Position - endEdgeDirection * _horizontalOffsetOfExtremePoints;
                 edgePoints[edgePoints.Count - 1] = endPoint;
             }
         }
@@ -61,7 +59,7 @@ namespace Assets.ShapeEditor
 
                 var newStartPoint = new Point(edgePoints[0])
                 {
-                    Position = edgePoints[0].Position + Vector2.down * mThickness
+                    Position = edgePoints[0].Position + Vector2.down * _thickness
                 };
                 bottomEdgePoints.Add(newStartPoint);
 
@@ -76,14 +74,14 @@ namespace Assets.ShapeEditor
 
                     var newPoint = new Point(edgePoints[pIndex])
                     {
-                        Position = point.Position + bottomOffset * mThickness
+                        Position = point.Position + bottomOffset * _thickness
                     };
                     bottomEdgePoints.Add(newPoint);
                 }
 
                 var newEndPoint = new Point(edgePoints[edgePoints.Count - 1])
                 {
-                    Position = edgePoints[edgePoints.Count - 1].Position + Vector2.down * mThickness
+                    Position = edgePoints[edgePoints.Count - 1].Position + Vector2.down * _thickness
                 };
                 bottomEdgePoints.Add(newEndPoint);
 
@@ -95,9 +93,9 @@ namespace Assets.ShapeEditor
 
         private void GenerateMesh(List<List<Point>> edgesPoints, List<List<Point>> bottomEdgesPoints)
         {       
-            var halfCommon = (mDepth + mThickness);
+            var halfCommon = (_depth + _thickness);
             var common = halfCommon * 2.0f;
-            var uvThicknessToHalfCommon = mThickness / halfCommon;
+            var uvThicknessToHalfCommon = _thickness / halfCommon;
           
             int verticesOffset = 0;
             for (int index = 0; index < edgesPoints.Count; index++)
@@ -108,129 +106,129 @@ namespace Assets.ShapeEditor
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var edgePoint = edgePoints[pI];
-                    mVertices.Add(edgePoint.GetPosition(-mDepth, Side.Front));
-                    mVertices.Add(edgePoint.GetPosition(mDepth, Side.Back));
+                    _vertices.Add(edgePoint.GetPosition(-_depth, Side.Front));
+                    _vertices.Add(edgePoint.GetPosition(_depth, Side.Back));
                 }
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var edgePoint = edgePoints[pI];
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, uvThicknessToHalfCommon));
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, 1 - uvThicknessToHalfCommon));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, uvThicknessToHalfCommon));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, 1 - uvThicknessToHalfCommon));
                 }
 
                 for (int pIndex = 0; pIndex < edgePoints.Count - 1; pIndex++)
                 {
                     int vIndex = pIndex * 2;
 
-                    mTriangles.Add(verticesOffset + vIndex);
-                    mTriangles.Add(verticesOffset + vIndex + 3);
-                    mTriangles.Add(verticesOffset + vIndex + 1);
+                    _triangles.Add(verticesOffset + vIndex);
+                    _triangles.Add(verticesOffset + vIndex + 3);
+                    _triangles.Add(verticesOffset + vIndex + 1);
 
-                    mTriangles.Add(verticesOffset + vIndex);
-                    mTriangles.Add(verticesOffset + vIndex + 2);
-                    mTriangles.Add(verticesOffset + vIndex + 3);
+                    _triangles.Add(verticesOffset + vIndex);
+                    _triangles.Add(verticesOffset + vIndex + 2);
+                    _triangles.Add(verticesOffset + vIndex + 3);
                 }
-                verticesOffset = mVertices.Count;
+                verticesOffset = _vertices.Count;
 
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var edgePoint = edgePoints[pI];
                     var bottomEdgePoint = bottomEdgePoints[pI];
-                    mVertices.Add(edgePoint.GetPosition(-mDepth, Side.Front));
-                    mVertices.Add(bottomEdgePoint.GetPosition(-mDepth, Side.Front));
+                    _vertices.Add(edgePoint.GetPosition(-_depth, Side.Front));
+                    _vertices.Add(bottomEdgePoint.GetPosition(-_depth, Side.Front));
                 }
 
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var edgePoint = edgePoints[pI];
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, uvThicknessToHalfCommon));
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, 0));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, uvThicknessToHalfCommon));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, 0));
                 }
 
                 for (int pIndex = 0; pIndex < edgePoints.Count - 1; pIndex++)
                 {
                     int vIndex = pIndex * 2;
 
-                    mTriangles.Add(verticesOffset + vIndex + 1);
-                    mTriangles.Add(verticesOffset + vIndex + 2);
-                    mTriangles.Add(verticesOffset + vIndex);
+                    _triangles.Add(verticesOffset + vIndex + 1);
+                    _triangles.Add(verticesOffset + vIndex + 2);
+                    _triangles.Add(verticesOffset + vIndex);
 
-                    mTriangles.Add(verticesOffset + vIndex + 1);
-                    mTriangles.Add(verticesOffset + vIndex + 3);
-                    mTriangles.Add(verticesOffset + vIndex + 2);
+                    _triangles.Add(verticesOffset + vIndex + 1);
+                    _triangles.Add(verticesOffset + vIndex + 3);
+                    _triangles.Add(verticesOffset + vIndex + 2);
                 }
 
-                verticesOffset = mVertices.Count;
+                verticesOffset = _vertices.Count;
 
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var bottomEdgePoint = bottomEdgePoints[pI];
-                    mVertices.Add(bottomEdgePoint.GetPosition(-mDepth, Side.Front));
-                    mVertices.Add(bottomEdgePoint.GetPosition(mDepth, Side.Back));
+                    _vertices.Add(bottomEdgePoint.GetPosition(-_depth, Side.Front));
+                    _vertices.Add(bottomEdgePoint.GetPosition(_depth, Side.Back));
                 }
 
                 for (var pI = 0; pI < edgePoints.Count; pI++)
                 {
                     var edgePoint = edgePoints[pI];
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, 1));
-                    mUVs.Add(new Vector2(edgePoint.Position.x / common, 0));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, 1));
+                    _uvs.Add(new Vector2(edgePoint.Position.x / common, 0));
                 }
 
                 for (int pIndex = 0; pIndex < edgePoints.Count - 1; pIndex++)
                 {
                     int vIndex = pIndex * 2;
 
-                    mTriangles.Add(verticesOffset + vIndex + 1);
-                    mTriangles.Add(verticesOffset + vIndex + 2);
-                    mTriangles.Add(verticesOffset + vIndex);
+                    _triangles.Add(verticesOffset + vIndex + 1);
+                    _triangles.Add(verticesOffset + vIndex + 2);
+                    _triangles.Add(verticesOffset + vIndex);
 
-                    mTriangles.Add(verticesOffset + vIndex + 1);
-                    mTriangles.Add(verticesOffset + vIndex + 3);
-                    mTriangles.Add(verticesOffset + vIndex + 2);
+                    _triangles.Add(verticesOffset + vIndex + 1);
+                    _triangles.Add(verticesOffset + vIndex + 3);
+                    _triangles.Add(verticesOffset + vIndex + 2);
                 }
 
-                verticesOffset = mVertices.Count;
+                verticesOffset = _vertices.Count;
 
-                mVertices.Add(edgePoints[0].GetPosition(-mDepth, Side.Front));
-                mVertices.Add(edgePoints[0].GetPosition(mDepth, Side.Back));
-                mVertices.Add(bottomEdgePoints[0].GetPosition(-mDepth, Side.Front));
-                mVertices.Add(bottomEdgePoints[0].GetPosition(mDepth, Side.Back));
+                _vertices.Add(edgePoints[0].GetPosition(-_depth, Side.Front));
+                _vertices.Add(edgePoints[0].GetPosition(_depth, Side.Back));
+                _vertices.Add(bottomEdgePoints[0].GetPosition(-_depth, Side.Front));
+                _vertices.Add(bottomEdgePoints[0].GetPosition(_depth, Side.Back));
 
-                mUVs.Add(new Vector2(0 + uvThicknessToHalfCommon, uvThicknessToHalfCommon));
-                mUVs.Add(new Vector2(1 - uvThicknessToHalfCommon, uvThicknessToHalfCommon));
-                mUVs.Add(new Vector2(0 + uvThicknessToHalfCommon, 0));
-                mUVs.Add(new Vector2(1 - uvThicknessToHalfCommon, 0));
+                _uvs.Add(new Vector2(0 + uvThicknessToHalfCommon, uvThicknessToHalfCommon));
+                _uvs.Add(new Vector2(1 - uvThicknessToHalfCommon, uvThicknessToHalfCommon));
+                _uvs.Add(new Vector2(0 + uvThicknessToHalfCommon, 0));
+                _uvs.Add(new Vector2(1 - uvThicknessToHalfCommon, 0));
 
-                mTriangles.Add(verticesOffset + 0 + 3);
-                mTriangles.Add(verticesOffset + 0 + 0);
-                mTriangles.Add(verticesOffset + 0 + 1);
+                _triangles.Add(verticesOffset + 0 + 3);
+                _triangles.Add(verticesOffset + 0 + 0);
+                _triangles.Add(verticesOffset + 0 + 1);
 
-                mTriangles.Add(verticesOffset + 0 + 3);
-                mTriangles.Add(verticesOffset + 0 + 2);
-                mTriangles.Add(verticesOffset + 0 + 0);
+                _triangles.Add(verticesOffset + 0 + 3);
+                _triangles.Add(verticesOffset + 0 + 2);
+                _triangles.Add(verticesOffset + 0 + 0);
 
-                verticesOffset = mVertices.Count;
+                verticesOffset = _vertices.Count;
 
 
-                mVertices.Add(edgePoints[edgePoints.Count - 1].GetPosition(-mDepth, Side.Front));
-                mVertices.Add(edgePoints[edgePoints.Count - 1].GetPosition(mDepth, Side.Back));
-                mVertices.Add(bottomEdgePoints[bottomEdgePoints.Count - 1].GetPosition(-mDepth, Side.Front));
-                mVertices.Add(bottomEdgePoints[bottomEdgePoints.Count - 1].GetPosition(mDepth, Side.Back));
+                _vertices.Add(edgePoints[edgePoints.Count - 1].GetPosition(-_depth, Side.Front));
+                _vertices.Add(edgePoints[edgePoints.Count - 1].GetPosition(_depth, Side.Back));
+                _vertices.Add(bottomEdgePoints[bottomEdgePoints.Count - 1].GetPosition(-_depth, Side.Front));
+                _vertices.Add(bottomEdgePoints[bottomEdgePoints.Count - 1].GetPosition(_depth, Side.Back));
 
-                mUVs.Add(new Vector2(0 + uvThicknessToHalfCommon, uvThicknessToHalfCommon));
-                mUVs.Add(new Vector2(1 - uvThicknessToHalfCommon, uvThicknessToHalfCommon));
-                mUVs.Add(new Vector2(0 + uvThicknessToHalfCommon, 0));
-                mUVs.Add(new Vector2(1 - uvThicknessToHalfCommon, 0));
+                _uvs.Add(new Vector2(0 + uvThicknessToHalfCommon, uvThicknessToHalfCommon));
+                _uvs.Add(new Vector2(1 - uvThicknessToHalfCommon, uvThicknessToHalfCommon));
+                _uvs.Add(new Vector2(0 + uvThicknessToHalfCommon, 0));
+                _uvs.Add(new Vector2(1 - uvThicknessToHalfCommon, 0));
 
-                mTriangles.Add(verticesOffset + 0 + 1);
-                mTriangles.Add(verticesOffset + 0 + 0);
-                mTriangles.Add(verticesOffset + 0 + 3);
+                _triangles.Add(verticesOffset + 0 + 1);
+                _triangles.Add(verticesOffset + 0 + 0);
+                _triangles.Add(verticesOffset + 0 + 3);
 
-                mTriangles.Add(verticesOffset + 0 + 0);
-                mTriangles.Add(verticesOffset + 0 + 2);
-                mTriangles.Add(verticesOffset + 0 + 3);
+                _triangles.Add(verticesOffset + 0 + 0);
+                _triangles.Add(verticesOffset + 0 + 2);
+                _triangles.Add(verticesOffset + 0 + 3);
 
-                verticesOffset = mVertices.Count;
+                verticesOffset = _vertices.Count;
             }
         }
     }

@@ -189,8 +189,7 @@ namespace Assets.Scripts.Shared.Tags
         }
         public override void OnClose()
         {
-            if (OnClosed != null)
-                OnClosed(this);
+            OnClosed?.Invoke(this);
         }
 
         private static bool mInitialized = false;

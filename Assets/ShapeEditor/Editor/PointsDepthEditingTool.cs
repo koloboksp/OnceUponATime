@@ -8,11 +8,10 @@ namespace Assets.ShapeEditor.Editor
 {
     public class PointsDepthEditingTool : EditingTool
     {
-        
-        public const float LineDepthBias = 0.01f;
+        const float LineDepthBias = 0.01f;
 
-        readonly MouseOverInfo mMouseOverInfo = new MouseOverInfo();
-        readonly SelectionInfo mMouseSelectionInfo = new SelectionInfo();
+        private readonly MouseOverInfo _mouseOverInfo = new MouseOverInfo();
+        private readonly SelectionInfo _mouseSelectionInfo = new SelectionInfo();
 
         public PointsDepthEditingTool(ShapeEditor owner) : base(owner)
         {
@@ -22,8 +21,8 @@ namespace Assets.ShapeEditor.Editor
         {
             base.OnEnable();
 
-            if (!mMouseSelectionInfo.ShapeSelected && Owner.ShapeCreator.Count > 0)
-                mMouseSelectionInfo.SelectShape(0);
+            if (!_mouseSelectionInfo.ShapeSelected && Owner.ShapeCreator.Count > 0)
+                _mouseSelectionInfo.SelectShape(0);
         }
 
         public override void Repaint()
@@ -38,7 +37,7 @@ namespace Assets.ShapeEditor.Editor
             for (int shapeIndex = 0; shapeIndex < Owner.ShapeCreator.Count; shapeIndex++)
             {
                 Shape shapeToDraw = Owner.ShapeCreator[shapeIndex];
-                bool shapeIsSelected = shapeIndex == mMouseOverInfo.ShapeIndex;
+                bool shapeIsSelected = shapeIndex == _mouseOverInfo.ShapeIndex;
 
                 var color = (shapeIsSelected) ? ShapeEditor.ContoursHighlightedColor : ShapeEditor.ContoursNormalColor;
                 for (int i = 0; i < shapeToDraw.Count; i++)
@@ -62,14 +61,14 @@ namespace Assets.ShapeEditor.Editor
                 }
             }
 
-            if (mMouseOverInfo.IsOverPoint)
+            if (_mouseOverInfo.IsOverPoint)
             {
-                var shape = Owner.ShapeCreator[mMouseOverInfo.ShapeIndex];
-                var point = shape[mMouseOverInfo.PointIndex];
+                var shape = Owner.ShapeCreator[_mouseOverInfo.ShapeIndex];
+                var point = shape[_mouseOverInfo.PointIndex];
 
                 Vector3 pPosition = Owner.ShapeCreator.transform.TransformPoint(point.GetPosition(
-                    mMouseOverInfo.PointSide == Side.Front ? -Owner.ShapeCreator.Depth : Owner.ShapeCreator.Depth,
-                    mMouseOverInfo.PointSide));
+                    _mouseOverInfo.PointSide == Side.Front ? -Owner.ShapeCreator.Depth : Owner.ShapeCreator.Depth,
+                    _mouseOverInfo.PointSide));
 
                 Handles.color = Color.red;
                 Handles.DrawWireDisc(pPosition, worldShapeNormal, ShapeEditor.GetHandelFixedScreenSize(pPosition, 1));
@@ -84,9 +83,9 @@ namespace Assets.ShapeEditor.Editor
             {
                 if (Event.current.button == 0)
                 {
-                    if (mMouseOverInfo.IsOverPoint)
+                    if (_mouseOverInfo.IsOverPoint)
                     {
-                        mMouseSelectionInfo.Select(mMouseOverInfo.ShapeIndex, mMouseOverInfo.PointIndex, mMouseOverInfo.PointSide, 
+                        _mouseSelectionInfo.Select(_mouseOverInfo.ShapeIndex, _mouseOverInfo.PointIndex, _mouseOverInfo.PointSide, 
                             Owner.ShapeCreator, guiEvent.mousePosition);  
                     }
                     else
@@ -99,16 +98,16 @@ namespace Assets.ShapeEditor.Editor
             {
                 if (Event.current.button == 0)
                 {
-                    mMouseSelectionInfo.StopDrag(Owner.ShapeCreator);            
+                    _mouseSelectionInfo.StopDrag(Owner.ShapeCreator);            
                 }
             }
             if (Event.current.type == EventType.MouseDrag)
             {
                 if (Event.current.button == 0)
                 {
-                    if (mMouseSelectionInfo.PointSelected)
+                    if (_mouseSelectionInfo.PointSelected)
                     {
-                        mMouseSelectionInfo.DragPoint(Owner.ShapeCreator, guiEvent.mousePosition);
+                        _mouseSelectionInfo.DragPoint(Owner.ShapeCreator, guiEvent.mousePosition);
                         Owner.MarkSceneUIDirty();
                         Owner.MarkShapeDirty();
                     }
@@ -126,7 +125,7 @@ namespace Assets.ShapeEditor.Editor
                 targetPlane.Raycast(mouseRay, out distance);
 
                 var mousePosition = mouseRay.GetPoint(distance);  
-                if(mMouseOverInfo.UpdateMouseOverInfo(Owner.ShapeCreator, mousePosition))
+                if(_mouseOverInfo.UpdateMouseOverInfo(Owner.ShapeCreator, mousePosition))
                     Owner.MarkSceneUIDirty();
             }
         }

@@ -2,38 +2,39 @@ using Assets.Scripts.Core;
 using Assets.Scripts.Core.Mobs;
 using Assets.Scripts.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Effects
 {
     public class HeroHealthBarEffect : MonoBehaviour
     {
-        public HeroHealthBarUI UIPartPrefab;
-        public GroundMovementCharacter Owner;
+        private HeroHealthBarUI _instance;
 
-        private HeroHealthBarUI mInstance;
-      
+        [FormerlySerializedAs("UIPartPrefab")] [SerializeField] private HeroHealthBarUI _uiPartPrefab;
+        [FormerlySerializedAs("Owner")] [SerializeField] private GroundMovementCharacter _owner;
+        
         public void Start()
         {
             var gamePanel = FindObjectOfType<UIGamePanel>();
 
-            var instanceObj = Object.Instantiate(UIPartPrefab.gameObject);
-            mInstance = instanceObj.GetComponent<HeroHealthBarUI>();
-            mInstance.transform.SetParent(gamePanel.HeroHealthBarRoot);
-            mInstance.transform.localPosition = Vector3.zero;
-            mInstance.transform.localRotation = Quaternion.identity;
+            var instanceObj = Object.Instantiate(_uiPartPrefab.gameObject);
+            _instance = instanceObj.GetComponent<HeroHealthBarUI>();
+            _instance.transform.SetParent(gamePanel.HeroHealthBarRoot);
+            _instance.transform.localPosition = Vector3.zero;
+            _instance.transform.localRotation = Quaternion.identity;
           
-            Owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
-            mInstance.Show(Owner.Lives / Owner.MaxLives);
+            _owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
+            _instance.Show(_owner.Lives / _owner.MaxLives);
         }
 
         public void OnDisable()
         {
-            Owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
+            _owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
         }
 
         private void Owner_OnLifeLevelChanged(Character sender)
         {
-            mInstance.Show(sender.Lives / sender.MaxLives);     
+            _instance.Show(sender.Lives / sender.MaxLives);     
         }
     }
 }

@@ -1,45 +1,46 @@
 using System.Collections;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
     public class GingerBreadMen :  GroundMob
     {
-        public float MaxRemovalDistance = 5.0f;
+        private Vector3 _startPosition;
+        private bool _dealDamageTrigger;
+        private bool _takeDamageTrigger;
 
-      
-        public Transform ViewRotationEffectRoot;
-        public float Radius = 0.25f;
-
-        private Vector3 mStartPosition;
-   
+        [FormerlySerializedAs("MaxRemovalDistance")] [SerializeField] private float _maxRemovalDistance = 5.0f;
+        [FormerlySerializedAs("ViewRotationEffectRoot")] [SerializeField] private Transform _viewRotationEffectRoot;
+        [FormerlySerializedAs("Radius")] [SerializeField] private float _radius = 0.25f;
+        
         protected override void Start() 
         {
             base.Start();
-            mStartPosition = this.transform.position;
+            _startPosition = this.transform.position;
 
-            StartCoroutine(T());
+            StartCoroutine(LifeCycle());
         }
 
-        private IEnumerator T()
+        private IEnumerator LifeCycle()
         {
             StartMove();
             while (Lives > 0)
             {
                 LogicMove();
 
-                if (mTakeDamageTrigger)
+                if (_takeDamageTrigger)
                 {
-                    mTakeDamageTrigger = false;
+                    _takeDamageTrigger = false;
 
                     StopMove();
                     yield return new WaitForSeconds(1);
                 }
 
-                if (mDealDamageTrigger)
+                if (_dealDamageTrigger)
                 {
-                    mDealDamageTrigger = false;
+                    _dealDamageTrigger = false;
 
                     StopMove();
                     yield return new WaitForSeconds(1);
@@ -57,23 +58,23 @@ namespace Assets.Scripts.Core.Mobs
 
         private void ChangeDirection()
         {
-            var vecToHomePoint = (mStartPosition - transform.position);
+            var vecToHomePoint = (_startPosition - transform.position);
 
             SetMovingDirection(Mathf.Sign(Vector2.Dot(Vector2.right, vecToHomePoint)) > 0 ? MovingDirection.Forward : MovingDirection.Backward);
         }
 
         private void LogicMove()
         {
-            float distanceFromStart = (transform.position - mStartPosition).magnitude;
+            float distanceFromStart = (transform.position - _startPosition).magnitude;
 
-            if (distanceFromStart > MaxRemovalDistance)
+            if (distanceFromStart > _maxRemovalDistance)
                 ChangeDirection();
  
             Move();
 
             float linearDeltaDistance = BodyRelativeVelocity.magnitude * Time.deltaTime * ((MovingDirection == MovingDirection.Forward ) ? 1.0f : -1.0f);
 
-            Rotate(linearDeltaDistance, Radius, ViewRotationEffectRoot);
+            Rotate(linearDeltaDistance, _radius, _viewRotationEffectRoot);
   
         }
        
@@ -84,17 +85,12 @@ namespace Assets.Scripts.Core.Mobs
             Quaternion additionalCoilRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, -deltaAngle));
             rotationRoot.localRotation = additionalCoilRotation * rotationRoot.localRotation;
         }
-
-        private bool mDealDamageTrigger;
-        private bool mTakeDamageTrigger;
-
-       
-
+        
         public override void TakeDamage(object sender, DamageInfo damageInfo)
         {
             base.TakeDamage(sender, damageInfo);
 
-            mTakeDamageTrigger = true;
+            _takeDamageTrigger = true;
         }
     }
 }

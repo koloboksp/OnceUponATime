@@ -1,51 +1,45 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
     public class HealthBarUI : MonoBehaviour
     {
-        private enum State
-        {
-            Show,
-            SmoothHide,
-        }
+        private State _currentState;
 
-        public Image Background;
-        public Image HealthBar;
-        public RectTransform HealthBarTransform;
+        private float _hideTime;
+        private float _hideTimer = 0.0f;
 
+        private Color _backgroundInitialColor;
+        private Color _healthBarInitialColor;
+        private Color _backgroundHideColor;
+        private Color _healthBarHideColor;
+        private float _initialWidth;
 
-        private State mCurrentState;
-
-        private float mHideTime;
-        private float mHideTimer = 0.0f;
-
-        private Color mBackgroundInitialColor;
-        private Color mHealthBarInitialColor;
-        private Color mBackgroundHideColor;
-        private Color mHealthBarHideColor;
-        private float mInitialWidth;
-
+        [FormerlySerializedAs("Background")] [SerializeField] private Image _background;
+        [FormerlySerializedAs("HealthBar")] [SerializeField] private Image _healthBar;
+        [FormerlySerializedAs("HealthBarTransform")] [SerializeField] private RectTransform _healthBarTransform;
+        
         public void OnEnable()
         {
-            mBackgroundInitialColor = Background.color;
-            mHealthBarInitialColor = HealthBar.color;
+            _backgroundInitialColor = _background.color;
+            _healthBarInitialColor = _healthBar.color;
 
-            mBackgroundHideColor = mBackgroundInitialColor;
-            mBackgroundHideColor.a = 0.0f;
-            mHealthBarHideColor = mHealthBarInitialColor;
-            mHealthBarHideColor.a = 0.0f;
+            _backgroundHideColor = _backgroundInitialColor;
+            _backgroundHideColor.a = 0.0f;
+            _healthBarHideColor = _healthBarInitialColor;
+            _healthBarHideColor.a = 0.0f;
 
-            mInitialWidth = HealthBarTransform.rect.width;
+            _initialWidth = _healthBarTransform.rect.width;
         }
         public void Hide(float hideTime)
         {
-            mCurrentState = State.SmoothHide;
-            mHideTimer = 0;
-            mHideTime = hideTime;
+            _currentState = State.SmoothHide;
+            _hideTimer = 0;
+            _hideTime = hideTime;
 
-            if (mHideTime <= 0.0f)
+            if (_hideTime <= 0.0f)
                 gameObject.SetActive(false);  
         }
 
@@ -53,32 +47,39 @@ namespace Assets.Scripts.UI
         {
             gameObject.SetActive(true);
 
-            Background.color = mBackgroundInitialColor;
-            HealthBar.color = mHealthBarInitialColor;
+            _background.color = _backgroundInitialColor;
+            _healthBar.color = _healthBarInitialColor;
 
-            HealthBarTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, mInitialWidth * normValue);
+            _healthBarTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _initialWidth * normValue);
 
-            mCurrentState = State.Show;
-            mHideTimer = 0;
+            _currentState = State.Show;
+            _hideTimer = 0;
         }
 
         private void Update()
         {
-            if (mCurrentState == State.Show)
+            if (_currentState == State.Show)
             {
 
             }
-            else if (mCurrentState == State.SmoothHide)
+            else if (_currentState == State.SmoothHide)
             {
-                if (mHideTimer < mHideTime)
+                if (_hideTimer < _hideTime)
                 {
-                    mHideTimer += Time.deltaTime;
+                    _hideTimer += Time.deltaTime;
 
-                    var normValue = mHideTimer / mHideTime;
-                    Background.color = Color.Lerp(mBackgroundInitialColor, mBackgroundHideColor, normValue);
-                    HealthBar.color = Color.Lerp(mHealthBarInitialColor, mHealthBarHideColor, normValue);
+                    var normValue = _hideTimer / _hideTime;
+                    _background.color = Color.Lerp(_backgroundInitialColor, _backgroundHideColor, normValue);
+                    _healthBar.color = Color.Lerp(_healthBarInitialColor, _healthBarHideColor, normValue);
                 }
             }         
         }
+        
+        private enum State
+        {
+            Show,
+            SmoothHide,
+        }
+
     }
 }

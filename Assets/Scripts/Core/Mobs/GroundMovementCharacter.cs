@@ -1,6 +1,7 @@
 using System;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs
 {
@@ -25,25 +26,25 @@ namespace Assets.Scripts.Core.Mobs
         public bool InAccelerationState { get; private set; }
         public bool InBreakingState { get; private set; }
 
-        private float mMovingSpeed;
-        private float mBrakeAcceleration;
-        private float mAcceleration;
-        private float mDesiredMovingSpeed;
+        private float _movingSpeed;
+        private float _brakeAcceleration;
+        private float _acceleration;
+        private float _desiredMovingSpeed;
 
-        public float MovingSpeed => mMovingSpeed;
+        public float MovingSpeed => _movingSpeed;
 
         public void Move(float movingSpeed, bool instant, float acceleration)
         {
-            mDesiredMovingSpeed = movingSpeed;
+            _desiredMovingSpeed = movingSpeed;
             if (instant)
             {
-                mMovingSpeed = mDesiredMovingSpeed;
-                mAcceleration = float.MaxValue;
+                _movingSpeed = _desiredMovingSpeed;
+                _acceleration = float.MaxValue;
                 InAccelerationState = false;
             }
             else
             {
-                mAcceleration = acceleration;
+                _acceleration = acceleration;
                 InAccelerationState = true;
             }
     
@@ -53,17 +54,17 @@ namespace Assets.Scripts.Core.Mobs
 
         public void Break(bool instant, float brakeAcceleration)
         {
-            mDesiredMovingSpeed = 0.0f;
+            _desiredMovingSpeed = 0.0f;
             if (instant)
             {
-                mMovingSpeed = mDesiredMovingSpeed;
-                mBrakeAcceleration = float.MaxValue;
+                _movingSpeed = _desiredMovingSpeed;
+                _brakeAcceleration = float.MaxValue;
                 InBreakingState = false;
                 InProcess = false;
             }
             else
             {
-                mBrakeAcceleration = brakeAcceleration;
+                _brakeAcceleration = brakeAcceleration;
                 InBreakingState = true;
             }
 
@@ -74,20 +75,20 @@ namespace Assets.Scripts.Core.Mobs
         {
             if (InAccelerationState)
             {
-                mMovingSpeed += mAcceleration * dTime;
-                if (mMovingSpeed >= mDesiredMovingSpeed)
+                _movingSpeed += _acceleration * dTime;
+                if (_movingSpeed >= _desiredMovingSpeed)
                 {
-                    mMovingSpeed = mDesiredMovingSpeed;
+                    _movingSpeed = _desiredMovingSpeed;
 
                     InAccelerationState = false;      
                 }
             }
             if (InBreakingState)
             {
-                mMovingSpeed -= mBrakeAcceleration * dTime;
-                if (mMovingSpeed <= mDesiredMovingSpeed)
+                _movingSpeed -= _brakeAcceleration * dTime;
+                if (_movingSpeed <= _desiredMovingSpeed)
                 {
-                    mMovingSpeed = mDesiredMovingSpeed;
+                    _movingSpeed = _desiredMovingSpeed;
 
                     InBreakingState = false;
                     InProcess = false;
@@ -99,7 +100,7 @@ namespace Assets.Scripts.Core.Mobs
         {
             if (InBreakingState)
             {
-                mMovingSpeed = 0.0f;
+                _movingSpeed = 0.0f;
 
                 InBreakingState = false;
                 InProcess = false;
@@ -144,79 +145,80 @@ namespace Assets.Scripts.Core.Mobs
         public event Action OnSmoothRotationEnd;
         public event Action OnSmoothRotationProcess;
 
-        private float mMovingSpeed;
-        private Direction mDirection = Direction.Right;
-        private MovingDirection mMovingDirection = MovingDirection.Forward;
+        private float _movingSpeed;
+        private Direction _direction = Direction.Right;
+        private MovingDirection _movingDirection = MovingDirection.Forward;
 
-        private readonly SmoothRotationOperation mSmoothRotationOperation = new SmoothRotationOperation();
-        private readonly Operation mStunOperation = new Operation();
+        private readonly SmoothRotationOperation _smoothRotationOperation = new SmoothRotationOperation();
+        private readonly Operation _stunOperation = new Operation();
 
-        public GroundMovementBody Body;
+        [FormerlySerializedAs("Body")] [SerializeField] private GroundMovementBody _body;
 
-        public float RunSpeed = 4;
-        public float WalkSpeed = 2;
-        public float StunForceThresholdValue = 1.0f;
-        public float StunTime = 0.5f;   
+        [FormerlySerializedAs("RunSpeed")] [SerializeField] private float _runSpeed = 4;
+        [FormerlySerializedAs("WalkSpeed")] [SerializeField] private float _walkSpeed = 2;
+        [FormerlySerializedAs("StunForceThresholdValue")] [SerializeField] private float _stunForceThresholdValue = 1.0f;
+        [FormerlySerializedAs("StunTime")] [SerializeField] private float _stunTime = 0.5f;   
 
-        public Direction Direction => mDirection;
-        public MovingDirection MovingDirection => mMovingDirection;
-        public bool StayOnGround => Body.UnderfootObject != null;
-        public Vector2 BodyRelativeVelocity => Body.RelativeVelocity;
-        public bool IsMoving => Body.MovingOperationInfo.InProcess;
-        public bool IsPushing => Body.MovingOperationInfo.InProcess && Body.MovableObjectOnMovingDirectionDetected;
-        public bool IsBreaking => Body.MovingOperationInfo.InBreakingState;
-        public bool IsJumping => Body.JumpOperationInfo.InProcess;
-        public bool CantMove => Body.StaticObjectDetectedInMovementDirection;
-        public SmoothRotationOperation SmoothRotationOperation => mSmoothRotationOperation;
-        public Operation StunOperation => mStunOperation;
+        public Direction Direction => _direction;
+        public MovingDirection MovingDirection => _movingDirection;
+        public bool StayOnGround => _body.UnderfootObject != null;
+        public Vector2 BodyRelativeVelocity => _body.RelativeVelocity;
+        public bool IsMoving => _body.MovingOperationInfo.InProcess;
+        public bool IsPushing => _body.MovingOperationInfo.InProcess && _body.MovableObjectOnMovingDirectionDetected;
+        public bool IsBreaking => _body.MovingOperationInfo.InBreakingState;
+        public bool IsJumping => _body.JumpOperationInfo.InProcess;
+        public bool CantMove => _body.StaticObjectDetectedInMovementDirection;
+        public SmoothRotationOperation SmoothRotationOperation => _smoothRotationOperation;
+        public Operation StunOperation => _stunOperation;
+        public float WalkSpeed => _walkSpeed;
+        public float StunForceThresholdValue => _stunForceThresholdValue;
+        public float RunSpeed => _runSpeed;
 
         public void SetMovingSpeed(float speed)
         {
-            mMovingSpeed = speed;
+            _movingSpeed = speed;
         }
 
         public void SetMovingDirection(MovingDirection direction)
         {
-            if (mMovingDirection != direction)
+            if (_movingDirection != direction)
             {
-                Body.BreakMoving();
+                _body.BreakMoving();
 
-                mMovingDirection = direction;
- 
-                if (OnMovingDirectionChanged != null)
-                    OnMovingDirectionChanged();
+                _movingDirection = direction;
+
+                OnMovingDirectionChanged?.Invoke();
             }
         }
 
         public void Move()
         {
-            Body.StartMoving(mMovingSpeed);
+            _body.StartMoving(_movingSpeed);
         }
 
         public void Move(float acceleration)
         {
-            Body.StartMoving(mMovingSpeed, false, acceleration);
+            _body.StartMoving(_movingSpeed, false, acceleration);
         }
 
         public void StopMove()
         {
-            Body.StopMoving();
+            _body.StopMoving();
         }
 
         public void StopMove(float brakeAcceleration)
         {
-            Body.StopMoving(false, brakeAcceleration);
+            _body.StopMoving(false, brakeAcceleration);
         }
-
-      
+        
         internal void ChangeDirection(Direction direction)
         {
-            if (mDirection != direction)
+            if (_direction != direction)
             {
-                Body.BreakMoving();
-                Body.ChangeDirection();
+                _body.BreakMoving();
+                _body.ChangeDirection();
 
-                mDirection = direction;
+                _direction = direction;
 
                 transform.localRotation = transform.localRotation * Quaternion.Euler(0, Mathf.PI * Mathf.Rad2Deg, 0);          
             }
@@ -224,49 +226,44 @@ namespace Assets.Scripts.Core.Mobs
 
         internal virtual void ChangeDirectionSmooth(Direction direction, RotationDirection rotationDirection, float time, Transform rotationRoot)
         {
-            if (mDirection != direction)
+            if (_direction != direction)
             {
-                Body.BreakMoving();
-                Body.ChangeDirection();
+                _body.BreakMoving();
+                _body.ChangeDirection();
 
-                mDirection = direction;
+                _direction = direction;
                
                 transform.localRotation = transform.localRotation * Quaternion.Euler(0, Mathf.PI * Mathf.Rad2Deg, 0);
                
-                mSmoothRotationOperation.Execute(time, rotationDirection, rotationRoot);
-                mSmoothRotationOperation.OnProcess = SmoothRotation_OnProcess;
-                mSmoothRotationOperation.OnComplete = SmoothRotation_OnComplete;
+                _smoothRotationOperation.Execute(time, rotationDirection, rotationRoot);
+                _smoothRotationOperation.OnProcess = SmoothRotation_OnProcess;
+                _smoothRotationOperation.OnComplete = SmoothRotation_OnComplete;
 
-                if (OnSmoothRotationStart != null)
-                    OnSmoothRotationStart();
+                OnSmoothRotationStart?.Invoke();
             }
         }
 
         private void SmoothRotation_OnProcess(Operation obj)
         {
-            if (OnSmoothRotationProcess != null)
-                OnSmoothRotationProcess();
+            OnSmoothRotationProcess?.Invoke();
         }
 
         private void SmoothRotation_OnComplete(Operation obj)
         {
-            if (OnSmoothRotationEnd != null)
-                OnSmoothRotationEnd();
+            OnSmoothRotationEnd?.Invoke();
         }
-
         
         internal void Jump()
         {  
-            Body.Jump();
+            _body.Jump();
 
-            if (OnJump != null)
-                OnJump(this);
+            OnJump?.Invoke(this);
         }
 
         protected virtual void InnerUpdate()
         {
-            mStunOperation.Process(Time.fixedDeltaTime);
-            mSmoothRotationOperation.Process(Time.deltaTime);
+            _stunOperation.Process(Time.fixedDeltaTime);
+            _smoothRotationOperation.Process(Time.deltaTime);
         }
 
         public override void TakeDamage(object sender, DamageInfo damageInfo)
@@ -275,33 +272,34 @@ namespace Assets.Scripts.Core.Mobs
 
             if (IsAlive)
             {
-                if (damageInfo.ForceValue > StunForceThresholdValue)
+                if (damageInfo.ForceValue > _stunForceThresholdValue)
                 {
-                    if (mStunOperation.InProcess)
-                        mStunOperation.Execute(mStunOperation.Time / 2.0f);
+                    if (_stunOperation.InProcess)
+                        _stunOperation.Execute(_stunOperation.Time / 2.0f);
                     else
-                        mStunOperation.Execute(StunTime);
+                        _stunOperation.Execute(_stunTime);
 
-                    Body.AbortAllControlledOperations();
+                    _body.AbortAllControlledOperations();
                 }
 
-                Body.AddDamageForce(damageInfo.ForceValue, damageInfo.ForceDirection);  
+                _body.AddDamageForce(damageInfo.ForceValue, damageInfo.ForceDirection);  
             }
         }
 
         internal void OnUnderfootObjectChanged(GameObject previous)
         {
-            if(Body.UnderfootObject != null)
-                if (OnLanded != null)
-                    OnLanded(this);
+            if(_body.UnderfootObject != null)
+            {
+                OnLanded?.Invoke(this);
+            }
         }
 
         public override void IgnoreCollisions(Collider2D target, bool ignore)
         {
-            if (Body.BodyCollider != null)
-                Physics2D.IgnoreCollision(target, Body.BodyCollider, ignore);
-            if (Body.BodyGroundCollider != null)
-                Physics2D.IgnoreCollision(target, Body.BodyGroundCollider, ignore); 
+            if (_body.BodyCollider != null)
+                Physics2D.IgnoreCollision(target, _body.BodyCollider, ignore);
+            if (_body.BodyGroundCollider != null)
+                Physics2D.IgnoreCollision(target, _body.BodyGroundCollider, ignore); 
         }
     }
 }
