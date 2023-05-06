@@ -7,13 +7,13 @@ using UnityEngine.Rendering.Universal;
 namespace Assets.Scripts.Effects
 {
 	public class FakeLightPass : ScriptableRenderPass
-	{	
-		RenderTargetHandle mDestination;
-	
-		List<ShaderTagId> mShaderTagIdList = new List<ShaderTagId>() { new ShaderTagId(FakeLightingFeature.FakeLightTagName) };
-		FilteringSettings mFilteringSettings;
-		RenderStateBlock mRenderStateBlock;
-		int mDownSample = 4;
+	{
+		private RenderTargetHandle mDestination;
+
+		private List<ShaderTagId> mShaderTagIdList = new List<ShaderTagId>() { new ShaderTagId(FakeLightingFeature.FakeLightTagName) };
+		private FilteringSettings mFilteringSettings;
+		private RenderStateBlock mRenderStateBlock;
+		private int mDownSample = 4;
 
 		public Color FillColor;
 

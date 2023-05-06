@@ -5,12 +5,12 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class SmoothRotationOperation : Operation
     {
-        Transform mSmoothRotationRoot;
+        private Transform mSmoothRotationRoot;
 
         public RotationDirection RotationDirection { get; private set; }
 
-        Quaternion mStartRotation;
-        Quaternion mEndRotation;
+        private Quaternion mStartRotation;
+        private Quaternion mEndRotation;
 
         public void Execute(float time, RotationDirection rotationDirection, Transform smoothRotationRoot)
         {         

@@ -13,11 +13,11 @@ public class PolygonMesh2D : MonoBehaviour {
 	protected MeshFilter meshFilter;
 
 	///<summary>The index of the polygon path to use for the mesh</summary>
-	int pathIndex = 0;
+	private int pathIndex = 0;
 	///<summary>The Z position for the generated mesh</summary>
 	public float zPosition = 0f;
 
-	void Start() {
+	private void Start() {
 		polygon = gameObject.GetComponent<PolygonCollider2D>();
 		meshFilter = gameObject.GetComponent<MeshFilter>();
 	} 
@@ -42,13 +42,13 @@ public class PolygonMesh2D : MonoBehaviour {
 		msh.uv = path.Select(v => new Vector2(v.x / bounds.size.x, v.y / bounds.size.y)).ToArray();
 	}
 
-	void Update() {
+	private void Update() {
 		if (!Application.isPlaying) OnColliderUpdate();
 	}
 	#endif
 }
 
-class Triangulator {
+internal class Triangulator {
 	private List<Vector2> mPoints = new List<Vector2>();
 	
 	public Triangulator (Vector2[] points) {

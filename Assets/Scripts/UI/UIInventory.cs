@@ -9,7 +9,7 @@ namespace Assets.Scripts.UI
         public UIItemView ItemView;
         public RectTransform ItemsRoot;
 
-        Hero mTarget;
+        private Hero mTarget;
 
         public void Show()
         {
@@ -45,8 +45,8 @@ namespace Assets.Scripts.UI
 
             this.gameObject.SetActive(false);       
         }
-      
-        void UIItemView_OnClick(UIUserButton sender)
+
+        private void UIItemView_OnClick(UIUserButton sender)
         {
             var itemView = sender as UIItemView;
             mTarget.EquipMainWeapon(itemView.InventoryItem.ItemInstance);

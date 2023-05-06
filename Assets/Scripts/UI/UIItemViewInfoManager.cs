@@ -24,7 +24,7 @@ namespace Assets.Scripts.UI
             return null;
         }
 
-        static UIItemViewInfoManager mInstance;
+        private static UIItemViewInfoManager mInstance;
         public static UIItemViewInfoManager Instance
         {
             get

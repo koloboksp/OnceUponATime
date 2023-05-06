@@ -9,22 +9,22 @@ namespace Assets.Scripts.Shared.Tags
 {
     public class TagHolderPropertyDrawerPopupWindow : PopupWindowContent
     {
-        const string UndefinedGroupName = "Undefined";
-        static readonly Color SelectionColor = new Color(118.0f / 256.0f, 173.0f / 256.0f, 191.0f / 256.0f);
+        private const string UndefinedGroupName = "Undefined";
+        private static readonly Color SelectionColor = new Color(118.0f / 256.0f, 173.0f / 256.0f, 191.0f / 256.0f);
 
         public override Vector2 GetWindowSize()
         {
             return mWindowSize;
         }
 
-        static List<string> mSelectedGroups = new List<string>();
+        private static List<string> mSelectedGroups = new List<string>();
 
-        Vector2 mWindowSize;
-        Vector2 mFilteredTagsScrollViewPosition;
-        Vector2 mSelectedGroupsScrollViewPosition;
-        Vector2 mAvailableGroupsScrollViewPosition;
-        Guid mSelectedTagId;
-        object mUserData;
+        private Vector2 mWindowSize;
+        private Vector2 mFilteredTagsScrollViewPosition;
+        private Vector2 mSelectedGroupsScrollViewPosition;
+        private Vector2 mAvailableGroupsScrollViewPosition;
+        private Guid mSelectedTagId;
+        private object mUserData;
 
         public event Action<TagHolderPropertyDrawerPopupWindow> OnClosed;
         public Guid SelectedTagId
@@ -192,9 +192,10 @@ namespace Assets.Scripts.Shared.Tags
             if (OnClosed != null)
                 OnClosed(this);
         }
-        static bool mInitialized = false;
 
-        static void CheckInit()
+        private static bool mInitialized = false;
+
+        private static void CheckInit()
         {
             if (!mInitialized)
             {
@@ -224,8 +225,9 @@ namespace Assets.Scripts.Shared.Tags
                 }
             }
         }
-        static Dictionary<string, List<ITag>> mAvailableTagByGroups;
-        static List<ITag> mAvailableTags;
+
+        private static Dictionary<string, List<ITag>> mAvailableTagByGroups;
+        private static List<ITag> mAvailableTags;
         
     }
 }

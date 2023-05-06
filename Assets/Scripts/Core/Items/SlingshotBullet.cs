@@ -18,10 +18,10 @@ namespace Assets.Scripts.Core.Items
         [FormerlySerializedAs("DamageType")] [SerializeField] private DamageType _damageType = DamageType.Crush;
         [FormerlySerializedAs("ForceValue")] [SerializeField] private float _forceValue = 1;
         [SerializeField] private Explosion _explosionPrefab;
-        
-        readonly List<Collider2D> _triggeredItems = new List<Collider2D>();
-        bool _ignoreCollisions;
-        bool _canDealDamage = true;
+
+        private readonly List<Collider2D> _triggeredItems = new List<Collider2D>();
+        private bool _ignoreCollisions;
+        private bool _canDealDamage = true;
         
         public SlingshotItem Owner { get; set; }
         public float Mass => _body.mass;
@@ -37,8 +37,8 @@ namespace Assets.Scripts.Core.Items
         {
             _body.AddForce(shotForce, mode);
         }
-        
-        void FixedUpdate()
+
+        private void FixedUpdate()
         {          
             for (var index = 0; index < _triggeredItems.Count; index++)
             {

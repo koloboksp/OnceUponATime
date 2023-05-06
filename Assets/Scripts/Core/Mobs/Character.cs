@@ -20,7 +20,7 @@ namespace Assets.Scripts.Core.Mobs
 
         public float DeathTime = 1;
 
-        readonly Operation mDeathOperation = new Operation();
+        private readonly Operation mDeathOperation = new Operation();
 
         public Operation DeathOperation => mDeathOperation;
         public virtual void TakeDamage(object sender, DamageInfo damageInfo)
@@ -74,7 +74,7 @@ namespace Assets.Scripts.Core.Mobs
             StartCoroutine(WaitForDeath());
         }
 
-        IEnumerator WaitForDeath()
+        private IEnumerator WaitForDeath()
         {
             while (mDeathOperation.InProcess)
             {

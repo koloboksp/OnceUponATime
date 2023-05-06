@@ -10,7 +10,7 @@ namespace Assets.Scripts.Effects
         public HeroHealthBarUI UIPartPrefab;
         public GroundMovementCharacter Owner;
 
-        HeroHealthBarUI mInstance;
+        private HeroHealthBarUI mInstance;
       
         public void Start()
         {
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Effects
             Owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
         }
 
-        void Owner_OnLifeLevelChanged(Character sender)
+        private void Owner_OnLifeLevelChanged(Character sender)
         {
             mInstance.Show(sender.Lives / sender.MaxLives);     
         }

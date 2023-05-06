@@ -9,9 +9,9 @@ namespace Assets.Scripts.Core.Mobs
         public ShakeEffect InteractionEffect;
         public Collider2D BodyCollider;
 
-        public DropDownItemsLevel DropDownItemsLevel; 
-        
-        void OnTriggerEnter2D(Collider2D collider2d)
+        public DropDownItemsLevel DropDownItemsLevel;
+
+        private void OnTriggerEnter2D(Collider2D collider2d)
         {
             InteractionEffect.enabled = true;
         }

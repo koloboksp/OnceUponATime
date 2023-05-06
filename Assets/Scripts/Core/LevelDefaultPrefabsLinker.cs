@@ -10,8 +10,8 @@ namespace Assets.Scripts.Core
         public GameObject UIPrefab;
         public Hero HeroPrefab;
         public CameraControl CameraControlPrefab;
-        
-        static LevelDefaultPrefabsLinker mInstance;
+
+        private static LevelDefaultPrefabsLinker mInstance;
         public static LevelDefaultPrefabsLinker Instance
         {
             get

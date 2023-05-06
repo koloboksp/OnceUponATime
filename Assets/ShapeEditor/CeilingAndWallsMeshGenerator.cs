@@ -7,12 +7,12 @@ namespace Assets.ShapeEditor
 {
     public class CeilingAndWallsMeshGenerator
     {
-        float mDepth;
+        private float mDepth;
 
-        List<int> mTriangles = new List<int>();
-        List<Vector3> mVertices = new List<Vector3>();
-        List<Vector3> mNormals = new List<Vector3>();
-        List<Vector2> mUVs = new List<Vector2>();
+        private List<int> mTriangles = new List<int>();
+        private List<Vector3> mVertices = new List<Vector3>();
+        private List<Vector3> mNormals = new List<Vector3>();
+        private List<Vector2> mUVs = new List<Vector2>();
 
 
         public List<int> Triangles => mTriangles;
@@ -28,7 +28,7 @@ namespace Assets.ShapeEditor
             GenerateMesh(walkableEdgesPoints);
         }
 
-        void GenerateMesh(List<List<Point>> edgesPoints)
+        private void GenerateMesh(List<List<Point>> edgesPoints)
         {
             var halfCommon = mDepth;
             var common = halfCommon * 2.0f;

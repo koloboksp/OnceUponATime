@@ -5,107 +5,114 @@ using System.Linq;
 using Assets.Scripts.Core.Items;
 using Assets.Scripts.Core.Mobs.Helpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class HeroMind : MonoBehaviour
     {
-        public Hero Owner;
-        public HeroFightLogic FightLogic;
-        public List<HeroRepresentationAboutItem> RepresentationAboutItems;
+        private const int MaxJumpCountInFreefall = 1;
+        private static readonly List<MapItem> NoAllocMapItems = new List<MapItem>();
+        private static readonly List<ExitFromLevel> NoAllocExitFromLevel = new List<ExitFromLevel>();
 
-        const int MaxJumpCountInFreefall = 1;
-        int mJumpCountInFreefall;
-      
-        bool mMoveInAttack;
-        float mAttackMovingSpeed;
-        MovingDirection mAttackMovingDirection;
-        Vector2 mAttackMovingTimeInterval;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Hero _owner;
+        [FormerlySerializedAs("FightLogic")] [SerializeField] private HeroFightLogic _fightLogic;
+        [FormerlySerializedAs("RepresentationAboutItems")] [SerializeField] private List<HeroRepresentationAboutItem> _representationAboutItems;
+        
+        private int _jumpCountInFreefall;
+        private bool _moveInAttack;
+        private float _attackMovingSpeed;
+        private MovingDirection _attackMovingDirection;
+        private Vector2 _attackMovingTimeInterval;
 
-        void Start()
+        private readonly Operation _autoEnterToLevelOperation = new Operation();
+        private readonly Operation _autoExitFromLevelOperation = new Operation();
+        private bool _attackCombinationPreparationNeeded;
+
+        public List<HeroRepresentationAboutItem> RepresentationAboutItems => _representationAboutItems;
+        
+        public Hero Owner => _owner;
+        
+        private void Start()
         {
-            Owner.OnTakeDamage += Owner_OnTakeDamage;
-            Owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
-            Owner.OnLanded += Owner_OnLanded;
+            _owner.OnTakeDamage += Owner_OnTakeDamage;
+            _owner.OnLifeLevelChanged += Owner_OnLifeLevelChanged;
+            _owner.OnLanded += Owner_OnLanded;
 
-            Owner.OnTriggeredSomething += Owner_OnTriggeredSomething;
+            _owner.OnTriggeredSomething += Owner_OnTriggeredSomething;
         }
 
-        void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
+        private void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
         {
-            if (damageInfo.ForceValue >= Owner.StunForceThresholdValue)
+            if (damageInfo.ForceValue >= _owner.StunForceThresholdValue)
             {
-                if (Owner.AttackOperation.InProcess)
-                    Owner.AbortAttack();
+                if (_owner.AttackOperation.InProcess)
+                    _owner.AbortAttack();
             }
         }
 
-        void Owner_OnLanded(GroundMovementCharacter sender)
+        private void Owner_OnLanded(GroundMovementCharacter sender)
         {
-            mJumpCountInFreefall = 0;
+            _jumpCountInFreefall = 0;
         }
 
-        void Owner_OnLifeLevelChanged(Character sender)
+        private void Owner_OnLifeLevelChanged(Character sender)
         {
             
         }
-
-        static readonly List<MapItem> mNoAllocMapItems = new List<MapItem>();
-        static readonly List<ExitFromLevel> mNoAllocExitFromLevel = new List<ExitFromLevel>();
-
-        void Owner_OnTriggeredSomething(Hero sender, Collider2D collider2d)
+        
+        private void Owner_OnTriggeredSomething(Hero sender, Collider2D collider2d)
         {
-            collider2d.gameObject.GetComponents(mNoAllocMapItems);
-            for (var miIndex = 0; miIndex < mNoAllocMapItems.Count; miIndex++)
+            collider2d.gameObject.GetComponents(NoAllocMapItems);
+            for (var miIndex = 0; miIndex < NoAllocMapItems.Count; miIndex++)
             {
-                var mapItem = mNoAllocMapItems[miIndex];
+                var mapItem = NoAllocMapItems[miIndex];
                 if (mapItem.TargetPrefab is HealthBonusItem)
                 {
-                    if (Owner.Lives < Owner.MaxLives)
+                    if (_owner.Lives < _owner.MaxLives)
                     {
                         var healthBonusItem = mapItem.TargetPrefab as HealthBonusItem;
-                        Owner.Treat(this, new TreatmentInfo(healthBonusItem.Power));
+                        _owner.Treat(this, new TreatmentInfo(healthBonusItem.Power));
                         mapItem.Taken();
                     }
                 }
                 else
                 {
-                    Owner.AddNewItemInInventory(mapItem.TargetPrefab);
+                    _owner.AddNewItemInInventory(mapItem.TargetPrefab);
                     mapItem.Taken();
                 } 
             }
 
-            if (!mAutoEnterToLevelOperation.InProcess)
+            if (!_autoEnterToLevelOperation.InProcess)
             {
-                collider2d.gameObject.GetComponents(mNoAllocExitFromLevel);
-                if (mNoAllocExitFromLevel.Count > 0)
+                collider2d.gameObject.GetComponents(NoAllocExitFromLevel);
+                if (NoAllocExitFromLevel.Count > 0)
                 {
 
-                    if (!mAutoExitFromLevelOperation.InProcess)
+                    if (!_autoExitFromLevelOperation.InProcess)
                     {
-                        var exit = mNoAllocExitFromLevel[0];
-                        exit.ChangeLevel(this.Owner);
+                        var exit = NoAllocExitFromLevel[0];
+                        exit.ChangeLevel(this._owner);
                         ExitFromLevel();
                     }
                 }
             }
         }
-
-       
+        
         public void InstantChangeDirection(Direction direction)
         {
-            Owner.ChangeDirection(direction);
+            _owner.ChangeDirection(direction);
         }
 
         public bool CanMove()
         {
-            if (mAutoExitFromLevelOperation.InProcess)
+            if (_autoExitFromLevelOperation.InProcess)
                 return false;
-            if (mAutoEnterToLevelOperation.InProcess)
+            if (_autoEnterToLevelOperation.InProcess)
                 return false;
-            if (Owner.StunOperation.InProcess)
+            if (_owner.StunOperation.InProcess)
                 return false;
-            if (Owner.AttackOperation.InAttackPart && Owner.AttackOperation.BlockMovement)
+            if (_owner.AttackOperation.InAttackPart && _owner.AttackOperation.BlockMovement)
                 return false;
 
             return true;
@@ -113,9 +120,9 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         public bool CanChangeDirection()
         {  
-            if (Owner.PrepareToAttackOperation.InProcess)
+            if (_owner.PrepareToAttackOperation.InProcess)
                 return false;
-            if (Owner.AttackOperation.InAttackPart)
+            if (_owner.AttackOperation.InAttackPart)
                 return false;
 
             return true;
@@ -123,36 +130,36 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         public void StopMove()
         {
-            if (mAutoExitFromLevelOperation.InProcess)
+            if (_autoExitFromLevelOperation.InProcess)
                 return;
-            if (mAutoEnterToLevelOperation.InProcess)
+            if (_autoEnterToLevelOperation.InProcess)
                 return;
 
-            Owner.StopMove();
+            _owner.StopMove();
         }
         public void Move(MovingDirection direction, float speed)
         {
-            Owner.SetMovingSpeed(speed);
-            Owner.SetMovingDirection(direction);
-            Owner.Move();
+            _owner.SetMovingSpeed(speed);
+            _owner.SetMovingDirection(direction);
+            _owner.Move();
         }
 
         public bool CanJump()
         {
-            if (mAutoExitFromLevelOperation.InProcess)
+            if (_autoExitFromLevelOperation.InProcess)
                 return false;
-            if (mAutoEnterToLevelOperation.InProcess)
+            if (_autoEnterToLevelOperation.InProcess)
                 return false;
-            if (Owner.StunOperation.InProcess)
+            if (_owner.StunOperation.InProcess)
                 return false;
  
-            if (!Owner.StayOnGround && mJumpCountInFreefall >= MaxJumpCountInFreefall)
+            if (!_owner.StayOnGround && _jumpCountInFreefall >= MaxJumpCountInFreefall)
                 return false;
 
-            if (Owner.IsJumping)
+            if (_owner.IsJumping)
                 return false;
 
-            if (Owner.AttackOperation.InAttackPart && Owner.AttackOperation.BlockMovement)
+            if (_owner.AttackOperation.InAttackPart && _owner.AttackOperation.BlockMovement)
                 return false;
 
             return true;
@@ -160,137 +167,129 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         public void Jump()
         {
-            if (!Owner.StayOnGround)
+            if (!_owner.StayOnGround)
             {
-                mJumpCountInFreefall++;
+                _jumpCountInFreefall++;
             }
            
 
-            Owner.Jump();
+            _owner.Jump();
         }
 
         public bool CanAttack(HeroAttackType attackType)
         {
-            if (mAutoExitFromLevelOperation.InProcess)
+            if (_autoExitFromLevelOperation.InProcess)
                 return false;
-            if (mAutoEnterToLevelOperation.InProcess)
+            if (_autoEnterToLevelOperation.InProcess)
                 return false;
-            if (Owner.StunOperation.InProcess)
+            if (_owner.StunOperation.InProcess)
                 return false;
-            if (Owner.AttackOperation.InAttackPart)
+            if (_owner.AttackOperation.InAttackPart)
                 return false;
-            if (Owner.PrepareToAttackOperation.InProcess)
+            if (_owner.PrepareToAttackOperation.InProcess)
                 return false;
-            if (Owner.IsJumping)
+            if (_owner.IsJumping)
                 return false;
-            if (!Owner.StayOnGround)
+            if (!_owner.StayOnGround)
                 return false;
 
             return true;
         }
-
-
-        bool attackCombinationPreparationNeeded;
+        
         public void AttackRequest(HeroAttackType attackType, Vector3 value)
         {
-            var attackCombination = FightLogic.GetAttackCombination(attackType);
+            var attackCombination = _fightLogic.GetAttackCombination(attackType);
 
-            mMoveInAttack = attackCombination.Move;
-            mAttackMovingSpeed = attackCombination.MovingSpeed;
-            mAttackMovingDirection = attackCombination.MovingDirection;
-            mAttackMovingTimeInterval = attackCombination.MovingTimeInterval * (attackCombination.AttackPartTime) ;
-            attackCombinationPreparationNeeded = attackCombination.PreparationNeeded;
+            _moveInAttack = attackCombination.Move;
+            _attackMovingSpeed = attackCombination.MovingSpeed;
+            _attackMovingDirection = attackCombination.MovingDirection;
+            _attackMovingTimeInterval = attackCombination.MovingTimeInterval * (attackCombination.AttackPartTime) ;
+            _attackCombinationPreparationNeeded = attackCombination.PreparationNeeded;
 
-            if (Owner.AttackOperation.InProcess)
-                Owner.AbortAttack();
+            if (_owner.AttackOperation.InProcess)
+                _owner.AbortAttack();
 
             
-            if(attackCombinationPreparationNeeded)
-                Owner.PrepareToAttack(attackCombination, value);
+            if(_attackCombinationPreparationNeeded)
+                _owner.PrepareToAttack(attackCombination, value);
             else
-                Owner.Attack(attackCombination);
+                _owner.Attack(attackCombination);
         }
 
         public void SetAttackValue(HeroAttackType mainWeapon, Vector3 value)
         {
-            if(attackCombinationPreparationNeeded)
-				Owner.UpdatePrepareToAttackState(mainWeapon, value);
+            if(_attackCombinationPreparationNeeded)
+				_owner.UpdatePrepareToAttackState(mainWeapon, value);
         }
         public void AttackPrepareCompleteRequest(HeroAttackType mainWeapon, Vector3 getActionValue)
         {
-	        if (attackCombinationPreparationNeeded)
-                Owner.CompletePrepareToAttackState(mainWeapon, getActionValue);
+	        if (_attackCombinationPreparationNeeded)
+                _owner.CompletePrepareToAttackState(mainWeapon, getActionValue);
         }
 
-        void Update()
+        private void Update()
         {         
-            if (mMoveInAttack)
+            if (_moveInAttack)
             {
-                if (Owner.AttackOperation.InAttackPart)
+                if (_owner.AttackOperation.InAttackPart)
                 {
-                    if(mAttackMovingTimeInterval.x <= Owner.AttackOperation.Timer && Owner.AttackOperation.Timer <= mAttackMovingTimeInterval.y)
+                    if(_attackMovingTimeInterval.x <= _owner.AttackOperation.Timer && _owner.AttackOperation.Timer <= _attackMovingTimeInterval.y)
                     { 
-                        Owner.SetMovingDirection(mAttackMovingDirection);
-                        Owner.SetMovingSpeed(mAttackMovingSpeed);
-                        Owner.Move();
+                        _owner.SetMovingDirection(_attackMovingDirection);
+                        _owner.SetMovingSpeed(_attackMovingSpeed);
+                        _owner.Move();
                     }
 
-                    if (Owner.AttackOperation.Timer > mAttackMovingTimeInterval.y)
+                    if (_owner.AttackOperation.Timer > _attackMovingTimeInterval.y)
                     {
-                        Owner.StopMove();
-                        mMoveInAttack = false;
+                        _owner.StopMove();
+                        _moveInAttack = false;
                     }
                 }  
             }
 
-            mAutoEnterToLevelOperation.Process(Time.deltaTime);
+            _autoEnterToLevelOperation.Process(Time.deltaTime);
         }
 
-        readonly Operation mAutoEnterToLevelOperation = new Operation();
-        readonly Operation mAutoExitFromLevelOperation = new Operation();
-
-
-        void ExitFromLevel()
+        private void ExitFromLevel()
         {
-            mAutoEnterToLevelOperation.Execute(1);
-            mAutoEnterToLevelOperation.OnComplete = mAutoEnterToLevelOperation_OnComplete;
+            _autoEnterToLevelOperation.Execute(1);
+            _autoEnterToLevelOperation.OnComplete = mAutoEnterToLevelOperation_OnComplete;
 
-            Owner.Move();
+            _owner.Move();
         }
+        
         public void EnterToLevel(ExitFromLevel enterToLevel)
         {                
             var exitDirection = enterToLevel.ExitDirection;
             var enterDirection = enterToLevel.EnterDirection;
 
-            Owner.ChangeDirection(enterDirection);
-            Owner.SetMovingSpeed(Owner.WalkSpeed);
-            Owner.Move();
+            _owner.ChangeDirection(enterDirection);
+            _owner.SetMovingSpeed(_owner.WalkSpeed);
+            _owner.Move();
 
-            mAutoEnterToLevelOperation.Execute(1);
-            mAutoEnterToLevelOperation.OnComplete = mAutoEnterToLevelOperation_OnComplete;
+            _autoEnterToLevelOperation.Execute(1);
+            _autoEnterToLevelOperation.OnComplete = mAutoEnterToLevelOperation_OnComplete;
 
         }
 
-        void mAutoEnterToLevelOperation_OnComplete(Operation obj)
+        private void mAutoEnterToLevelOperation_OnComplete(Operation obj)
         {
-            Owner.StopMove();
+            _owner.StopMove();
         }
 
         internal void EquipMainWeapon(InventoryItem inventoryItem)
         {
-            var representationAboutItem = RepresentationAboutItems.OfType<HeroRepresentationAboutWeaponItem>().FirstOrDefault(i => i.Target == inventoryItem.ItemPrefab);
+            var representationAboutItem = _representationAboutItems.OfType<HeroRepresentationAboutWeaponItem>().FirstOrDefault(i => i.Target == inventoryItem.ItemPrefab);
 
             foreach (WeaponItemPlacement weaponItemPlacement in representationAboutItem.RequiredFreeSlots)
             {
-                var firstOrDefault = Owner.MainWeaponSlots.FirstOrDefault(i => i.Placement == weaponItemPlacement);
+                var firstOrDefault = _owner.MainWeaponSlots.FirstOrDefault(i => i.Placement == weaponItemPlacement);
                 firstOrDefault.ChangeItem(null);
             }
-            var weaponSlot = Owner.MainWeaponSlots.FirstOrDefault(i => i.Placement == representationAboutItem.Placement);
+            var weaponSlot = _owner.MainWeaponSlots.FirstOrDefault(i => i.Placement == representationAboutItem.Placement);
 
             weaponSlot.ChangeItem(inventoryItem);
         }
-
-
-        
     }
 }

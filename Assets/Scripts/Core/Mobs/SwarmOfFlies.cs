@@ -7,7 +7,7 @@ namespace Assets.Scripts.Core.Mobs
 {
     public class SwarmOfFlies : Character
     {
-        enum State
+        private enum State
         {
             WaitForTarget,
             MoveToTarget,
@@ -31,33 +31,33 @@ namespace Assets.Scripts.Core.Mobs
         public float DamageReduce = 0.1f;
         public DropDownItemsLevel DropDownItemsLevel = DropDownItemsLevel.CoinsAndMomentBonuses50;
 
-        Level mLevel;
+        private Level mLevel;
 
-        State mCurrentState = State.WaitForTarget;
+        private State mCurrentState = State.WaitForTarget;
 
-        Vector3 mStartPosition;
+        private Vector3 mStartPosition;
 
-        bool mEnemyDetected = false;
-        Hero mEnemy;
+        private bool mEnemyDetected = false;
+        private Hero mEnemy;
 
-        float mSearchTime = 2.0f;
-        float mSearchTimer = 0.0f;
+        private float mSearchTime = 2.0f;
+        private float mSearchTimer = 0.0f;
 
-        bool mCanAttack = true;
-        float mAttackSpeed = 1.0f;
-        float mAttackTimer = 0.0f;
+        private bool mCanAttack = true;
+        private float mAttackSpeed = 1.0f;
+        private float mAttackTimer = 0.0f;
 
-        float mAttackDistance = 0.3f;
+        private float mAttackDistance = 0.3f;
 
-        float mDieEffectTimer;
-    
+        private float mDieEffectTimer;
 
-        float mGetCriticalDamageEffectTimer;
-        float mGetCriticalDamageEffectTime = 0.5f;
 
-        readonly List<Fly> mFlies = new List<Fly>();
+        private float mGetCriticalDamageEffectTimer;
+        private float mGetCriticalDamageEffectTime = 0.5f;
 
-        void Start()
+        private readonly List<Fly> mFlies = new List<Fly>();
+
+        private void Start()
         {
             mStartPosition = transform.position;
             mLevel = FindObjectOfType<Level>();
@@ -78,10 +78,10 @@ namespace Assets.Scripts.Core.Mobs
             ReactionTrigger.OnSomethingExit += ReactionTrigger_OnSomethingExit;
         }
 
-        static List<Hero> mNoAllocGetComponent = new List<Hero>();
+        private static List<Hero> mNoAllocGetComponent = new List<Hero>();
 
-        
-        void ReactionTrigger_OnSomethingEnter(Trigger sender, Collider2D collider2d)
+
+        private void ReactionTrigger_OnSomethingEnter(Trigger sender, Collider2D collider2d)
         {
             collider2d.gameObject.GetComponents<Hero>(mNoAllocGetComponent);
 
@@ -91,7 +91,8 @@ namespace Assets.Scripts.Core.Mobs
                 mEnemy = mNoAllocGetComponent[0];
             }
         }
-        void ReactionTrigger_OnSomethingExit(Trigger sender, Collider2D collider2d)
+
+        private void ReactionTrigger_OnSomethingExit(Trigger sender, Collider2D collider2d)
         {
             collider2d.gameObject.GetComponents<Hero>(mNoAllocGetComponent);
 
@@ -101,7 +102,8 @@ namespace Assets.Scripts.Core.Mobs
                 //mEnemy = null;
             }
         }
-        void Update()
+
+        private void Update()
         {  
             if (mCurrentState == State.WaitForTarget)
             {

@@ -16,7 +16,7 @@ namespace Assets.Scripts.Core
         public Color FakeLightingDarknessColor => _fakeLightingDarknessColor;
         public Color AmbientLight => _ambientLight;
 
-        void Start()
+        private void Start()
         {
             UpdateLighting();
         }
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Core
             UpdateLighting();
         }
 
-        void UpdateLighting()
+        private void UpdateLighting()
         {
             if (_transitionLighting != null)
             {

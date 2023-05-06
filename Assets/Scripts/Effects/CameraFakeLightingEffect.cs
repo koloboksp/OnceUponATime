@@ -5,10 +5,10 @@ namespace Assets.Scripts.Effects
 {
     public class CameraFakeLightingEffect : MonoBehaviour
     {
-        Camera mEffectCamera;
-        RenderTexture mEffectRenderTexture;
+        private Camera mEffectCamera;
+        private RenderTexture mEffectRenderTexture;
         public Material EffectMaterial;
-        Color mDarknessColor = Color.black;
+        private Color mDarknessColor = Color.black;
 
         public Color DarknessColor
         {
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Effects
             }
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             var srcCamera = gameObject.GetComponent<Camera>();
    
@@ -47,13 +47,13 @@ namespace Assets.Scripts.Effects
             EffectMaterial.SetTexture("_LightingTex", mEffectRenderTexture);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             Destroy(mEffectCamera.gameObject);
             Destroy(mEffectRenderTexture);
         }
-      
-        void OnRenderImage(RenderTexture source, RenderTexture destination)
+
+        private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             Graphics.Blit(source, destination, EffectMaterial);
         }  

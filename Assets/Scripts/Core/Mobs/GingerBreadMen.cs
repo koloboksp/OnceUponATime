@@ -12,7 +12,7 @@ namespace Assets.Scripts.Core.Mobs
         public Transform ViewRotationEffectRoot;
         public float Radius = 0.25f;
 
-        Vector3 mStartPosition;
+        private Vector3 mStartPosition;
    
         protected override void Start() 
         {
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Core.Mobs
             StartCoroutine(T());
         }
 
-        IEnumerator T()
+        private IEnumerator T()
         {
             StartMove();
             while (Lives > 0)
@@ -48,21 +48,21 @@ namespace Assets.Scripts.Core.Mobs
                 yield return null;
             }
         }
-        
-        void StartMove()
+
+        private void StartMove()
         {
             SetMovingDirection(UnityEngine.Random.Range(0, 2) == 0 ? MovingDirection.Forward: MovingDirection.Backward);
             SetMovingSpeed(WalkSpeed);
         }
 
-        void ChangeDirection()
+        private void ChangeDirection()
         {
             var vecToHomePoint = (mStartPosition - transform.position);
 
             SetMovingDirection(Mathf.Sign(Vector2.Dot(Vector2.right, vecToHomePoint)) > 0 ? MovingDirection.Forward : MovingDirection.Backward);
         }
 
-        void LogicMove()
+        private void LogicMove()
         {
             float distanceFromStart = (transform.position - mStartPosition).magnitude;
 
@@ -85,8 +85,8 @@ namespace Assets.Scripts.Core.Mobs
             rotationRoot.localRotation = additionalCoilRotation * rotationRoot.localRotation;
         }
 
-        bool mDealDamageTrigger;
-        bool mTakeDamageTrigger;
+        private bool mDealDamageTrigger;
+        private bool mTakeDamageTrigger;
 
        
 

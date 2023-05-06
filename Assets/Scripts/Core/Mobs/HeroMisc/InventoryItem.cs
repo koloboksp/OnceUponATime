@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
     {
         public readonly Item ItemPrefab;
         public readonly Item ItemInstance;
-        int mCount;
+        private int mCount;
 
         public InventoryItem(Item itemPrefab)
         {

@@ -5,10 +5,10 @@ using UnityEngine;
 namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class DealDamageOnContact
-    {       
-        static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
+    {
+        private static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
 
-        readonly List<ContactInfo> mContactInfos = new List<ContactInfo>();
+        private readonly List<ContactInfo> mContactInfos = new List<ContactInfo>();
 
         private Action<ContactInfo> OnDealDamage;
 
@@ -104,14 +104,14 @@ namespace Assets.Scripts.Core.Mobs.Helpers
         public class ContactInfo
         {
             public readonly IDamageable Target;
-            readonly List<Collider2D> mColliders = new List<Collider2D>();
+            private readonly List<Collider2D> mColliders = new List<Collider2D>();
 
-            bool mMinimalAttackIntervalPassed;
-            float mAttackTimer;
-            int mAttacksCount = 0;
+            private bool mMinimalAttackIntervalPassed;
+            private float mAttackTimer;
+            private int mAttacksCount = 0;
 
-            Vector3 mAveragePoint;
-            Vector3 mAverageNormal;
+            private Vector3 mAveragePoint;
+            private Vector3 mAverageNormal;
 
             public ContactInfo(IDamageable damageable, Collider2D collider, Vector2 averagePoint, Vector2 averageNormal)
             {

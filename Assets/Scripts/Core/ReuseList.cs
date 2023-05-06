@@ -4,9 +4,9 @@ namespace Assets.Scripts.Core
 {
     public class ReuseList<T> where T : new()
     {
-        readonly List<int> mFree = new List<int>();
-        readonly List<int> mUsed = new List<int>();
-        readonly List<T> mElements = new List<T>();
+        private readonly List<int> mFree = new List<int>();
+        private readonly List<int> mUsed = new List<int>();
+        private readonly List<T> mElements = new List<T>();
 
         public T Get()
         {

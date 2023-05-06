@@ -11,9 +11,9 @@ namespace Assets.ShapeEditor.Geometry
 
 	public class Triangulator
     {
-        LinkedList<Vertex> vertsInClippedPolygon;
-        int[] tris;
-        int triIndex;
+        private LinkedList<Vertex> vertsInClippedPolygon;
+        private int[] tris;
+        private int triIndex;
 
         public Triangulator(Polygon polygon)
         {
@@ -77,7 +77,7 @@ namespace Assets.ShapeEditor.Geometry
         }
 
         // Creates a linked list of all vertices in the polygon, with the hole vertices joined to the hull at optimal points.
-        LinkedList<Vertex> GenerateVertexList(Polygon polygon)
+        private LinkedList<Vertex> GenerateVertexList(Polygon polygon)
         {
             LinkedList<Vertex> vertexList = new LinkedList<Vertex>();
             LinkedListNode<Vertex> currentNode = null;
@@ -248,7 +248,7 @@ namespace Assets.ShapeEditor.Geometry
 
 
         // check if triangle contains any verts (note, only necessary to check reflex verts).
-        bool TriangleContainsVertex(Vertex v0, Vertex v1, Vertex v2)
+        private bool TriangleContainsVertex(Vertex v0, Vertex v1, Vertex v2)
         {
             LinkedListNode<Vertex> vertexNode = vertsInClippedPolygon.First;
             for (int i = 0; i < vertsInClippedPolygon.Count; i++)
@@ -272,7 +272,7 @@ namespace Assets.ShapeEditor.Geometry
 
 
         // v1 is considered a convex vertex if v0-v1-v2 are wound in a counter-clockwise order.
-        bool IsConvex(Vector2 v0, Vector2 v1, Vector2 v2)
+        private bool IsConvex(Vector2 v0, Vector2 v1, Vector2 v2)
         {
             return Maths2D.SideOfLine(v0, v2, v1) == -1;
         }

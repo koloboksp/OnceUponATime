@@ -11,9 +11,9 @@ namespace Assets.Scripts.Effects
 
         public float ShakeDuration = 1.0f;
 
-        float mElapsedTime;
-        Vector3 mStartPosition;
-        Quaternion mStartRotation;
+        private float mElapsedTime;
+        private Vector3 mStartPosition;
+        private Quaternion mStartRotation;
 
         public void OnEnable()
         {

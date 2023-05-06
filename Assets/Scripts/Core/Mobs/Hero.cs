@@ -60,21 +60,21 @@ namespace Assets.Scripts.Core.Mobs
         public Item DefaultRightHandItemPrefab;
        // public List<Item> WeaponInInventory;
 
-        readonly List<InventoryItem> mInventoryItems = new List<InventoryItem>();
-        readonly List<HeroWeaponSlot> mMainWeaponSlots = new List<HeroWeaponSlot>();
+       private readonly List<InventoryItem> mInventoryItems = new List<InventoryItem>();
+       private readonly List<HeroWeaponSlot> mMainWeaponSlots = new List<HeroWeaponSlot>();
 
-        readonly HeroPrepareToAttackOperation mPrepareToAttackOperation = new HeroPrepareToAttackOperation();
+       private readonly HeroPrepareToAttackOperation mPrepareToAttackOperation = new HeroPrepareToAttackOperation();
         public HeroPrepareToAttackOperation PrepareToAttackOperation => mPrepareToAttackOperation;
 
-        readonly HeroAttackOperation mAttackOperation = new HeroAttackOperation();
+        private readonly HeroAttackOperation mAttackOperation = new HeroAttackOperation();
         public HeroAttackOperation AttackOperation => mAttackOperation;
 
         public IEnumerable<InventoryItem> InventoryItems => mInventoryItems;
         public IEnumerable<HeroWeaponSlot> MainWeaponSlots => mMainWeaponSlots;
 
-        readonly List<Collider2D> mTriggeredItems = new List<Collider2D>();
+        private readonly List<Collider2D> mTriggeredItems = new List<Collider2D>();
 
-        void Awake()
+        private void Awake()
         {
             mMainWeaponSlots.Add(new HeroWeaponSlot(WeaponItemPlacement.InLeftHand, ViewPart.LeftHand));
             mMainWeaponSlots.Add(new HeroWeaponSlot(WeaponItemPlacement.InRightHand, ViewPart.RightHand));
@@ -89,7 +89,8 @@ namespace Assets.Scripts.Core.Mobs
             mPrepareToAttackOperation.OnProcess = mPrepareToAttackOperation_OnProcess;
             mPrepareToAttackOperation.OnComplete = mPrepareToAttackOperation_OnComplete;
         }
-        void Start()
+
+        private void Start()
         {
             
             //foreach (var item in WeaponInInventory)
@@ -117,7 +118,7 @@ namespace Assets.Scripts.Core.Mobs
             return inventoryItem;
         }
 
-        void Update()
+        private void Update()
         {  
             base.InnerUpdate();
 
@@ -133,7 +134,7 @@ namespace Assets.Scripts.Core.Mobs
             mPrepareToAttackOperation.Process(Time.deltaTime);
         }
 
-        void OnTriggerEnter2D(Collider2D collider2d)
+        private void OnTriggerEnter2D(Collider2D collider2d)
         {
             if (!mTriggeredItems.Contains(collider2d))
                 mTriggeredItems.Add(collider2d);
@@ -181,13 +182,14 @@ namespace Assets.Scripts.Core.Mobs
         {
             mPrepareToAttackOperation.ManualComplete();
         }
-        void mPrepareToAttackOperation_OnProcess(Operation sender)
+
+        private void mPrepareToAttackOperation_OnProcess(Operation sender)
         {
       //      if (OnPrepareToAttackStateChanged != null)
       //          OnPrepareToAttackStateChanged(this);
         }
 
-        void mPrepareToAttackOperation_OnComplete(Operation sender)
+        private void mPrepareToAttackOperation_OnComplete(Operation sender)
         {
             if (OnPrepareToAttackStateChanged != null)
                 OnPrepareToAttackStateChanged(this);
@@ -205,24 +207,24 @@ namespace Assets.Scripts.Core.Mobs
             mAttackOperation.Abort();
         }
 
-        void AttackOperation_OnProcess(Operation sender)
+        private void AttackOperation_OnProcess(Operation sender)
         {
           
         }
 
-        void AttackOperation_OnInWaitingPart(AttackOperation sender)
+        private void AttackOperation_OnInWaitingPart(AttackOperation sender)
         {
             if (OnAttackWaitForNext != null)
                 OnAttackWaitForNext(this);
         }
 
-        void AttackOperation_OnComplete(Operation sender)
+        private void AttackOperation_OnComplete(Operation sender)
         {
             if (OnAttackComplete != null)
                 OnAttackComplete(this);
         }
 
-        void AttackOperation_OnAbort(Operation sender)
+        private void AttackOperation_OnAbort(Operation sender)
         {
             if (OnAttackAbort != null)
                 OnAttackAbort(this);

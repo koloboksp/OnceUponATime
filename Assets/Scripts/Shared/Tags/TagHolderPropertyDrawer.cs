@@ -11,7 +11,7 @@ namespace Assets.Scripts.Shared.Tags
 
     public class TagGroup : PropertyAttribute
     {
-        List<string> mGroups = new List<string>();
+        private List<string> mGroups = new List<string>();
         public IEnumerable<string> Groups
         {
             get { return mGroups; }
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Shared.Tags
         public static readonly Vector2 MinimalSizeofPopupWindow = new Vector2(500, 300);
         public static readonly Vector2Int DeleteButtonSize = new Vector2Int(13, 13);
 
-        static byte[] mNoAllocGuidData = new byte[16];
+        private static byte[] mNoAllocGuidData = new byte[16];
  
         public override void OnGUI(Rect position, UnityEditor.SerializedProperty property, GUIContent label)
         {
@@ -132,10 +132,10 @@ namespace Assets.Scripts.Shared.Tags
             return false;
         }
 #endif
-        bool mHasChangesInPopup;
-        Guid mSelectedIdFromPopup;
+        private bool mHasChangesInPopup;
+        private Guid mSelectedIdFromPopup;
 
-        void PopupWindow_OnClosed(TagHolderPropertyDrawerPopupWindow sender)
+        private void PopupWindow_OnClosed(TagHolderPropertyDrawerPopupWindow sender)
         {
             sender.OnClosed -= PopupWindow_OnClosed;
             mHasChangesInPopup = true;

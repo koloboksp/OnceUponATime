@@ -8,7 +8,7 @@ namespace Assets.Scripts.UI
 {
     public class UIUserButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        enum State
+        private enum State
         {
             Normal,
             Pressed,
@@ -25,14 +25,14 @@ namespace Assets.Scripts.UI
 
         public object UserData;
 
-        bool mIsPressed = false;
+        private bool mIsPressed = false;
        // bool mIsManualUpdated = false;
-        readonly List<Graphic> mAllInnerGraphicConponents = new List<Graphic>();
-        readonly Dictionary<Graphic, Color> mSavedNormalColors = new Dictionary<Graphic, Color>();
-        bool mInitialized;        
-        int mUpdateCycleIndexOnPointerDown;
-        int mCurrentUpdateCycleIndex = 0;
-        bool mIgnoreInput = false;
+       private readonly List<Graphic> mAllInnerGraphicConponents = new List<Graphic>();
+       private readonly Dictionary<Graphic, Color> mSavedNormalColors = new Dictionary<Graphic, Color>();
+       private bool mInitialized;
+       private int mUpdateCycleIndexOnPointerDown;
+       private int mCurrentUpdateCycleIndex = 0;
+       private bool mIgnoreInput = false;
 
         public bool IgnoreInput
         {
@@ -60,7 +60,7 @@ namespace Assets.Scripts.UI
             UpdateGraphical(State.Disabled);
         }
 
-        void CheckInitialization()
+        private void CheckInitialization()
         {
             if (!mInitialized)
             {
@@ -95,7 +95,8 @@ namespace Assets.Scripts.UI
             if (!finded)
                 Debug.LogError(string.Format("Skin '{0}' not found.", skinName), this);
         }
-        void UpdateGraphical(State state)
+
+        private void UpdateGraphical(State state)
         {
             CheckInitialization();
 

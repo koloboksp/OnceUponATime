@@ -14,9 +14,9 @@ namespace Assets.Scripts.Core
 
     public class MovablePlatform : MonoBehaviour, IOrderedFixedUpdate
     {
-        const float ShiftThreshold = 0.01f;
+        private const float ShiftThreshold = 0.01f;
 
-        readonly PathTraveler mPathTraveler = new PathTraveler();
+        private readonly PathTraveler mPathTraveler = new PathTraveler();
 
         public MovablePlatformMovePart MovablePart;
         public float Speed = 1.5f;
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Core
             OrderedFixedUpdateManager.Remove(this);
         }
 
-        void Start()
+        private void Start()
         {
             mPathTraveler.RebuildPath(gameObject.GetComponentsInChildren<IPoint>());
             mPathTraveler.Move(Speed, Time.fixedDeltaTime);
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Core
             MovablePart.MovePosition(mPathTraveler.PreviousPosition, nextPositionShift / Time.fixedDeltaTime, previousPositionShift / Time.fixedDeltaTime, speedChanged, directionChanged);
         }
 
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             var points = gameObject.GetComponentsInChildren<IPoint>();
             for (var ppIndex = 0; ppIndex < points.Length - 1; ppIndex++)
@@ -71,15 +71,15 @@ namespace Assets.Scripts.Core
             }
         }
 
-        class PathTraveler
+        private class PathTraveler
         {
-            List<IPoint> mPathPoints;
-            float mPathLength;
+            private List<IPoint> mPathPoints;
+            private float mPathLength;
 
-            float mTraveledDistance;
-            Vector3 mPreviousPosition;
-            Vector3 mPosition;
-            float mMovingDirection = 1;
+            private float mTraveledDistance;
+            private Vector3 mPreviousPosition;
+            private Vector3 mPosition;
+            private float mMovingDirection = 1;
 
             public void RebuildPath(IEnumerable<IPoint> points)
             {
@@ -90,7 +90,7 @@ namespace Assets.Scripts.Core
                 Move(0, 0);
             }
 
-            void CalculateLength()
+            private void CalculateLength()
             {
                 mPathLength = 0.0f;
                 for (int ppIndex = 0; ppIndex < mPathPoints.Count - 1; ppIndex++)

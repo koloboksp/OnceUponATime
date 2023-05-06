@@ -6,8 +6,8 @@ namespace Assets.Scripts.Core
     public class LevelSkybox : MonoBehaviour
     {
         public Material SkyBoxMaterial;
-        
-        void Start()
+
+        private void Start()
         {
             RenderSettings.skybox = SkyBoxMaterial;
         }

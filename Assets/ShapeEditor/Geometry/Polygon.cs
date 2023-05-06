@@ -17,7 +17,7 @@ namespace Assets.ShapeEditor.Geometry
         public readonly int[] numPointsPerHole;
         public readonly int numHoles;
 
-        readonly int[] holeStartIndices;
+        private readonly int[] holeStartIndices;
 
         public Polygon(Point[] hull, Point[][] holes)
         {
@@ -63,7 +63,7 @@ namespace Assets.ShapeEditor.Geometry
         {
         }
 
-        bool PointsAreCounterClockwise(Point[] testPoints)
+        private bool PointsAreCounterClockwise(Point[] testPoints)
         {
             float signedArea = 0;
             for (int i = 0; i < testPoints.Length; i++)

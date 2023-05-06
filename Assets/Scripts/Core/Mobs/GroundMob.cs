@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core.Mobs
     {
         public event Action OnDealDamageOnContact;
 
-        DealDamageOnContact mDealDamageOnContact;
+        private DealDamageOnContact mDealDamageOnContact;
 
         public float DamageOnContact = 1;
         public float DamageForceOnContact = 4;
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Core.Mobs
             mDealDamageOnContact.OnCollisionExit2D(collisionInfo, this);
         }
 
-        void OnDealDamageOnContactHelper(DealDamageOnContact.ContactInfo contactInfo)
+        private void OnDealDamageOnContactHelper(DealDamageOnContact.ContactInfo contactInfo)
         {
             Vector2 forceDirection;
             if (Vector2.Dot(contactInfo.AverageNormal, Vector2.right) < 0)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
@@ -15,134 +16,150 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
     public class HeroView : MonoBehaviour
     {
-        public string MainWeaponPrepare = "MainWeaponPrepare";
+        const string MainWeaponPrepare = "MainWeaponPrepare";
 
-        public string MainWeaponAttackMovement = "MainWeaponAttackMovement";
-        public string MainWeaponAttack = "MainWeaponAttack";
-        public string InMainWeaponAttackState = "InMainWeaponAttackState";
-        public string InMainWeaponWaitPartState = "InMainWeaponWaitPartState";
+        const string MainWeaponAttackMovement = "MainWeaponAttackMovement";
+        const string MainWeaponAttack = "MainWeaponAttack";
+        const string InMainWeaponAttackState = "InMainWeaponAttackState";
+        const string InMainWeaponWaitPartState = "InMainWeaponWaitPartState";
         
-        public string MainWeaponAttackAnimationSpeedScaler = "MainWeaponAttackSpeedScaler";
-        public string MainWeaponWaitAnimationSpeedScaler = "MainWeaponWaitSpeedScaler";
+        const string MainWeaponAttackAnimationSpeedScaler = "MainWeaponAttackSpeedScaler";
+        const string MainWeaponWaitAnimationSpeedScaler = "MainWeaponWaitSpeedScaler";
 
-        public List<AttackAnimationsInfo> MainWeaponAttackAnimationsInfo = new List<AttackAnimationsInfo>();
+        const string MovingSpeedMultiplier = "MovingSpeedMultiplier";
+        const string Jump = "Jump";
+        const string Push = "Push";
+        const string InJumpState = "InJumpState";
+        const string BodySpeedInYAxis = "BodySpeedInYAxis";
+        const string BodySpeedInXZPlane = "BodySpeedInXZPlane";
+        const string Freefall = "Freefall";
+        const string IsAlive = "IsAlive";
+        const string GetDamage = "getDamage";
 
-        public Hero Owner;
+        [FormerlySerializedAs("MainWeaponAttackAnimationsInfo")] [SerializeField] private List<AttackAnimationsInfo> _mainWeaponAttackAnimationsInfo = new List<AttackAnimationsInfo>();
 
-        public Animator Animator;
-        public Transform Neck;
+        [FormerlySerializedAs("Owner")] [SerializeField] private Hero _owner;
 
-        public Transform RightHand;
-        public Transform LeftHand;
-        public Transform ShotPoint;
+        [FormerlySerializedAs("Animator")] [SerializeField] private Animator _animator;
+        [FormerlySerializedAs("Neck")] [SerializeField] private Transform _neck;
 
-      //  public float RunAnimationDerivedScaler = 2.0f;
-        public float RunAnimationDefaultSpeed = 5.0f;
+        [FormerlySerializedAs("RightHand")] [SerializeField] private Transform _rightHand;
+        [FormerlySerializedAs("LeftHand")] [SerializeField] private Transform _leftHand;
+        [FormerlySerializedAs("ShotPoint")] [SerializeField] private Transform _shotPoint;
 
-        void OnEnable()
+        [FormerlySerializedAs("RunAnimationDefaultSpeed")] [SerializeField] private float _runAnimationDefaultSpeed = 5.0f;
+        [SerializeField] private float _jumpMinimalViewTime = 0.3f;
+
+        private bool _inJumpState;
+        private float _jumpTimer;
+
+        public Transform Neck => _neck;
+        public Transform LeftHand => _leftHand;
+        public Transform RightHand => _rightHand;
+        public Transform ShotPoint => _shotPoint;
+
+        private void OnEnable()
         {
-            Owner.OnJump += OnJump;
+            _owner.OnJump += OnJump;
 
-            Owner.OnAttackStarted += OnAttackStarted;
-            Owner.OnAttackWaitForNext += OnAttackWaitForNext;
-            Owner.OnAttackComplete += OnAttackComplete;
-            Owner.OnAttackAbort += OnAttackAbort;
+            _owner.OnAttackStarted += OnAttackStarted;
+            _owner.OnAttackWaitForNext += OnAttackWaitForNext;
+            _owner.OnAttackComplete += OnAttackComplete;
+            _owner.OnAttackAbort += OnAttackAbort;
 
-            Owner.OnPrepareToAttackStateChanged += OnPrepareToAttackStateChanged;
-            Owner.OnLifeLevelChanged += OnLifeLevelChanged;
+            _owner.OnPrepareToAttackStateChanged += OnPrepareToAttackStateChanged;
+            _owner.OnLifeLevelChanged += OnLifeLevelChanged;
         }
 
-       
 
-        void OnJump(GroundMovementCharacter sender)
+        private void OnJump(GroundMovementCharacter sender)
         {
-            Animator.SetTrigger("Jump");
-            mInJumpState = true;
-            mJumpTimer = 0;
+            _animator.SetTrigger(Jump);
+            _inJumpState = true;
+            _jumpTimer = 0;
         }
 
-        bool mInJumpState;
-        float mJumpTimer;
-        float mJumpMinimalViewTime = 0.3f;
 
-        void OnPrepareToAttackStateChanged(Hero sender)
+        private void OnPrepareToAttackStateChanged(Hero sender)
         {
-            if (Owner.PrepareToAttackOperation.InProcess)
+            if (_owner.PrepareToAttackOperation.InProcess)
             {
-                var animationsInfo = MainWeaponAttackAnimationsInfo.Find(i => i.AttackMovement == Owner.PrepareToAttackOperation.Movement);
+                var animationsInfo = _mainWeaponAttackAnimationsInfo.Find(i => i.AttackMovement == _owner.PrepareToAttackOperation.Movement);
 
-                Animator.SetInteger(MainWeaponAttackMovement, animationsInfo.AttackPartAnimationIndex);
-                Animator.SetTrigger(MainWeaponPrepare);              
+                _animator.SetInteger(MainWeaponAttackMovement, animationsInfo.AttackPartAnimationIndex);
+                _animator.SetTrigger(MainWeaponPrepare);              
             }
             
         }
 
-        void OnAttackStarted(Hero sender)
+        private void OnAttackStarted(Hero sender)
         {
-            var animationsInfo = MainWeaponAttackAnimationsInfo.Find(i => i.AttackMovement == Owner.AttackOperation.Movement);
+            var animationsInfo = _mainWeaponAttackAnimationsInfo.Find(i => i.AttackMovement == _owner.AttackOperation.Movement);
 
             var animationLength = animationsInfo.AttackPartAnimation.length + animationsInfo.WaitPartAnimation.length;
             var attackAnimationPart = animationsInfo.AttackPartAnimation.length / animationLength;
             var waitAnimationPart = animationsInfo.WaitPartAnimation.length / animationLength;
-            var useTime = Owner.AttackOperation.Time;
-            var attackTime = Owner.AttackOperation.Time - Owner.AttackOperation.WaitPartTime;
-            var waitTime = Owner.AttackOperation.WaitPartTime;
+            var useTime = _owner.AttackOperation.Time;
+            var attackTime = _owner.AttackOperation.Time - _owner.AttackOperation.WaitPartTime;
+            var waitTime = _owner.AttackOperation.WaitPartTime;
 
-            Animator.SetFloat(MainWeaponAttackAnimationSpeedScaler, (attackAnimationPart / (attackTime / useTime)) * (animationLength / useTime) );
-            Animator.SetFloat(MainWeaponWaitAnimationSpeedScaler, (waitAnimationPart / (waitTime / useTime)) * (animationLength / useTime));
-            Animator.SetInteger(MainWeaponAttackMovement, animationsInfo.AttackPartAnimationIndex);
+            _animator.SetFloat(MainWeaponAttackAnimationSpeedScaler, (attackAnimationPart / (attackTime / useTime)) * (animationLength / useTime) );
+            _animator.SetFloat(MainWeaponWaitAnimationSpeedScaler, (waitAnimationPart / (waitTime / useTime)) * (animationLength / useTime));
+            _animator.SetInteger(MainWeaponAttackMovement, animationsInfo.AttackPartAnimationIndex);
            
-            Animator.SetBool(InMainWeaponAttackState, true);
-            Animator.SetTrigger(MainWeaponAttack);
+            _animator.SetBool(InMainWeaponAttackState, true);
+            _animator.SetTrigger(MainWeaponAttack);
         }
 
-        void OnAttackWaitForNext(Hero sender)
+        private void OnAttackWaitForNext(Hero sender)
         {
-            Animator.ResetTrigger(MainWeaponAttack);
-            Animator.SetBool(InMainWeaponAttackState, false);
-            Animator.SetBool(InMainWeaponWaitPartState, true);
-        }
-        void OnAttackComplete(Hero sender)
-        {
-            Animator.SetBool(InMainWeaponWaitPartState, false);
-        }
-        void OnAttackAbort(Hero sender)
-        {
-            Animator.ResetTrigger(MainWeaponAttack);
-            Animator.SetBool(InMainWeaponAttackState, false);
-            Animator.SetBool(InMainWeaponWaitPartState, false);
-        }
-        void OnLifeLevelChanged(Character sender)
-        {
-            Animator.SetTrigger("getDamage");
-            Animator.SetBool("IsAlive", Owner.IsAlive);
+            _animator.ResetTrigger(MainWeaponAttack);
+            _animator.SetBool(InMainWeaponAttackState, false);
+            _animator.SetBool(InMainWeaponWaitPartState, true);
         }
 
-        void Update()
+        private void OnAttackComplete(Hero sender)
         {
-            Animator.SetBool("Freefall", !Owner.StayOnGround);
+            _animator.SetBool(InMainWeaponWaitPartState, false);
+        }
 
-            Animator.SetFloat("BodySpeedInXZPlane", Mathf.Abs((float) Owner.BodyRelativeVelocity.x));
-            if (Owner.IsMoving)
+        private void OnAttackAbort(Hero sender)
+        {
+            _animator.ResetTrigger(MainWeaponAttack);
+            _animator.SetBool(InMainWeaponAttackState, false);
+            _animator.SetBool(InMainWeaponWaitPartState, false);
+        }
+
+        private void OnLifeLevelChanged(Character sender)
+        {
+            _animator.SetTrigger(GetDamage);
+            _animator.SetBool(IsAlive, _owner.IsAlive);
+        }
+
+        private void Update()
+        {
+            _animator.SetBool(Freefall, !_owner.StayOnGround);
+
+            _animator.SetFloat(BodySpeedInXZPlane, Mathf.Abs((float) _owner.BodyRelativeVelocity.x));
+            if (_owner.IsMoving)
             {
-                var movingSign = Owner.MovingDirection == MovingDirection.Backward ? -1.0f : 1.0f;
-                Animator.SetFloat("MovingSpeedMultiplier", movingSign * Mathf.Abs(Owner.BodyRelativeVelocity.x) / RunAnimationDefaultSpeed );
+                var movingSign = _owner.MovingDirection == MovingDirection.Backward ? -1.0f : 1.0f;
+                _animator.SetFloat(MovingSpeedMultiplier, movingSign * Mathf.Abs(_owner.BodyRelativeVelocity.x) / _runAnimationDefaultSpeed );
             }
             else
-                Animator.SetFloat("MovingSpeedMultiplier", 1);
+                _animator.SetFloat(MovingSpeedMultiplier, 1);
 
-           // Animator.SetFloat("RunAnimationDerivedScaler", RunAnimationDerivedScaler);
-            Animator.SetBool("InJumpState", mInJumpState);
-            if (!Owner.StayOnGround)
-                Animator.SetFloat("BodySpeedInYAxis", Owner.BodyRelativeVelocity.y);
+            _animator.SetBool(InJumpState, _inJumpState);
+            if (!_owner.StayOnGround)
+                _animator.SetFloat(BodySpeedInYAxis, _owner.BodyRelativeVelocity.y);
 
-            Animator.SetBool("Push", Owner.IsPushing);
+            _animator.SetBool(Push, _owner.IsPushing);
 
-            if (mInJumpState)
+            if (_inJumpState)
             {
-                mJumpTimer += Time.deltaTime;
-                if (mJumpTimer >= mJumpMinimalViewTime)
-                    mInJumpState = false;
+                _jumpTimer += Time.deltaTime;
+                if (_jumpTimer >= _jumpMinimalViewTime)
+                    _inJumpState = false;
             }
         }
     }

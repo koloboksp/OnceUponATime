@@ -6,7 +6,7 @@ namespace Assets.ShapeEditor
 {
     public class CeilingAndWallsEdgesDetector
     {
-        List<List<int>> mEdgesPointsIndexes;
+        private List<List<int>> mEdgesPointsIndexes;
 
         public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
 

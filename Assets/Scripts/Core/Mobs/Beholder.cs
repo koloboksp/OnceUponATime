@@ -9,9 +9,9 @@ namespace Assets.Scripts.Core.Mobs
         
         public event Action<Beholder> OnAttackStateChanged;
 
-        public Transform SmoothRotationRoot; 
-        
-        readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();
+        public Transform SmoothRotationRoot;
+
+        private readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();
         public AttackOperation AttackOperation => mAttackOperation;
 
         internal override void ChangeDirectionSmooth(Direction direction, RotationDirection rotationDirection, float time, Transform rotationRoot)
@@ -19,9 +19,9 @@ namespace Assets.Scripts.Core.Mobs
             base.ChangeDirectionSmooth(direction, rotationDirection, time, rotationRoot);
       
         }
-        
 
-        void Update()
+
+        private void Update()
         {
             base.InnerUpdate();
                   
@@ -44,19 +44,19 @@ namespace Assets.Scripts.Core.Mobs
                 OnAttackStateChanged(this);
         }
 
-        void Attack_Abort(Operation obj)
+        private void Attack_Abort(Operation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);
         }
 
-        void Attack_InWaitPart(AttackOperation obj)
+        private void Attack_InWaitPart(AttackOperation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);
         }
 
-        void Attack_OnComplete(Operation obj)
+        private void Attack_OnComplete(Operation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);

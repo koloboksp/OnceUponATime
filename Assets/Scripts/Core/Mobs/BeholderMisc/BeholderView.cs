@@ -6,7 +6,7 @@ namespace Assets.Scripts.Core.Mobs.BeholderMisc
     {
         public Transform BeamAnchor;
         public GameObject BeholderBeamEffectPrefab;
-        GameObject BeholderBeamEffectInstance;
+        private GameObject BeholderBeamEffectInstance;
 
         public Beholder Owner;
         public Animator Animator;
@@ -16,7 +16,7 @@ namespace Assets.Scripts.Core.Mobs.BeholderMisc
 
         public float RunAnimationDerivedScaler = 2.0f;
 
-        void OnEnable()
+        private void OnEnable()
         {
             Owner.OnTakeDamage += OnTakeDamage;
 
@@ -28,14 +28,14 @@ namespace Assets.Scripts.Core.Mobs.BeholderMisc
         }
 
 
-        void OnTakeDamage(Character sender, DamageInfo damageInfo)
+        private void OnTakeDamage(Character sender, DamageInfo damageInfo)
         {
             Animator.SetTrigger("getDamage");
 
             Animator.SetBool("IsAlive", Owner.IsAlive);
         }
 
-        void Owner_OnAttackStateChanged(Beholder sender)
+        private void Owner_OnAttackStateChanged(Beholder sender)
         {
             if (Owner.AttackOperation.InProcess)
             {
@@ -76,32 +76,34 @@ namespace Assets.Scripts.Core.Mobs.BeholderMisc
             }
         }
 
-        void Owner_OnAttackStart(Digger obj)
+        private void Owner_OnAttackStart(Digger obj)
         {
             Animator.SetBool("InMainWeaponAttackState", true);
         }
 
-        void Owner_OnAttackEnd(Digger obj)
+        private void Owner_OnAttackEnd(Digger obj)
         {
             Animator.SetBool("InMainWeaponAttackState", false);
         }
 
-        void Owner_OnSmoothRotationStart()
+        private void Owner_OnSmoothRotationStart()
         {
             Animator.SetInteger("SmoothRotationDirection", Owner.SmoothRotationOperation.RotationDirection == RotationDirection.Clockwise ? 0 : 1);
             Animator.SetBool("InSmoothRotationState", true);
         }
-        void Owner_OnSmoothRotationProcess()
+
+        private void Owner_OnSmoothRotationProcess()
         {
             Animator.SetFloat("SmoothRotationNormTime", Owner.SmoothRotationOperation.NormElapsedTime);
         }
-        void Owner_OnSmoothRotationEnd()
+
+        private void Owner_OnSmoothRotationEnd()
         {
             Animator.SetBool("InSmoothRotationState", false);
             Animator.SetInteger("SmoothRotationDirection", -1);
         }
 
-        void Update()
+        private void Update()
         {
             Animator.SetBool("Freefall", !Owner.StayOnGround);
 

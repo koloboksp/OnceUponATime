@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core
 {
     public class LevelLightingChanger : MonoBehaviour
     {
-        const string GizmosIconName = "LevelLightingChanger";
+        private const string GizmosIconName = "LevelLightingChanger";
 
         private static readonly List<Hero> NoAllocGetComponent = new List<Hero>();
         
@@ -41,8 +41,8 @@ namespace Assets.Scripts.Core
                 _level.Lighting.Blend(_from, _to, transition);
             }
         }
-        
-        void OnDrawGizmos()
+
+        private void OnDrawGizmos()
         {
             Gizmos.DrawIcon(this.gameObject.transform.position, GizmosIconName, true);
         }

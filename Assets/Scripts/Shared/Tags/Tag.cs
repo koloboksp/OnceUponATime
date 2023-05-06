@@ -5,9 +5,9 @@ namespace Assets.Scripts.Shared.Tags
 {
     public class Tag : ITag
     {
-        readonly Guid mId;
-        readonly string mName;
-        readonly List<string> mGroups;
+        private readonly Guid mId;
+        private readonly string mName;
+        private readonly List<string> mGroups;
 
         public Guid Id
         {

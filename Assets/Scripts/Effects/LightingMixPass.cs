@@ -18,15 +18,15 @@ namespace Assets.Scripts.Effects
 
 		private RenderTargetIdentifier _depth;
 
-		RenderTargetIdentifier source;
-		RenderTargetIdentifier destination;
-		int temporaryRTId = Shader.PropertyToID("_TempRT");
+		private RenderTargetIdentifier source;
+		private RenderTargetIdentifier destination;
+		private int temporaryRTId = Shader.PropertyToID("_TempRT");
 
-		int sourceId;
-		int destinationId;
-		bool isSourceAndDestinationSameTarget;
+		private int sourceId;
+		private int destinationId;
+		private bool isSourceAndDestinationSameTarget;
 
-		FakeLightingFeature.Settings settings;
+		private FakeLightingFeature.Settings settings;
 
 		public LightingMixPass(FakeLightingFeature.Settings settings)
 		{

@@ -11,9 +11,9 @@ namespace Assets.Scripts.UI
         public Image NormalState;
         public Image PressedState;
 
-        bool mMouseDown;
+        private bool mMouseDown;
 
-        Vector2 mInputVector;
+        private Vector2 mInputVector;
         public bool IsPressed => mMouseDown;
         public Vector2 Direction => mInputVector;
 
@@ -48,9 +48,9 @@ namespace Assets.Scripts.UI
             }
         }
 
-       
-        Vector2 mStartPointerPosition;
-        Vector2 mBtnStartPosition;
+
+        private Vector2 mStartPointerPosition;
+        private Vector2 mBtnStartPosition;
 
         public void OnPointerDown(PointerEventData eventData)
         {

@@ -21,7 +21,7 @@ namespace Assets.Scripts.UI
             Target_OnItemInWeaponSlotsChanged(mTarget);
         }
 
-        void Target_OnItemInWeaponSlotsChanged(Hero sender)
+        private void Target_OnItemInWeaponSlotsChanged(Hero sender)
         {
             var firstOrDefault = sender.MainWeaponSlots.FirstOrDefault(i => i.InventoryItem != null);
             if (firstOrDefault != null)
@@ -34,7 +34,7 @@ namespace Assets.Scripts.UI
             }
         }
 
-        void InventoryBtn_OnClick(UIUserButton obj)
+        private void InventoryBtn_OnClick(UIUserButton obj)
         {
             Inventory.Show();
         }

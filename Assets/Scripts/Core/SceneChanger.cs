@@ -17,18 +17,18 @@ namespace Assets.Scripts.Core
         public float WaitBeforeTime = 1.0f;
         public float DarknesEffectTime = 0.25f;
 
-        AsyncOperation mLoadSceneResult;
-        string mLoadingSceneName;
-        Scene mLoadingScene;
-        SceneChangerLoadingBar mLoadingBar;
-        List<CanvasSettings> mLoadedSceneSavedCanvasSettings;
+        private AsyncOperation mLoadSceneResult;
+        private string mLoadingSceneName;
+        private Scene mLoadingScene;
+        private SceneChangerLoadingBar mLoadingBar;
+        private List<CanvasSettings> mLoadedSceneSavedCanvasSettings;
 
         public object Sender;
         public object UserData;
 
         public event Action<SceneChanger> OnComplete;
 
-        void StartChange(string nextLevelName, string currentLevelName, bool unpauseAfter, object sender, object userData, float waitBeforeTime, float darknesEffectTime)
+        private void StartChange(string nextLevelName, string currentLevelName, bool unpauseAfter, object sender, object userData, float waitBeforeTime, float darknesEffectTime)
         {
             NextLevelName = nextLevelName;
             CurrentLevelName = currentLevelName;
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Core
             StartCoroutine(Execute());
         }
 
-        IEnumerator Execute()
+        private IEnumerator Execute()
         {
             CameraDarkness();
             yield return new WaitForSeconds(DarknesEffectTime);
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Core
             Logic_OnComplete();
         }
 
-        void CameraDarkness()
+        private void CameraDarkness()
         {
             Scene currentActiveScene = SceneManager.GetActiveScene();
             var findedCameras = Camera.allCameras;
@@ -98,7 +98,8 @@ namespace Assets.Scripts.Core
                 }
             }
         }
-        void WaitForOldLevelUnloaded()
+
+        private void WaitForOldLevelUnloaded()
         {
             Scene previousActiveScene = SceneManager.GetActiveScene();
 
@@ -123,13 +124,13 @@ namespace Assets.Scripts.Core
             mOldSceneUnloaded = true;
         }
 
-        bool mOldSceneUnloaded = false;
-        bool mNewSceneLoaded = false;
-        bool mObjectsOfNewSceneLoaded = false;
+        private bool mOldSceneUnloaded = false;
+        private bool mNewSceneLoaded = false;
+        private bool mObjectsOfNewSceneLoaded = false;
 
-        bool mTransitionSceneUnloaded = false;
+        private bool mTransitionSceneUnloaded = false;
 
-        void StartLoadingLevel()
+        private void StartLoadingLevel()
         {
             mLoadingSceneName = NextLevelName;
             mLoadSceneResult = SceneManager.LoadSceneAsync(mLoadingSceneName, LoadSceneMode.Additive);
@@ -144,12 +145,14 @@ namespace Assets.Scripts.Core
             mLoadSceneResult.allowSceneActivation = true;
             mLoadSceneResult.completed += LoadSceneResultOnCompleted;
         }
-        void LoadSceneResultOnCompleted(AsyncOperation asyncOperation)
+
+        private void LoadSceneResultOnCompleted(AsyncOperation asyncOperation)
         {
             mNewSceneLoaded = true;
             mLoadingScene = SceneManager.GetSceneByName(mLoadingSceneName);
         }
-        void CheckLevelLoading()
+
+        private void CheckLevelLoading()
         {
             if (mLoadingScene.IsValid())
             {
@@ -216,8 +219,8 @@ namespace Assets.Scripts.Core
             }
         }
 
-        
-        void WaitForTransitionSceneUnloaded()
+
+        private void WaitForTransitionSceneUnloaded()
         {
             Scene previousActiveScene = SceneManager.GetActiveScene();
 
@@ -231,12 +234,12 @@ namespace Assets.Scripts.Core
             unloadSceneAsync.completed += TransitionSceneUnloaded_OnCompleted;
         }
 
-        void TransitionSceneUnloaded_OnCompleted(AsyncOperation asyncOperation)
+        private void TransitionSceneUnloaded_OnCompleted(AsyncOperation asyncOperation)
         {
             mTransitionSceneUnloaded = true;
         }
 
-        void CameraBrighten()
+        private void CameraBrighten()
         {
             Camera findedCameraInLoadedScene = null;
             GameObject[] rootGameObjects = mLoadingScene.GetRootGameObjects();
@@ -276,7 +279,7 @@ namespace Assets.Scripts.Core
             return sceneChanger;
         }
 
-        static List<SceneChangeInfo> mInfos = new List<SceneChangeInfo>();
+        private static List<SceneChangeInfo> mInfos = new List<SceneChangeInfo>();
 
         public static SceneChangeInfo LastInfo
         {

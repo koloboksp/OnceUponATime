@@ -12,14 +12,14 @@ namespace Assets.Scripts.Effects
         public HealthBarUI UIPartPrefab;
         public Vector3 Offset;
 
-        HealthBarUI mInstance;
-        float mTimer;
-        float mVisibleTime = 2.0f;
-        float mHideTime = 1.0f;
+        private HealthBarUI mInstance;
+        private float _timer;
+        private float mVisibleTime = 2.0f;
+        private float mHideTime = 1.0f;
 
-        UIGamePanel mCachedUIGamePanel;
+        private UIGamePanel mCachedUIGamePanel;
 
-        State mCurrentState = State.Hide;
+        private State mCurrentState = State.Hide;
     
         public void OnEnable()
         {
@@ -33,11 +33,12 @@ namespace Assets.Scripts.Effects
             Owner.OnLifeLevelChanged -= Owner_OnLifeLevelChanged;
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             DestroyInstance();
         }
-        void Owner_OnLifeLevelChanged(Character sender)
+
+        private void Owner_OnLifeLevelChanged(Character sender)
         {
             if (mInstance == null)
             {
@@ -50,16 +51,16 @@ namespace Assets.Scripts.Effects
             mInstance.Show(sender.Lives / sender.MaxLives);
 
             mCurrentState = State.Show;
-            mTimer = 0.0f;
+            _timer = 0.0f;
         }
 
-        void UpdateScreenPosition()
+        private void UpdateScreenPosition()
         {
             var t = Camera.main.WorldToScreenPoint(Owner.transform.position + Offset);
             mInstance.transform.position = t;
         }
 
-        void DestroyInstance()
+        private void DestroyInstance()
         {
             if (mInstance != null)
             {
@@ -68,13 +69,14 @@ namespace Assets.Scripts.Effects
             }
         }
 
-        enum State
+        private enum State
         {
             Hide,
             Show,
             StartHide,     
         }
-        void Update()
+
+        private void Update()
         {
             if (mCurrentState == State.Hide)
             {
@@ -82,9 +84,9 @@ namespace Assets.Scripts.Effects
             }
             if (mCurrentState == State.Show)
             {
-                mTimer += Time.deltaTime;
+                _timer += Time.deltaTime;
                 UpdateScreenPosition();
-                if (mTimer > mVisibleTime)
+                if (_timer > mVisibleTime)
                 {
                     mCurrentState = State.StartHide;
 
@@ -94,9 +96,9 @@ namespace Assets.Scripts.Effects
 
             if (mCurrentState == State.StartHide)
             {
-                mTimer += Time.deltaTime;
+                _timer += Time.deltaTime;
                 UpdateScreenPosition();
-                if (mTimer > mVisibleTime + mHideTime)
+                if (_timer > mVisibleTime + mHideTime)
                 {
                     mCurrentState = State.Hide;
 

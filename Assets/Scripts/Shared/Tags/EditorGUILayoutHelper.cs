@@ -68,11 +68,11 @@ namespace Assets.Scripts.Shared.Tags
             EditorGUILayout.EndHorizontal();
         }
 
-        static bool mPopupWindowJustClosed = false;
-        static Guid mPopupWindowSelectionResult;
-        static int mControlId;
+        private static bool mPopupWindowJustClosed = false;
+        private static Guid mPopupWindowSelectionResult;
+        private static int mControlId;
 
-        static void PopupWindow_OnClosed(TagHolderPropertyDrawerPopupWindow sender)
+        private static void PopupWindow_OnClosed(TagHolderPropertyDrawerPopupWindow sender)
         {
             sender.OnClosed -= PopupWindow_OnClosed;
             mControlId = (int)sender.UserData;

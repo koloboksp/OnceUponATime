@@ -11,10 +11,10 @@ namespace Assets.Scripts.Core
         public Vector2 CurrentStepSpeed => mSpeed;
         public bool DirectionChanged => mDirectionChanged;
 
-        Vector2 mNextSpeed;
-        Vector2 mSpeed;
-        bool mSpeedChanged;
-        bool mDirectionChanged;
+        private Vector2 mNextSpeed;
+        private Vector2 mSpeed;
+        private bool mSpeedChanged;
+        private bool mDirectionChanged;
 
         public void MovePosition(Vector2 position, Vector2 nextStepSpeed, Vector2 speed, bool speedChanged, bool directionChanged)
         {

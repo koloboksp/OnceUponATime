@@ -6,16 +6,16 @@ using UnityEngine;
 namespace Assets.ShapeEditor
 {
     public class WalkableMeshGenerator
-    {    
-        float mHorizontalOffsetOfExtremePoints;
-        float mThickness;
-        float mDepth;
+    {
+        private float mHorizontalOffsetOfExtremePoints;
+        private float mThickness;
+        private float mDepth;
 
-       
-        List<int> mTriangles = new List<int>();
-        List<Vector3> mVertices = new List<Vector3>();
-        List<Vector3> mNormals = new List<Vector3>();
-        List<Vector2> mUVs = new List<Vector2>();
+
+        private List<int> mTriangles = new List<int>();
+        private List<Vector3> mVertices = new List<Vector3>();
+        private List<Vector3> mNormals = new List<Vector3>();
+        private List<Vector2> mUVs = new List<Vector2>();
 
        
         public List<int> Triangles => mTriangles;
@@ -35,7 +35,7 @@ namespace Assets.ShapeEditor
             GenerateMesh(walkableEdgesPoints, generatedBottomWalkableEdgesPoints);     
         }
 
-        void ApplyHorizontalOffsetToExtremeEdgePoints(List<List<Point>> edgesPoints)
+        private void ApplyHorizontalOffsetToExtremeEdgePoints(List<List<Point>> edgesPoints)
         {
             foreach (List<Point> edgePoints in edgesPoints)
             {
@@ -51,7 +51,7 @@ namespace Assets.ShapeEditor
             }
         }
 
-        List<List<Point>> GenerateBottomPoints(List<List<Point>> edgesPoints)
+        private List<List<Point>> GenerateBottomPoints(List<List<Point>> edgesPoints)
         {
             List<List<Point>> bottomEdgesPoints = new List<List<Point>>();
 
@@ -92,7 +92,8 @@ namespace Assets.ShapeEditor
 
             return bottomEdgesPoints;
         }
-        void GenerateMesh(List<List<Point>> edgesPoints, List<List<Point>> bottomEdgesPoints)
+
+        private void GenerateMesh(List<List<Point>> edgesPoints, List<List<Point>> bottomEdgesPoints)
         {       
             var halfCommon = (mDepth + mThickness);
             var common = halfCommon * 2.0f;

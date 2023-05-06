@@ -5,17 +5,17 @@ namespace Assets.Scripts.Core
 {
     public class FPSDisplay : MonoBehaviour
     {
-        float mUpdateTime = 1.0f;
+        private float mUpdateTime = 1.0f;
 
-        float mAvergeTimer = 0.0f;
-        int mFrameCount = 0;
+        private float mAvergeTimer = 0.0f;
+        private int mFrameCount = 0;
 
-        float mAvergeTime = 0.0f;
-        float mAvergeFPS = 0.0f;
+        private float mAvergeTime = 0.0f;
+        private float mAvergeFPS = 0.0f;
 
-        Text mText;
+        private Text mText;
 
-        void Start()
+        private void Start()
         {
             var foundCanvas = FindObjectOfType<Canvas>();
 
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Core
             mText.text = "";
         }
 
-        void Update()
+        private void Update()
         {
             mAvergeTimer += Time.deltaTime;
             mFrameCount += 1;

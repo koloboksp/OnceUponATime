@@ -14,23 +14,23 @@ namespace Assets.Scripts.Effects
         public float LifeTime = 0.3f;
         public Material Material;
 
-        readonly List<int> mIndexesOfFreePoints = new List<int>();
-        readonly List<int> mIndexesOfUsedPoints = new List<int>();
-        readonly List<Point> mPoints = new List<Point>();
+        private readonly List<int> mIndexesOfFreePoints = new List<int>();
+        private readonly List<int> mIndexesOfUsedPoints = new List<int>();
+        private readonly List<Point> mPoints = new List<Point>();
 
-        readonly ReallocArray<Vector3> mMeshVertices = new ReallocArray<Vector3>();
-        readonly ReallocArray<Vector2> mMeshUVs = new ReallocArray<Vector2>();
-        readonly ReallocArray<int> mMeshTriangles = new ReallocArray<int>();
-        readonly ReallocArray<Color> mMeshVertexColors = new ReallocArray<Color>();
+        private readonly ReallocArray<Vector3> mMeshVertices = new ReallocArray<Vector3>();
+        private readonly ReallocArray<Vector2> mMeshUVs = new ReallocArray<Vector2>();
+        private readonly ReallocArray<int> mMeshTriangles = new ReallocArray<int>();
+        private readonly ReallocArray<Color> mMeshVertexColors = new ReallocArray<Color>();
 
-        Vector3 mPreviousPosition;
-        Quaternion mPreviousRotation;
+        private Vector3 mPreviousPosition;
+        private Quaternion mPreviousRotation;
 
-        GameObject mTrailObject = null;
-        Mesh mTrailMesh = null;
-        Material mInstanceMaterial;
+        private GameObject mTrailObject = null;
+        private Mesh mTrailMesh = null;
+        private Material mInstanceMaterial;
 
-        void Start()
+        private void Start()
         {
             mPreviousPosition = transform.position;
             mPreviousRotation = transform.rotation;
@@ -55,7 +55,8 @@ namespace Assets.Scripts.Effects
                 meshRenderer.material = mInstanceMaterial;
             }
         }
-        void OnDestroy()
+
+        private void OnDestroy()
         {
             mPoints.Clear();
             mIndexesOfFreePoints.Clear();
@@ -112,8 +113,8 @@ namespace Assets.Scripts.Effects
             }
         }
 
-        
-        void Update()
+
+        private void Update()
         {
             if (Emit)
             {             
@@ -257,7 +258,7 @@ namespace Assets.Scripts.Effects
             }
         }
 
-        void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(this.gameObject.transform.position + this.gameObject.transform.rotation * Axis * (Offset + Width * 0.5f), 
@@ -266,7 +267,7 @@ namespace Assets.Scripts.Effects
 
         public class ReallocArray<T>
         {
-            T[] mArray;
+            private T[] mArray;
 
             public void CheckSize(int newSize)
             {
@@ -309,13 +310,14 @@ namespace Assets.Scripts.Effects
                 }
             }
         }
-        class Point
+
+        private class Point
         {
             public float ElapsedTime;
             public float LifeTime;
             public Vector3 Position;
             public Quaternion Rotation;
-            bool mRemove;
+            private bool mRemove;
 
             public Point(float lifeTime, Transform transform)
             {

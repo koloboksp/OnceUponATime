@@ -8,8 +8,8 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class HeroPrepareToAttackOperation : Operation
     {
-        Hero mOwner;
-        ItemPreparationView mItemPreparationViewInstance;
+        private Hero mOwner;
+        private ItemPreparationView mItemPreparationViewInstance;
 
         public HeroAvailableStrikes Movement { get; private set; }
         public HeroWeaponSlot mWeaponSlot;
@@ -61,24 +61,22 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
     public class HeroAttackOperation : AttackOperation
     {
-        Hero mOwner;
-        HeroWeaponSlot mWeaponSlot;
-        float mShotAngle = 0.0f;
+        private Hero _owner;
+        private HeroWeaponSlot _weaponSlot;
+        private float _shotAngle = 0.0f;
+        private readonly List<IDamageable> _alreadyDamagedObjectsAtCycle = new List<IDamageable>();
+        private readonly List<KeyValuePair<IDamageable, Collider2D>> _damagedObjectsAtCycle = new List<KeyValuePair<IDamageable, Collider2D>>();
 
         public HeroAvailableStrikes Movement { get; private set; }
         public bool BlockMovement { get; private set; }
-
-        readonly List<IDamageable> mAlreadyDamagedObjectsAtCycle = new List<IDamageable>();
-        readonly List<KeyValuePair<IDamageable, Collider2D>> mDamagedObjectsAtCycle = new List<KeyValuePair<IDamageable, Collider2D>>();
-
-
+        
         public void MeleeExecute(Hero owner, HeroAttackType attackType, HeroAvailableStrikes movement, bool blockMovement,
             HeroWeaponSlot weaponSlot, Vector2 dealDamageTimeInterval, float attackPartTime, float waitPartTime)
         {
-            mOwner = owner;
+            _owner = owner;
             Movement = movement;
             BlockMovement = blockMovement;
-            mWeaponSlot = weaponSlot;
+            _weaponSlot = weaponSlot;
 
             MeleeExecute(dealDamageTimeInterval, attackPartTime, waitPartTime);
         }
@@ -86,12 +84,12 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
         public void RangedExecute(Hero owner, HeroAttackType attackType, HeroAvailableStrikes movement, bool blockMovement,
             HeroWeaponSlot weaponSlot, float shotTime, float shotAngle, float attackPartTime, float waitPartTime)
         {
-            mOwner = owner;
+            _owner = owner;
             Movement = movement;
             BlockMovement = blockMovement;
-            mWeaponSlot = weaponSlot;
+            _weaponSlot = weaponSlot;
 
-            mShotAngle = shotAngle;
+            _shotAngle = shotAngle;
 
             RangedExecute(shotTime, attackPartTime, waitPartTime);
         }
@@ -104,53 +102,53 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
         protected override void BeginMeleeDealDamage()
         {
-            var weaponItem = mWeaponSlot.InventoryItem.ItemInstance as WeaponItem;
+            var weaponItem = _weaponSlot.InventoryItem.ItemInstance as WeaponItem;
 
-            var damageArea = GetDamageArea(mOwner, weaponItem.MeleeHorizontalRange, weaponItem.MeleeVerticalRangePadding);
+            var damageArea = GetDamageArea(_owner, weaponItem.MeleeHorizontalRange, weaponItem.MeleeVerticalRangePadding);
             weaponItem.BeginDealDamage(damageArea);
         }
 
         protected override void MeleeDealDamage()
         {
-            var weaponItem = mWeaponSlot.InventoryItem.ItemInstance as WeaponItem;
+            var weaponItem = _weaponSlot.InventoryItem.ItemInstance as WeaponItem;
 
-            var damageArea = GetDamageArea(mOwner, weaponItem.MeleeHorizontalRange, weaponItem.MeleeVerticalRangePadding);
-            FindObjectsInArea(damageArea, mDamagedObjectsAtCycle);
+            var damageArea = GetDamageArea(_owner, weaponItem.MeleeHorizontalRange, weaponItem.MeleeVerticalRangePadding);
+            FindObjectsInArea(damageArea, _damagedObjectsAtCycle);
 
-            for (var dpIndex = 0; dpIndex < mDamagedObjectsAtCycle.Count; dpIndex++)
+            for (var dpIndex = 0; dpIndex < _damagedObjectsAtCycle.Count; dpIndex++)
             {
-                var damagedPair = mDamagedObjectsAtCycle[dpIndex];
-                if (!ReferenceEquals(damagedPair.Key, mOwner) &&
-                    !mAlreadyDamagedObjectsAtCycle.Contains(damagedPair.Key))
+                var damagedPair = _damagedObjectsAtCycle[dpIndex];
+                if (!ReferenceEquals(damagedPair.Key, _owner) &&
+                    !_alreadyDamagedObjectsAtCycle.Contains(damagedPair.Key))
                 {
-                    mAlreadyDamagedObjectsAtCycle.Add(damagedPair.Key);
+                    _alreadyDamagedObjectsAtCycle.Add(damagedPair.Key);
 
-                    var vecTo = mOwner.transform.position - damagedPair.Value.gameObject.transform.position;
+                    var vecTo = _owner.transform.position - damagedPair.Value.gameObject.transform.position;
                     var dirTo = -vecTo.normalized;
-                    damagedPair.Key.TakeDamage(mOwner, new DamageInfo(weaponItem.MeleeDamageType, weaponItem.MeleeAttack, damageArea.center, weaponItem.MeleeForce, dirTo));
+                    damagedPair.Key.TakeDamage(_owner, new DamageInfo(weaponItem.MeleeDamageType, weaponItem.MeleeAttack, damageArea.center, weaponItem.MeleeForce, dirTo));
                 }
             }
 
-            mWeaponSlot.InventoryItem.ItemInstance.DealDamage(mWeaponSlot.Anchor.transform.position, mOwner.transform.right);
+            _weaponSlot.InventoryItem.ItemInstance.DealDamage(_weaponSlot.Anchor.transform.position, _owner.transform.right);
         }
 
         protected override void EndMeleeDealDamage()
         {
-            mWeaponSlot.InventoryItem.ItemInstance.EndDealDamage();
+            _weaponSlot.InventoryItem.ItemInstance.EndDealDamage();
 
-            mAlreadyDamagedObjectsAtCycle.Clear();   
+            _alreadyDamagedObjectsAtCycle.Clear();   
         }
 
         protected override void RangedShot()
         {
-            var weaponItem = mWeaponSlot.InventoryItem.ItemInstance as WeaponItem;
+            var weaponItem = _weaponSlot.InventoryItem.ItemInstance as WeaponItem;
             var rangedWeaponItem = weaponItem as RangedWeaponItem;
-            rangedWeaponItem.Shot(mShotAngle);
+            rangedWeaponItem.Shot(_shotAngle);
         }
 
         protected override void EndRangedAttack()
         {
-            var weaponItem = mWeaponSlot.InventoryItem.ItemInstance as WeaponItem;
+            var weaponItem = _weaponSlot.InventoryItem.ItemInstance as WeaponItem;
             var rangedWeaponItem = weaponItem as RangedWeaponItem;
             rangedWeaponItem.EndAttack();       
         }

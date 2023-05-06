@@ -13,13 +13,13 @@ public class CtrlRoot : MonoBehaviour
 
     public List<Transform> controllers;
 
-    void Start()
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }

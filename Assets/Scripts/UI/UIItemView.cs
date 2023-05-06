@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
         public Image IconImage;
         public Text CountLabel;
 
-        InventoryItem mInventoryItem;
+        private InventoryItem mInventoryItem;
 
         public InventoryItem InventoryItem
         {

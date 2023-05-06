@@ -51,12 +51,12 @@ namespace Assets.Scripts.Core
             }
         }
 
-        static readonly List<ActionInfo> mActionInfos = new List<ActionInfo>();
-        static readonly List<KeyValuePair<InputAction, Vector3>> mActionValues = new List<KeyValuePair<InputAction, Vector3>>();
+        private static readonly List<ActionInfo> mActionInfos = new List<ActionInfo>();
+        private static readonly List<KeyValuePair<InputAction, Vector3>> mActionValues = new List<KeyValuePair<InputAction, Vector3>>();
 
-        static InputAction mActions;
-        static InputAction mStartedActions;
-        static InputAction mEndedActions;
+        private static InputAction mActions;
+        private static InputAction mStartedActions;
+        private static InputAction mEndedActions;
 
         public static event Action<InputAction, InputAction> OnInputActionChanged;
         public static event Action<InputAction, InputAction> OnInputActionEnded;
@@ -119,7 +119,7 @@ namespace Assets.Scripts.Core
             }
         }
 
-        static void UpdateResult()
+        private static void UpdateResult()
         {
             InputAction previousResult = mActions;
             mActions = InputAction.None;

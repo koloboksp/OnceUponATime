@@ -6,14 +6,10 @@ namespace Assets.Scripts.Shared.Tags
     [Serializable]
     public class TagHolder
     {
-        [SerializeField]
-        byte[] mId;
-        [NonSerialized]
-        bool mInit;
-        [NonSerialized]
-        Guid mIdCache;
-        [NonSerialized]
-        ITag mTag;
+        [SerializeField] private byte[] mId;
+        [NonSerialized] private bool mInit;
+        [NonSerialized] private Guid mIdCache;
+        [NonSerialized] private ITag mTag;
 
         private TagHolder()
         {
@@ -30,7 +26,7 @@ namespace Assets.Scripts.Shared.Tags
             Id = source.Id;
         }
 
-        void CheckInit(bool force = false)
+        private void CheckInit(bool force = false)
         {
             if (!mInit || force)
             {

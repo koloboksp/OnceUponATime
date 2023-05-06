@@ -1,5 +1,6 @@
 using Assets.Scripts.Core.Mobs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Items
 {
@@ -20,12 +21,20 @@ namespace Assets.Scripts.Core.Items
         protected ItemPreparationView mItemPreparationViewInstance;
 
 
-        public Character Owner;
+        [FormerlySerializedAs("Owner")] 
+        [SerializeField] private Character _owner;
+        [FormerlySerializedAs("Type")] 
+        [SerializeField] private ItemType _type;
+        [FormerlySerializedAs("EquipmentViewPartPrefab")] 
+        [SerializeField] private EquipmentItemView _equipmentViewPartPrefab;
+        [FormerlySerializedAs("ItemPreparationViewPrefab")] 
+        [SerializeField] private ItemPreparationView _itemPreparationViewPrefab;
 
-        public ItemType Type;
-        public EquipmentItemView EquipmentViewPartPrefab;
-        public ItemPreparationView ItemPreparationViewPrefab;
-
+        public Character Owner
+        {
+            get => _owner;
+            set => _owner = value;
+        }
 
         public virtual void DealDamage(Vector2 position, Vector2 direction) { }
 
@@ -47,9 +56,9 @@ namespace Assets.Scripts.Core.Items
 
         public void CreateEquipmentViewPart(Transform anchor)
         {
-            if (EquipmentViewPartPrefab != null && mEquipmentViewPartInstance == null)
+            if (_equipmentViewPartPrefab != null && mEquipmentViewPartInstance == null)
             {
-                mEquipmentViewPartInstance = Instantiate(EquipmentViewPartPrefab);
+                mEquipmentViewPartInstance = Instantiate(_equipmentViewPartPrefab);
 
                 mEquipmentViewPartInstance.transform.SetParent(anchor, true);
                 mEquipmentViewPartInstance.transform.localPosition = Vector3.zero;
@@ -67,9 +76,9 @@ namespace Assets.Scripts.Core.Items
 
         public ItemPreparationView CreatePreparationView(Transform anchor)
         {
-            if (ItemPreparationViewPrefab != null && mItemPreparationViewInstance == null)
+            if (_itemPreparationViewPrefab != null && mItemPreparationViewInstance == null)
             {
-                mItemPreparationViewInstance = Instantiate(ItemPreparationViewPrefab);
+                mItemPreparationViewInstance = Instantiate(_itemPreparationViewPrefab);
 
                 mItemPreparationViewInstance.transform.SetParent(anchor, true);
                 mItemPreparationViewInstance.transform.localPosition = Vector3.zero;

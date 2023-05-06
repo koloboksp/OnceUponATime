@@ -6,7 +6,7 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
     {
         public readonly WeaponItemPlacement Placement;
         public readonly Transform Anchor;
-        InventoryItem mInventoryItem;
+        private InventoryItem mInventoryItem;
 
         public HeroWeaponSlot()
         {

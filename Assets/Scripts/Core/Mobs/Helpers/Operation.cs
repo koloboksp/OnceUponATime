@@ -4,12 +4,12 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 {
     public class Operation
     {
-        float mTimer;
-        float mTime;
+        private float mTimer;
+        private float mTime;
 
-        Action<Operation> mOnComplete;
-        Action<Operation> mOnProcess;
-        Action<Operation> mOnAbort;
+        private Action<Operation> mOnComplete;
+        private Action<Operation> mOnProcess;
+        private Action<Operation> mOnAbort;
 
         public float Time => mTime;
         public float Timer => mTimer;

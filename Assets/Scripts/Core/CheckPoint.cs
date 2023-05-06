@@ -33,10 +33,10 @@ namespace Assets.Scripts.Core
         public event Action<CheckPoint> OnActivate;
 
         public Transform WobbleEffectRoot;
-        CheckPointData mData;
+        private CheckPointData mData;
 
-        bool mActivated;
-        float mTimer;
+        private bool mActivated;
+        private float mTimer;
         
         public virtual void TakeDamage(object sender, DamageInfo damageInfo)
         {
@@ -62,7 +62,7 @@ namespace Assets.Scripts.Core
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (mActivated)
             {

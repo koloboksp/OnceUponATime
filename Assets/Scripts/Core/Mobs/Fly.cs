@@ -4,7 +4,7 @@ namespace Assets.Scripts.Core.Mobs
 {
     public class Fly : MonoBehaviour
     {
-        enum State
+        private enum State
         {
             Move,
             Attack,
@@ -14,13 +14,13 @@ namespace Assets.Scripts.Core.Mobs
         }
 
 
-        Vector3 mCenterPoint;
+        private Vector3 mCenterPoint;
 
-        float mSpeed = 2.0f;
+        private float mSpeed = 2.0f;
         public float RandomRangeRadius = 0.5f;
 
-        Vector3 mDestination;
-        State mCurrentState = State.Move;
+        private Vector3 mDestination;
+        private State mCurrentState = State.Move;
 
         public Vector3 CenterPoint
         {
@@ -29,8 +29,8 @@ namespace Assets.Scripts.Core.Mobs
                 mCenterPoint = value;
             }
         }
-       
-        void Start()
+
+        private void Start()
         {  
             SelectNewRandomDestinationPoint();
             transform.localPosition = mDestination;
@@ -41,11 +41,13 @@ namespace Assets.Scripts.Core.Mobs
         {
             mDestination = localPoint;
         }
-        void SelectNewRandomDestinationPoint()
+
+        private void SelectNewRandomDestinationPoint()
         {
             mDestination = UnityEngine.Random.insideUnitSphere * RandomRangeRadius;
         }
-        void Update()
+
+        private void Update()
         {
             if (mCurrentState == State.Move)
             {
@@ -107,7 +109,7 @@ namespace Assets.Scripts.Core.Mobs
             }
         }
 
-        bool MoveToDestination2(float dTime, float speed)
+        private bool MoveToDestination2(float dTime, float speed)
         {
             var vecToDestination = mDestination - transform.localPosition;
             var timeToDestination = vecToDestination.magnitude / speed;
@@ -126,7 +128,7 @@ namespace Assets.Scripts.Core.Mobs
             return false;
         }
 
-        bool MoveToDestination(float dTime)
+        private bool MoveToDestination(float dTime)
         {
             var vecToDestination = mDestination - transform.localPosition;
             var timeToDestination = vecToDestination.magnitude / mSpeed;
@@ -146,11 +148,11 @@ namespace Assets.Scripts.Core.Mobs
             return false;
         }
 
-        float mDelayTimer;
-        float mDelay;
+        private float mDelayTimer;
+        private float mDelay;
 
-        float mDieEffectTime;
-        float mDieEffectTimer;
+        private float mDieEffectTime;
+        private float mDieEffectTimer;
         private Vector3 mInitialLocalScale;
         public Vector3 rot;
         public void Die(float effectDelay, float effectTime)
@@ -164,11 +166,11 @@ namespace Assets.Scripts.Core.Mobs
             mDieEffectTimer = 0.0f;
         }
 
-        float mEffectSpeed;
-        float mEffectForceValue;
+        private float mEffectSpeed;
+        private float mEffectForceValue;
 
-        float mStunEffectTime;
-        float mStunEffectTimer;
+        private float mStunEffectTime;
+        private float mStunEffectTimer;
 
         public void StunEffect(Vector3 localForcePoint, float forceValue, float effectTime)
         {

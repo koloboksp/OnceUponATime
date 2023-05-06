@@ -4,8 +4,7 @@ namespace Assets.Scripts.Core
 {
     public class SetMaxFPS : MonoBehaviour
     {
-
-        void Start()
+        private void Start()
         {
             Application.targetFrameRate = 60;
         }

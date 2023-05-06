@@ -4,8 +4,8 @@ namespace Assets.Scripts.Core
 {
     public static class OrderedFixedUpdateManager
     {
-        static readonly List<IOrderedFixedUpdate> mFixedUpdates = new List<IOrderedFixedUpdate>();
-        static readonly List<IOrderedFixedUpdate> mCopyFixedUpdates = new List<IOrderedFixedUpdate>();
+        private static readonly List<IOrderedFixedUpdate> mFixedUpdates = new List<IOrderedFixedUpdate>();
+        private static readonly List<IOrderedFixedUpdate> mCopyFixedUpdates = new List<IOrderedFixedUpdate>();
 
         public static void Add(IOrderedFixedUpdate obj)
         {

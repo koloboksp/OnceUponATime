@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core
 {
     public class CameraControl : MonoBehaviour
     {
-        ChangerListener<Color> mFakeLightingDarknessColor;
+        private ChangerListener<Color> mFakeLightingDarknessColor;
 
         public Level Owner;
         public Hero Target;
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Core
 
       //  public CameraFakeLightingEffect FakeLightingEffect;
 
-        void Start()
+      private void Start()
         {
             var component = this.GetComponent<Camera>();
             mFakeLightingDarknessColor = new ChangerListener<Color>(Owner.Lighting.FakeLightingDarknessColor);
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Core
             FakeLightingDarknessColor_OnValueChanged(mFakeLightingDarknessColor.Value);
         }
 
-        void FakeLightingDarknessColor_OnValueChanged(Color oldColor)
+      private void FakeLightingDarknessColor_OnValueChanged(Color oldColor)
         {      
             if (Owner.Lighting.FakeLightingDarknessColor.grayscale < 1)
             {
@@ -38,7 +38,7 @@ namespace Assets.Scripts.Core
             }         
         }
 
-        void Update()
+      private void Update()
         {
             mFakeLightingDarknessColor.CheckValue(Owner.Lighting.FakeLightingDarknessColor);
         }    
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Core
     {
         public event Action<T> OnValueChanged;
 
-        T mValue;
+        private T mValue;
 
         public ChangerListener(T value)
         {

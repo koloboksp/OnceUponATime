@@ -17,14 +17,14 @@ public class SkinCheck : MonoBehaviour
     }
 
 
-    void Start()
+    private void Start()
     {
         Debug.Log(skin.bones.Length);
         
 
     }
 
-    void Update()
+    private void Update()
     {
         //show bones
        

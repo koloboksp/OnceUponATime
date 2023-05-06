@@ -8,11 +8,11 @@ namespace Assets.Scripts.Shared.Tags
 {
     public static class TagsStorageManager
     {
-        static Dictionary<Type, ITagContainer> mTagContainers = new Dictionary<Type, ITagContainer>();
-        static List<ITag> mTags = new List<ITag>();
-        static bool mInitialized;
+        private static Dictionary<Type, ITagContainer> mTagContainers = new Dictionary<Type, ITagContainer>();
+        private static List<ITag> mTags = new List<ITag>();
+        private static bool mInitialized;
 
-        static void CheckInit()
+        private static void CheckInit()
         {
             if (!mInitialized)
             {

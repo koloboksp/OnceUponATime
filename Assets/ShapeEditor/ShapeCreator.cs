@@ -17,7 +17,7 @@ namespace Assets.ShapeEditor
 
         [HideInInspector]
         [SerializeField]
-        List<Shape> mShapes = new List<Shape>();
+        private List<Shape> mShapes = new List<Shape>();
 
         public IEnumerable<Shape> Shapes => mShapes;
 

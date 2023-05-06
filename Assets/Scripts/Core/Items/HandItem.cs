@@ -1,28 +1,30 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Items
 {
     [CreateAssetMenu(fileName = "HandItem", menuName = "Items/HandItem", order = 51)]
     public class HandItem : WeaponItem
     {
-        public GameObject HandPunchEffectPrefab;
+        [FormerlySerializedAs("HandPunchEffectPrefab")] 
+        [SerializeField] private GameObject _handPunchEffectPrefab;
 
-        GameObject mHandPunchEffectInstance;
+        private GameObject _handPunchEffectInstance;
 
         public override void BeginDealDamage(Rect damageArea)
         { 
-            mHandPunchEffectInstance = Instantiate(HandPunchEffectPrefab);
-            mHandPunchEffectInstance.transform.position = damageArea.center;
-            var componentInChildren = HandPunchEffectPrefab.GetComponentInChildren<Animation>();
+            _handPunchEffectInstance = Instantiate(_handPunchEffectPrefab);
+            _handPunchEffectInstance.transform.position = damageArea.center;
+            var componentInChildren = _handPunchEffectPrefab.GetComponentInChildren<Animation>();
             componentInChildren.Play();
         }
 
         public override void EndDealDamage()
         {
-            if (mHandPunchEffectInstance != null)
+            if (_handPunchEffectInstance != null)
             {
-                Destroy(mHandPunchEffectInstance);
-                mHandPunchEffectInstance = null;
+                Destroy(_handPunchEffectInstance);
+                _handPunchEffectInstance = null;
             }
             base.EndDealDamage();
         }

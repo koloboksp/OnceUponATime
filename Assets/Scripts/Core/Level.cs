@@ -26,13 +26,13 @@ namespace Assets.Scripts.Core
         public Hero Hero;
         public TagHolder Id;
 
-        CheckPointData mCheckPointDataAtTheStart;
-        readonly List<CheckPoint> mCheckPoints = new List<CheckPoint>();
-        CheckPoint mLastActivatedCheckPoint = null;
+        private CheckPointData mCheckPointDataAtTheStart;
+        private readonly List<CheckPoint> mCheckPoints = new List<CheckPoint>();
+        private CheckPoint mLastActivatedCheckPoint = null;
 
         [SerializeField] private LevelLighting _levelLighting;
 
-        readonly List<HopelessPlace> mHopelessPlaces = new List<HopelessPlace>();
+        private readonly List<HopelessPlace> mHopelessPlaces = new List<HopelessPlace>();
 
         public Rect Bounds = new Rect(new Vector2(0,0), new Vector2(10,10));
 
@@ -126,25 +126,25 @@ namespace Assets.Scripts.Core
             Hero = heroInstance;
         }
 
-        void HopelessPlace_OnHeroEnter(HopelessPlace obj)
+        private void HopelessPlace_OnHeroEnter(HopelessPlace obj)
         {
             CameraDarknessEffect.PlungeIntoDarkness(Camera.main, 1.0f, CameraDarknessEffect.DarknessValues.Zero, CameraDarknessEffect.DarknessValues.One, this);
             StartCoroutine(WaitFor());
         }
 
 
-        void CheckPoint_OnBeforeDestroy(CheckPoint sender)
+        private void CheckPoint_OnBeforeDestroy(CheckPoint sender)
         {
             mLastActivatedCheckPoint = sender;
         }
 
-        void Hero_OnBeforeDestroy(Character sender)
+        private void Hero_OnBeforeDestroy(Character sender)
         {
             CameraDarknessEffect.PlungeIntoDarkness(Camera.main, 1.0f, CameraDarknessEffect.DarknessValues.Zero, CameraDarknessEffect.DarknessValues.One, this);
             StartCoroutine(WaitFor());
         }
 
-        IEnumerator WaitFor()
+        private IEnumerator WaitFor()
         {
             yield return new WaitForSeconds(1);
 
@@ -164,11 +164,12 @@ namespace Assets.Scripts.Core
             CameraDarknessEffect.PlungeIntoDarkness(Camera.main, 1.0f, CameraDarknessEffect.DarknessValues.One, CameraDarknessEffect.DarknessValues.Zero, this);        
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             OrderedFixedUpdateManager.FixedUpdate();
         }
-        void OnDrawGizmos()
+
+        private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             var rtC = transform.position + transform.rotation * (Bounds.center + Bounds.size * new Vector2(0.5f, 0.5f));

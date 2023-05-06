@@ -6,7 +6,7 @@ namespace Assets.ShapeEditor
 {
     public class HolesWallsEdgesDetector
     {
-        List<List<int>> mEdgesPointsIndexes;
+        private List<List<int>> mEdgesPointsIndexes;
         public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
 
         public HolesWallsEdgesDetector(Polygon polygon, List<List<int>> walkableEdgesPointsIndexes)

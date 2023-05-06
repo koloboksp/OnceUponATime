@@ -21,14 +21,11 @@ namespace Assets.Scripts.Effects
             return 0.0f;
         }
 
-        [NonSerialized]
-        Shader mUsingShader;
-        [NonSerialized]
-        float mDarknessValue = 0.0f;
-        [NonSerialized]
-        Material mMaterial;
-     
-        void Awake()
+        [NonSerialized] private Shader mUsingShader;
+        [NonSerialized] private float mDarknessValue = 0.0f;
+        [NonSerialized] private Material mMaterial;
+
+        private void Awake()
         {
             if (mUsingShader == null)
             {
@@ -40,13 +37,14 @@ namespace Assets.Scripts.Effects
                 mMaterial.hideFlags = HideFlags.HideAndDontSave;
             }
         }
-        void Start()
+
+        private void Start()
         {
             if (!mUsingShader && !mUsingShader.isSupported)
                 enabled = false;
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (mMaterial)
             {
@@ -56,21 +54,21 @@ namespace Assets.Scripts.Effects
         }
 
 
-        void OnRenderImage(RenderTexture sourceTexture, RenderTexture destTexture)
+        private void OnRenderImage(RenderTexture sourceTexture, RenderTexture destTexture)
         {
             mMaterial.SetFloat("_DarknessValue", mDarknessValue);
             Graphics.Blit(sourceTexture, destTexture, mMaterial);
         }
 
-        List<HolderInfo> mHolderInfos = new List<HolderInfo>();
+        private List<HolderInfo> mHolderInfos = new List<HolderInfo>();
 
-        class HolderInfo
+        private class HolderInfo
         {
             public readonly object Holder;
-            float mTimer;
-            float mTime;
-            DarknessValues mStartDarknessValue;
-            DarknessValues mEndDarknessValue;
+            private float mTimer;
+            private float mTime;
+            private DarknessValues mStartDarknessValue;
+            private DarknessValues mEndDarknessValue;
 
             public bool CalculationCompleted { get; private set; }
             public DarknessValues EndDarknessValue { get { return mEndDarknessValue; } }
@@ -115,7 +113,8 @@ namespace Assets.Scripts.Effects
                     CalculationCompleted = true;
             }
         }
-        void SetDarkness(DarknessValues value, object holder)
+
+        private void SetDarkness(DarknessValues value, object holder)
         {
             var fHolderInfo = mHolderInfos.Find(i => i.Holder == holder);
             if (value == DarknessValues.One)
@@ -132,7 +131,8 @@ namespace Assets.Scripts.Effects
 
             UpdateDarknessDerivedValue();
         }
-        void PlungeIntoDarkness(float time, DarknessValues startDarknessValue, DarknessValues endDarknessValue, object holder)
+
+        private void PlungeIntoDarkness(float time, DarknessValues startDarknessValue, DarknessValues endDarknessValue, object holder)
         {
             var fHolderInfo = mHolderInfos.Find(i => i.Holder == holder);
             if (fHolderInfo == null)
@@ -142,7 +142,7 @@ namespace Assets.Scripts.Effects
             StartCoroutine(ManualUpdate());
         }
 
-        void UpdateDarknessDerivedValue()
+        private void UpdateDarknessDerivedValue()
         {
             float maxDarknessValue = 0.0f;
             for (int hiIndex = 0; hiIndex < mHolderInfos.Count; hiIndex++)
@@ -160,7 +160,8 @@ namespace Assets.Scripts.Effects
                     this.enabled = true;
             }
         }
-        IEnumerator ManualUpdate()
+
+        private IEnumerator ManualUpdate()
         {
             while (true)
             {

@@ -21,18 +21,18 @@ namespace Assets.Scripts.UI
 
         public bool Active { get { return isActiveAndEnabled; } }
 
-       
-        void Awake()
+
+        private void Awake()
         {
             InputManager.AddProvider(this);
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             InputManager.RemoveProvider(this);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             MoveLeftBtn.AutoReturn = false;
             MoveRightBtn.AutoReturn = false;
@@ -43,7 +43,8 @@ namespace Assets.Scripts.UI
             if (OnActiveStatusChanged != null)
                 OnActiveStatusChanged(this);
         }
-        void OnDisable()
+
+        private void OnDisable()
         {
             if (OnActiveStatusChanged != null)
                 OnActiveStatusChanged(this);

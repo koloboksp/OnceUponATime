@@ -7,8 +7,8 @@ namespace Assets.Scripts.Core.Mobs
     public class Larva : GroundMob
     { 
         public Transform SmoothRotationRoot;
-      
-        void Update()
+
+        private void Update()
         {
             base.InnerUpdate();
         }

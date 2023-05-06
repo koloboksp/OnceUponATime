@@ -4,11 +4,11 @@ namespace Assets.Scripts.Core.Mobs
 {
     public class RotationInterpolator
     {
-        Quaternion mDesiredValue;
-        Quaternion mInterpolatedValue;
+        private Quaternion mDesiredValue;
+        private Quaternion mInterpolatedValue;
 
-        float mSpeed = 50.0f;
-        bool mReset = true;
+        private float mSpeed = 50.0f;
+        private bool mReset = true;
 
         public Quaternion Value
         {

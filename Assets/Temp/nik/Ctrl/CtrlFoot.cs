@@ -30,12 +30,12 @@ public class CtrlFoot : Ctrl
  
     private bool isInit = false;
 
-    void Start()
+    private void Start()
     {
         
     }
 
-    void Update()
+    private void Update()
     {
         if (!isActive) return;
         if (!isInit) return;

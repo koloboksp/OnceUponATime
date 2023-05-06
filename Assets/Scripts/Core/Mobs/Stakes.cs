@@ -10,14 +10,14 @@ namespace Assets.Scripts.Core.Mobs
         public float DamageForceOnContact = 4;
         public float DealDamageOnContactSpeed = 4.0f;
 
-        DealDamageOnContact mDealDamageOnContact;
+        private DealDamageOnContact mDealDamageOnContact;
 
-        void Awake()
+        private void Awake()
         {
             mDealDamageOnContact = new DealDamageOnContact(OnDealDamageOnContact);
         }
 
-        void OnDealDamageOnContact(DealDamageOnContact.ContactInfo contactInfo)
+        private void OnDealDamageOnContact(DealDamageOnContact.ContactInfo contactInfo)
         {
             Vector2 forceDirection;
             if (Vector2.Dot(contactInfo.AverageNormal, Vector2.right) < 0)
@@ -29,17 +29,17 @@ namespace Assets.Scripts.Core.Mobs
             contactInfo.Target.TakeDamage(this, new DamageInfo(DamageType.Push, DamageOnContact, contactInfo.AveragePoint, DamageForceOnContact, forceDirection));
         }
 
-        void OnCollisionEnter2D(Collision2D collisionInfo)
+        private void OnCollisionEnter2D(Collision2D collisionInfo)
         {
             mDealDamageOnContact.OnCollisionEnter2D(collisionInfo, this);
         }
 
-        void OnCollisionExit2D(Collision2D collisionInfo)
+        private void OnCollisionExit2D(Collision2D collisionInfo)
         {
             mDealDamageOnContact.OnCollisionExit2D(collisionInfo, this); 
         }
 
-        void Update()
+        private void Update()
         {
             mDealDamageOnContact.Update(DealDamageOnContactSpeed);
         }

@@ -7,8 +7,8 @@ namespace Assets.ShapeEditor
 {
     public class WalkableEdgesDetector
     {
-        float mWalkableAngle;
-        List<List<int>> mEdgesPointsIndexes;
+        private float mWalkableAngle;
+        private List<List<int>> mEdgesPointsIndexes;
 
         public List<List<int>> EdgesPointsIndexes => mEdgesPointsIndexes;
 
@@ -21,7 +21,7 @@ namespace Assets.ShapeEditor
             mEdgesPointsIndexes = FindWalkableEdges(hullPoints);
         }
 
-        List<List<int>> FindWalkableEdges(List<Point> hullPoints)
+        private List<List<int>> FindWalkableEdges(List<Point> hullPoints)
         {
             List<List<int>> walkablePolyEdges = new List<List<int>>();
 

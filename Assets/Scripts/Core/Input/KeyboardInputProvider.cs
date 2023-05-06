@@ -7,7 +7,7 @@ namespace Assets.Scripts.Core
     public class KeyboardInputProvider : MonoBehaviour, IInputProvider
     {
         [RuntimeInitializeOnLoadMethod()]
-        static void CreateInstance()
+        private static void CreateInstance()
         {
             GameObject container = new GameObject(nameof(KeyboardInputProvider));
             DontDestroyOnLoad(container);
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Core
         public class Association
         {
             public InputAction Action { get; }
-            List<KeyCode> mKeyCodes;
+            private List<KeyCode> mKeyCodes;
 
             public Association(InputAction action, List<KeyCode> codes)
             {
@@ -43,23 +43,23 @@ namespace Assets.Scripts.Core
 
         public event Action<IInputProvider> OnActiveStatusChanged;
 
-        void Awake()
+        private void Awake()
         {
             InputManager.AddProvider(this);
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             InputManager.RemoveProvider(this);
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (OnActiveStatusChanged != null)
                 OnActiveStatusChanged(this);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             if (OnActiveStatusChanged != null)
                 OnActiveStatusChanged(this);
@@ -75,7 +75,7 @@ namespace Assets.Scripts.Core
             InputManager.SetAction(this, result);
         }
 
-        void CheckKeys(List<Association> associations, ref InputAction result)
+        private void CheckKeys(List<Association> associations, ref InputAction result)
         {
             for (var aIndex = 0; aIndex < associations.Count; aIndex++)
             {
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Core
 
         public static IEnumerable<Association> UserKeysAssociations { get { return mUserKeysAssociations; } }
 
-        static readonly List<Association> mSystemKeysAssociations = new List<Association>()
+        private static readonly List<Association> mSystemKeysAssociations = new List<Association>()
         {
             new Association(InputAction.UIMoveUp, new List<KeyCode>(){KeyCode.UpArrow, KeyCode.W}),
             new Association(InputAction.UIMoveDown, new List<KeyCode>(){KeyCode.DownArrow, KeyCode.S}),
@@ -110,7 +110,8 @@ namespace Assets.Scripts.Core
             new Association(InputAction.UIEnter, new List<KeyCode>(){KeyCode.Return, KeyCode.Space}),
             new Association(InputAction.Esc, new List<KeyCode>(){KeyCode.Escape, KeyCode.Backspace}),
         };
-        static readonly List<Association> mUserKeysAssociations = new List<Association>()
+
+        private static readonly List<Association> mUserKeysAssociations = new List<Association>()
         {
             new Association(InputAction.Jump, new List<KeyCode>(){KeyCode.UpArrow, KeyCode.W, KeyCode.Space}),
             new Association(InputAction.MoveLeft, new List<KeyCode>(){KeyCode.LeftArrow, KeyCode.A}),

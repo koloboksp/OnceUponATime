@@ -4,27 +4,27 @@ using UnityEngine;
 namespace Assets.Scripts.Core.Mobs
 {
     public class GroundMovementBody : MonoBehaviour, IOrderedFixedUpdate
-    {  
-        readonly RaycastHit2D[] mNoAllocGroundDetectionResults = new RaycastHit2D[10];
-        readonly List<IManualMoved> mNoAllocManualMovedResults = new List<IManualMoved>();
+    {
+        private readonly RaycastHit2D[] mNoAllocGroundDetectionResults = new RaycastHit2D[10];
+        private readonly List<IManualMoved> mNoAllocManualMovedResults = new List<IManualMoved>();
 
-        readonly ReuseList<ContactInfo> mContacts = new ReuseList<ContactInfo>();
-        readonly ReuseList<ContactInfo> mRaycastContacts = new ReuseList<ContactInfo>();
+        private readonly ReuseList<ContactInfo> mContacts = new ReuseList<ContactInfo>();
+        private readonly ReuseList<ContactInfo> mRaycastContacts = new ReuseList<ContactInfo>();
 
-        readonly MovingOperationInfo mMovingOperationInfo = new MovingOperationInfo();
-        readonly JumpOperationInfo mJumpOperationInfo = new JumpOperationInfo();
+        private readonly MovingOperationInfo mMovingOperationInfo = new MovingOperationInfo();
+        private readonly JumpOperationInfo mJumpOperationInfo = new JumpOperationInfo();
 
-        GameObject mUnderfootObject;
-        GameObject mPreviousFrameUnderfootObject;
+        private GameObject mUnderfootObject;
+        private GameObject mPreviousFrameUnderfootObject;
 
-        bool mStaticObjectDetectedInMovementDirection;
-        bool mMovableObjectDetectedInMovementDirection;
+        private bool mStaticObjectDetectedInMovementDirection;
+        private bool mMovableObjectDetectedInMovementDirection;
 
-        Vector2 mPreviousLocalMovingAxis;
-        Vector2 mBodyRelativeVelocity;
+        private Vector2 mPreviousLocalMovingAxis;
+        private Vector2 mBodyRelativeVelocity;
 
-        float mBreakMovingSpeed;
-        bool mNeedToApplyBrakeForce = false;
+        private float mBreakMovingSpeed;
+        private bool mNeedToApplyBrakeForce = false;
 
         public GroundMovementCharacter Owner;
 
@@ -113,13 +113,13 @@ namespace Assets.Scripts.Core.Mobs
             Body.AddForce(transform.TransformDirection(localForce) * Body.mass, ForceMode2D.Impulse);
         }
 
-        float CalculateStartSpeedFromHeight(Vector2 localVelocity)
+        private float CalculateStartSpeedFromHeight(Vector2 localVelocity)
         {
             //vs = sqrt(h * 2 * g) - v0; 
             return Mathf.Sqrt(JumpHeight * 2 * Physics2D.gravity.magnitude * Body.gravityScale) - localVelocity.y;
         }
 
-        void FindUnderfootObjectInContacts(ref GameObject underfootObject, ref Vector2 relativeVelocity)
+        private void FindUnderfootObjectInContacts(ref GameObject underfootObject, ref Vector2 relativeVelocity)
         {
             int forwardContactIndex = -1;
             int backwardContactIndex = -1;
@@ -148,7 +148,7 @@ namespace Assets.Scripts.Core.Mobs
             }
         }
 
-        void FindUnderfootObjectByRaycast(ref GameObject underfootObject)
+        private void FindUnderfootObjectByRaycast(ref GameObject underfootObject)
         {
             var resultsCount = Physics2D.RaycastNonAlloc(this.transform.position, -transform.up, mNoAllocGroundDetectionResults, 1.0f);
 
@@ -175,7 +175,7 @@ namespace Assets.Scripts.Core.Mobs
         }
 
 
-        void UnderfootObjectIsManualMoved(ref Vector2 externalLocalVelocity)
+        private void UnderfootObjectIsManualMoved(ref Vector2 externalLocalVelocity)
         {       
             mUnderfootObject.GetComponents<IManualMoved>(mNoAllocManualMovedResults);
 
@@ -190,13 +190,13 @@ namespace Assets.Scripts.Core.Mobs
             }
         }
 
-        void GetLocalMovingAxisFromRaycast(ref Vector2 localMovingAxis)
+        private void GetLocalMovingAxisFromRaycast(ref Vector2 localMovingAxis)
         {
             if(mRaycastContacts.Count > 0)
                 localMovingAxis = ((Owner.MovingDirection == MovingDirection.Forward) ? -1 : 1) * Vector2.Perpendicular(mRaycastContacts[0].LocalNormal);
         }
 
-        void GetLocalMovingAxisFromContacts(ref Vector2 localMovingAxis)
+        private void GetLocalMovingAxisFromContacts(ref Vector2 localMovingAxis)
         {
             if (mContacts.Count > 0)
             {
@@ -340,14 +340,15 @@ namespace Assets.Scripts.Core.Mobs
         }
 
 
-        void CalculateBreakForce(Vector2 localVelocity)
+        private void CalculateBreakForce(Vector2 localVelocity)
         {
             var velocityOnGroundSideVec = UnityExtension.Project(localVelocity, mPreviousLocalMovingAxis);
             var velocityAbs = Mathf.Min(Mathf.Abs(velocityOnGroundSideVec.magnitude), mBreakMovingSpeed);
 
             Body.AddForce(transform.rotation * (-mPreviousLocalMovingAxis * velocityAbs) * Body.mass, ForceMode2D.Impulse);
         }
-        void ApplyBreakForce(Vector2 localVelocity)
+
+        private void ApplyBreakForce(Vector2 localVelocity)
         {
             var velocityOnGroundSideVec = UnityExtension.Project(localVelocity, mPreviousLocalMovingAxis);
             var velocityAbs = Mathf.Min(Mathf.Abs(velocityOnGroundSideVec.magnitude), mBreakMovingSpeed);
@@ -380,7 +381,7 @@ namespace Assets.Scripts.Core.Mobs
             }
         }
 
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             for (int i = 0 ; i < mContacts.Count; i++)
             {

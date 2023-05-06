@@ -15,7 +15,7 @@ namespace Assets.ShapeEditor.Geometry
         public Point[] vertices;
         public int[] triangles;
 
-        Shape[] shapes;
+        private Shape[] shapes;
        
         public CompositeShape(IEnumerable<Shape> shapes)
         {

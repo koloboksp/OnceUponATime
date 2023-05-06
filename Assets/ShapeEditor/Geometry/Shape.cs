@@ -9,8 +9,7 @@ namespace Assets.ShapeEditor.Geometry
     {
         public List<Vector2> points = new List<Vector2>();
 
-        [SerializeField]
-        List<Point> mPoints = new List<Point>();
+        [SerializeField] private List<Point> mPoints = new List<Point>();
 
         public Point this[int index]
         {

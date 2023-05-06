@@ -8,13 +8,14 @@ namespace Assets.Scripts.Effects
         public float AngleSpeed = 30.0f;
         public bool FixPosition = true;
 
-        Vector2 mStartPosition;
+        private Vector2 mStartPosition;
 
-        void Start()
+        private void Start()
         {
             mStartPosition = Body.position;
         }
-        void FixedUpdate()
+
+        private void FixedUpdate()
         {
             if(FixPosition)
                 Body.MovePosition(mStartPosition);

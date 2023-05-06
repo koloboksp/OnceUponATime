@@ -5,7 +5,7 @@ namespace Assets.Scripts.UI
 {
     public class HealthBarUI : MonoBehaviour
     {
-        enum State
+        private enum State
         {
             Show,
             SmoothHide,
@@ -16,16 +16,16 @@ namespace Assets.Scripts.UI
         public RectTransform HealthBarTransform;
 
 
-        State mCurrentState;
+        private State mCurrentState;
 
-        float mHideTime;
-        float mHideTimer = 0.0f;
+        private float mHideTime;
+        private float mHideTimer = 0.0f;
 
-        Color mBackgroundInitialColor;
-        Color mHealthBarInitialColor;
-        Color mBackgroundHideColor;
-        Color mHealthBarHideColor;
-        float mInitialWidth;
+        private Color mBackgroundInitialColor;
+        private Color mHealthBarInitialColor;
+        private Color mBackgroundHideColor;
+        private Color mHealthBarHideColor;
+        private float mInitialWidth;
 
         public void OnEnable()
         {
@@ -62,7 +62,7 @@ namespace Assets.Scripts.UI
             mHideTimer = 0;
         }
 
-        void Update()
+        private void Update()
         {
             if (mCurrentState == State.Show)
             {

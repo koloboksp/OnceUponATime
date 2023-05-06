@@ -2,15 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Core.Items;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class HeroFightLogic : MonoBehaviour
     {
-        public HeroMind Mind;
-        
-        public HeroStrikesInfos StrikesInfos;
-
         private static Dictionary<WeaponItemPlacement, int> mItemPriorityInStrikeCombination =
             new Dictionary<WeaponItemPlacement, int>()
             {
@@ -19,77 +16,80 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
                 {WeaponItemPlacement.OnLeg, 2},
                 {WeaponItemPlacement.InLeftHand, 3},
             };
+        
+        [FormerlySerializedAs("Mind")] [SerializeField] private HeroMind _mind;
+        [FormerlySerializedAs("StrikesInfos")] [SerializeField] private HeroStrikesInfos _strikesInfos;
+        
+        private List<KeyValuePair<HeroWeaponSlot, HeroRepresentationAboutWeaponItem>> _combination;
+        private List<int> _selectedStrikeCombinations ;
+        private int _itemIndex = 0;
+        private int _strikeCombinationIndex = 0;
 
-        List<KeyValuePair<HeroWeaponSlot, HeroRepresentationAboutWeaponItem>> mCombination;
-        List<int> mSelectedStrikeCombinations ;
-        int mItemIndex = 0;
-        int mStrikeCombinationIndex = 0;
-
-        void Start()
+        private void Start()
         {
-            Mind.Owner.OnItemInWeaponSlotsChanged += Owner_OnItemInWeaponSlotsChanged;
-            Mind.Owner.OnTakeDamage += Owner_OnTakeDamage;
+            _mind.Owner.OnItemInWeaponSlotsChanged += Owner_OnItemInWeaponSlotsChanged;
+            _mind.Owner.OnTakeDamage += Owner_OnTakeDamage;
         }
 
-        void Owner_OnTakeDamage(Character arg1, DamageInfo arg2)
+        private void Owner_OnTakeDamage(Character arg1, DamageInfo arg2)
         {
-            mCombination = null;
-            mItemIndex = 0;
-            mStrikeCombinationIndex = 0;
+            _combination = null;
+            _itemIndex = 0;
+            _strikeCombinationIndex = 0;
         }
 
-        void Owner_OnItemInWeaponSlotsChanged(Hero sender)
+        private void Owner_OnItemInWeaponSlotsChanged(Hero sender)
         {
-            mCombination = null;
-            mItemIndex = 0;
-            mStrikeCombinationIndex = 0;
+            _combination = null;
+            _itemIndex = 0;
+            _strikeCombinationIndex = 0;
         }
 
         public AttackCombination GetAttackCombination(HeroAttackType attackType)
         {
             if (attackType == HeroAttackType.MainWeapon)
             {
-                if (mCombination == null)
+                if (_combination == null)
                 {
-                    mCombination = Mind.Owner.MainWeaponSlots
+                    _combination = _mind.Owner.MainWeaponSlots
                         .Where(i => i.InventoryItem != null)
-                        .Select(i => new KeyValuePair<HeroWeaponSlot, HeroRepresentationAboutWeaponItem>(i, Mind.RepresentationAboutItems.Find(ii => ii.Target == i.InventoryItem.ItemPrefab) as HeroRepresentationAboutWeaponItem))
+                        .Select(i => new KeyValuePair<HeroWeaponSlot, HeroRepresentationAboutWeaponItem>(i, _mind.RepresentationAboutItems.Find(ii => ii.Target == i.InventoryItem.ItemPrefab) as HeroRepresentationAboutWeaponItem))
                         .OrderBy((l) => mItemPriorityInStrikeCombination[l.Value.Placement]).ToList();    
                 }
 
-                if (mItemIndex == 0 && mStrikeCombinationIndex == 0)
+                if (_itemIndex == 0 && _strikeCombinationIndex == 0)
                 {
-                    mSelectedStrikeCombinations = mCombination.Select(i => Random.Range(0, i.Value.StrikesCombinations.Count)).ToList();
+                    _selectedStrikeCombinations = _combination.Select(i => Random.Range(0, i.Value.StrikesCombinations.Count)).ToList();
                 }
 
-                var strikesCombination = mCombination[mItemIndex].Value.StrikesCombinations[mSelectedStrikeCombinations[mItemIndex]].Strikes;
-                var strikeInfo = StrikesInfos.StrikeInfos.Find(i => i.Strike == strikesCombination[mStrikeCombinationIndex]);
+                var strikesCombination = _combination[_itemIndex].Value.StrikesCombinations[_selectedStrikeCombinations[_itemIndex]].Strikes;
+                var strikeInfo = _strikesInfos.StrikeInfos.First(i => i.Strike == strikesCombination[_strikeCombinationIndex]);
 
                 var ac = new AttackCombination(
                     attackType,
-                    mCombination[mItemIndex].Value.UsingType,
-                    mCombination[mItemIndex].Key,
-                    strikesCombination[mStrikeCombinationIndex],
-                    mCombination[mItemIndex].Value.AttackPartTime,
-                    mCombination[mItemIndex].Value.WaitingPartTime,
+                    _combination[_itemIndex].Value.UsingType,
+                    _combination[_itemIndex].Key,
+                    strikesCombination[_strikeCombinationIndex],
+                    _combination[_itemIndex].Value.AttackPartTime,
+                    _combination[_itemIndex].Value.WaitingPartTime,
                     strikeInfo.BlockMovement,
                     strikeInfo.PreparationNeeded,
-                    strikeInfo.DealDamageTimeInterval * mCombination[mItemIndex].Value.AttackPartTime,
-                    strikeInfo.ShotTime * mCombination[mItemIndex].Value.AttackPartTime,
+                    strikeInfo.DealDamageTimeInterval * _combination[_itemIndex].Value.AttackPartTime,
+                    strikeInfo.ShotTime * _combination[_itemIndex].Value.AttackPartTime,
                     strikeInfo.Move,
                     strikeInfo.MovingSpeed,
                     strikeInfo.MovingDirection,
                     strikeInfo.MovingTimeInterval);
 
 
-                mStrikeCombinationIndex++;
-                if (mStrikeCombinationIndex >= strikesCombination.Count)
+                _strikeCombinationIndex++;
+                if (_strikeCombinationIndex >= strikesCombination.Count)
                 {
-                    mStrikeCombinationIndex = 0;
-                    mItemIndex++;
-                    if (mItemIndex >= mCombination.Count)
+                    _strikeCombinationIndex = 0;
+                    _itemIndex++;
+                    if (_itemIndex >= _combination.Count)
                     {
-                        mItemIndex = 0;
+                        _itemIndex = 0;
                     }
                 }
 
@@ -110,7 +110,6 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             public readonly float AttackPartTime;
             public readonly float WaitPartTime;
 
-
             public readonly bool BlockMovement;
             public readonly bool PreparationNeeded;
 
@@ -121,7 +120,6 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             public readonly float MovingSpeed;
             public readonly MovingDirection MovingDirection;
             public readonly Vector2 MovingTimeInterval;
-
             
             public AttackCombination(HeroAttackType attackType,
                 WeaponItemUsingType usingType,
@@ -153,8 +151,6 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
                 MovingDirection = movingDirection;
                 MovingTimeInterval = movingTimeInterval;
             }
-
-            
         }
     }
 }

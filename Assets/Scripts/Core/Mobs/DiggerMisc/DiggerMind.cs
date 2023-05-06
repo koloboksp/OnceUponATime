@@ -21,21 +21,21 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
 
         public float RotationSpeed = 1.0f;
 
-        bool mFirstLanding;
-        float mTraveledDistance;
+        private bool mFirstLanding;
+        private float mTraveledDistance;
 
-        Operation mTakeDamageOperation = new Operation();
-        Operation mDealDamageOnContactOperation = new Operation();
+        private Operation mTakeDamageOperation = new Operation();
+        private Operation mDealDamageOnContactOperation = new Operation();
 
 
-        void Start()
+        private void Start()
         {     
             Owner.OnLanded += Owner_OnOnLanded;    
             Owner.OnTakeDamage += Owner_OnTakeDamage;
             Owner.OnDealDamageOnContact += Owner_OnDealDamageOnContact;
         }
-   
-        void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
+
+        private void Owner_OnTakeDamage(Character sender, DamageInfo damageInfo)
         {
             mTakeDamageOperation.Execute(WaitTimeAfterTakeDamage);
 
@@ -43,20 +43,20 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
             mDealDamageOnContactOperation.Abort();
         }
 
-      
-        void Owner_OnOnLanded(GroundMovementCharacter obj)
+
+        private void Owner_OnOnLanded(GroundMovementCharacter obj)
         {
             mFirstLanding = true;
         }
 
-        void Owner_OnDealDamageOnContact()
+        private void Owner_OnDealDamageOnContact()
         {
             mDealDamageOnContactOperation.Execute(1.0f);
 
             Owner.StopMove();
         }
 
-        void Update()
+        private void Update()
         {
             DetermineCurrentAction();
 
@@ -70,7 +70,7 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
             mDealDamageOnContactOperation.Process(Time.deltaTime);
         }
 
-        void DetermineCurrentAction()
+        private void DetermineCurrentAction()
         {
             if (!Owner.IsAlive)
                 return;
@@ -145,7 +145,7 @@ namespace Assets.Scripts.Core.Mobs.DiggerMisc
             Owner.Move(CalculateAcceleration(Owner.WalkSpeed, 0.5f));
         }
 
-        float CalculateAcceleration(float velocity, float distance)
+        private float CalculateAcceleration(float velocity, float distance)
         {
             return (velocity * velocity) / (2.0f * distance);
         }

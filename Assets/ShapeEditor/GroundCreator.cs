@@ -7,7 +7,7 @@ namespace Assets.ShapeEditor
 {
     public class GroundCreator : ShapeCreator
     {
-        float HorizontalOffsetOfWalkableExtremePoints = 0.05f;
+        private float HorizontalOffsetOfWalkableExtremePoints = 0.05f;
 
         public float WalkableAngle = 35;
         public bool GenerateWalkablePart = true;

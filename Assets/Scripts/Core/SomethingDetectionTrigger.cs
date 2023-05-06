@@ -6,15 +6,15 @@ namespace Assets.Scripts.Core
 {
     public class SomethingDetectionTrigger<T> : Trigger 
     {
-        List<T> mNoAllocForSearch = new List<T>();
-        List<Pair> mEnemies = new List<Pair>();
+        private List<T> mNoAllocForSearch = new List<T>();
+        private List<Pair> mEnemies = new List<Pair>();
 
         public int EnemiesCount
         {
             get { return mEnemies.Count; }
         }
 
-        int IndexOf(T key)
+        private int IndexOf(T key)
         {
             for (var index = 0; index < mEnemies.Count; index++)
             {
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Core
             return -1;
         }
 
-        void OnTriggerEnter2D(Collider2D collider2d)
+        private void OnTriggerEnter2D(Collider2D collider2d)
         {
             if (collider2d.attachedRigidbody != null && !collider2d.isTrigger)
             {
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Core
             }
         }
 
-        void OnTriggerExit2D(Collider2D collider2d)
+        private void OnTriggerExit2D(Collider2D collider2d)
         {
             for (var index = mEnemies.Count - 1; index >= 0; index--)
             {
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Core
         public class Pair
         {
             public readonly T Key;
-            readonly List<Collider2D> mValues = new List<Collider2D>();
+            private readonly List<Collider2D> mValues = new List<Collider2D>();
 
             public Pair(T key, Collider2D value)
             {

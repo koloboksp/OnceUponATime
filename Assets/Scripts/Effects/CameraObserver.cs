@@ -11,7 +11,7 @@ namespace Assets.Scripts.Core
         public float Distance = 8;
         public float VerticalOffset = 2;
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             var screenPointToRay = Observer.ViewportPointToRay(new Vector3(0,  0.0f, 0));
             var screenPointToRay1 = Observer.ViewportPointToRay(new Vector3(1f,  1f, 0));

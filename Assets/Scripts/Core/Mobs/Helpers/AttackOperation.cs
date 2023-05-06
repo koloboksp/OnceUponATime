@@ -6,36 +6,36 @@ namespace Assets.Scripts.Core.Mobs.Helpers
 { 
     public class AttackOperation : Operation
     {
-        enum MeleeAttackState
+        private enum MeleeAttackState
         {
             WaitForBegin,
             Process,
             End,
         }
 
-        enum RangedAttackState
+        private enum RangedAttackState
         {
             WaitForBegin,
             WaitForShot,
             End,          
         }
 
-        static readonly Collider2D[] mNoAllocFoundResults = new Collider2D[10];
-        static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
+        private static readonly Collider2D[] mNoAllocFoundResults = new Collider2D[10];
+        private static readonly List<IDamageable> mNoAllocGetComponent = new List<IDamageable>();
 
-        Action<AttackOperation> mOnInWaitPart;
+        private Action<AttackOperation> mOnInWaitPart;
 
-        float mPreparePartTime;
-        float mAttackPartTime;
-        float mWaitPartTime;
-        
-        WeaponItemUsingType mUsingType;
+        private float mPreparePartTime;
+        private float mAttackPartTime;
+        private float mWaitPartTime;
 
-        Vector2 mMeleeDealDamageTimeInterval;
-        MeleeAttackState mMeleeAttackState;
+        private WeaponItemUsingType mUsingType;
 
-        float mShotTime;
-        RangedAttackState mRangedAttackState;
+        private Vector2 mMeleeDealDamageTimeInterval;
+        private MeleeAttackState mMeleeAttackState;
+
+        private float mShotTime;
+        private RangedAttackState mRangedAttackState;
 
         public bool InAttackPart { get; private set; }
         public bool InWaitingPart { get; private set; }

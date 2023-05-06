@@ -7,9 +7,9 @@ namespace Assets.Scripts.UI
     {
         public RectTransform HealthBarTransform;
 
-        float mInitialWidth;
+        private float mInitialWidth;
 
-        void OnEnable()
+        private void OnEnable()
         {
             mInitialWidth = HealthBarTransform.rect.width;
         }

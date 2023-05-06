@@ -6,21 +6,21 @@ namespace Assets.Scripts.Core.Items
     {
         public MapItem Target;
 
-        Rigidbody2D mBody;
+        private Rigidbody2D _body;
 
-        void Start()
+        private void Start()
         {
-            mBody = gameObject.AddComponent<Rigidbody2D>();
-            mBody.freezeRotation = true;
+            _body = gameObject.AddComponent<Rigidbody2D>();
+            _body.freezeRotation = true;
             var circleCollider2d = gameObject.AddComponent<CircleCollider2D>();
             circleCollider2d.radius = 0.1f;
             circleCollider2d.offset = Vector2.up * 0.1f;
-            mBody.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
+            _body.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
         }
 
-        void Update()
+        private void Update()
         {
-            if (mBody.IsSleeping())
+            if (_body.IsSleeping())
                 Destroy(this.gameObject);
 
             if (Target != null)

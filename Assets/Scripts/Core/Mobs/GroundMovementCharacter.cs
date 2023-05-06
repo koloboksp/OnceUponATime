@@ -25,10 +25,10 @@ namespace Assets.Scripts.Core.Mobs
         public bool InAccelerationState { get; private set; }
         public bool InBreakingState { get; private set; }
 
-        float mMovingSpeed;
-        float mBrakeAcceleration;
-        float mAcceleration;
-        float mDesiredMovingSpeed;
+        private float mMovingSpeed;
+        private float mBrakeAcceleration;
+        private float mAcceleration;
+        private float mDesiredMovingSpeed;
 
         public float MovingSpeed => mMovingSpeed;
 
@@ -144,12 +144,12 @@ namespace Assets.Scripts.Core.Mobs
         public event Action OnSmoothRotationEnd;
         public event Action OnSmoothRotationProcess;
 
-        float mMovingSpeed;
-        Direction mDirection = Direction.Right;
-        MovingDirection mMovingDirection = MovingDirection.Forward;
+        private float mMovingSpeed;
+        private Direction mDirection = Direction.Right;
+        private MovingDirection mMovingDirection = MovingDirection.Forward;
 
-        readonly SmoothRotationOperation mSmoothRotationOperation = new SmoothRotationOperation();
-        readonly Operation mStunOperation = new Operation();
+        private readonly SmoothRotationOperation mSmoothRotationOperation = new SmoothRotationOperation();
+        private readonly Operation mStunOperation = new Operation();
 
         public GroundMovementBody Body;
 
@@ -241,14 +241,14 @@ namespace Assets.Scripts.Core.Mobs
                     OnSmoothRotationStart();
             }
         }
-        
-        void SmoothRotation_OnProcess(Operation obj)
+
+        private void SmoothRotation_OnProcess(Operation obj)
         {
             if (OnSmoothRotationProcess != null)
                 OnSmoothRotationProcess();
         }
 
-        void SmoothRotation_OnComplete(Operation obj)
+        private void SmoothRotation_OnComplete(Operation obj)
         {
             if (OnSmoothRotationEnd != null)
                 OnSmoothRotationEnd();

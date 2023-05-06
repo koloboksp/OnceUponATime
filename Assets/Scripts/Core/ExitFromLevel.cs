@@ -46,7 +46,7 @@ namespace Assets.Scripts.Core
             SceneChanger.Change(levelTag.Name, TagsStorageManager.FindTag<LevelTag>(Level.ActiveLevel.Id.Id).Name, true, this, changeUserData, 1, 1);
         }
 
-        void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(transform.position + ((ExitDirection == Direction.Right) ? Vector3.right : Vector3.left), 0.1f);

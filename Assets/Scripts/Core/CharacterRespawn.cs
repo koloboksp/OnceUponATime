@@ -5,7 +5,7 @@ namespace Assets.Scripts.Core
 {
     public class CharacterRespawn : MonoBehaviour
     {
-        const string GizmosIconName = "MonsterRespawn";
+        private const string GizmosIconName = "MonsterRespawn";
 
         public GameObject Prefab;
 
@@ -15,7 +15,7 @@ namespace Assets.Scripts.Core
             SceneManager.MoveGameObjectToScene(instance, gameObject.scene);
         }
 
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             Gizmos.DrawIcon(this.gameObject.transform.position, GizmosIconName, true);
         }

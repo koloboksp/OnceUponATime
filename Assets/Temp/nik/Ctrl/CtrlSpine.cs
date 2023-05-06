@@ -17,7 +17,7 @@ public class CtrlSpine : Ctrl
 
     private Vector3 mid0, mid1;
 
-    void Start()
+    private void Start()
     {
         
     }

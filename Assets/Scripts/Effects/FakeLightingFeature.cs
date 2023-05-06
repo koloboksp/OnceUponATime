@@ -11,9 +11,9 @@ namespace Assets.Scripts.Effects
 		public const string FakeLightTextureName = "_FakeLightRenderTexture";
 		public const RenderPassEvent FirePassEvent = RenderPassEvent.AfterRenderingOpaques;
 
-		RenderTargetHandle _FakeLightRenderTexture;
-		FakeLightPass mFakeLightPass;
-		LightingMixPass mLightingMixPass;
+		private RenderTargetHandle _FakeLightRenderTexture;
+		private FakeLightPass mFakeLightPass;
+		private LightingMixPass mLightingMixPass;
 
 		public Settings settings;
 		

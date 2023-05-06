@@ -52,7 +52,7 @@ namespace Assets.Scripts.Effects
             UpdateRange(_range);
         }
 
-        void UpdateRange(float range)
+        private void UpdateRange(float range)
         {
             if (_light != null)
             {
@@ -73,11 +73,11 @@ namespace Assets.Scripts.Effects
         }
 
 
-        float mTimer;
-        float mTimeToChange ;
-        bool WaitFor;
+        private float mTimer;
+        private float mTimeToChange ;
+        private bool WaitFor;
 
-        void Update()
+        private void Update()
         {
             if (_blink)
             {

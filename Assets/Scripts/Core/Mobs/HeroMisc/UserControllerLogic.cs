@@ -4,7 +4,7 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 {
     public class UserControllerLogic : MonoBehaviour
     {
-        bool mNeedToBreak = false;
+        private bool mNeedToBreak = false;
 
         public HeroMind Mind;
 
@@ -12,10 +12,10 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
         public bool DebugMoveRight = false;
         public bool DebugAttack = false;
 
-        readonly InputDetectionHelper mJumpInputHelper = new InputDetectionHelper();
-        readonly InputDetectionHelper mAttackInputHelper = new InputDetectionHelper();
+        private readonly InputDetectionHelper mJumpInputHelper = new InputDetectionHelper();
+        private readonly InputDetectionHelper mAttackInputHelper = new InputDetectionHelper();
 
-        void Start()
+        private void Start()
         {
             mAttackInputHelper.Threshold = 0.4f;
 
@@ -23,8 +23,8 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             InputManager.OnInputActionEnded += InputManager_OnOnInputActionEnded;
         }
 
-     
-        void InputManager_OnInputActionStarted(InputAction action, InputAction previousAction)
+
+        private void InputManager_OnInputActionStarted(InputAction action, InputAction previousAction)
         {
             if (InputManager.HasAction(action, InputAction.Jump))
             {
@@ -39,8 +39,8 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             }
         }
 
-     
-        void InputManager_OnOnInputActionEnded(InputAction endedActions, InputAction previousAction)
+
+        private void InputManager_OnOnInputActionEnded(InputAction endedActions, InputAction previousAction)
         {
             if (mReadAttackValue)
             {
@@ -53,8 +53,8 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             }
         }
 
-        bool mReadAttackValue;
-        bool mPrepareComplete;
+        private bool mReadAttackValue;
+        private bool mPrepareComplete;
 
         public void Update()
         {
@@ -158,10 +158,10 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
 
     public class InputDetectionHelper
     {
-        float mTimer = 0;
+        private float mTimer = 0;
         public float Threshold { get; set; } = 0.1f;
 
-        bool mActive;
+        private bool mActive;
 
         
         public void Activate()

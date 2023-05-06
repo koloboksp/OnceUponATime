@@ -11,13 +11,13 @@ namespace Assets.Scripts.Core.Mobs
         public event Action<Digger> OnAttackStateChanged;
         
         public Transform OrientedByGroundRoot;
-        readonly RotationInterpolator mOrientedByGroundRootInterpolator = new RotationInterpolator();
+        private readonly RotationInterpolator mOrientedByGroundRootInterpolator = new RotationInterpolator();
         public Transform SmoothRotationRoot;
- 
-        readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();    
+
+        private readonly SimpleMeleeAttackOperation mAttackOperation = new SimpleMeleeAttackOperation();    
         public AttackOperation AttackOperation => mAttackOperation;
 
-        void Update()
+        private void Update()
         {
             base.InnerUpdate();
 
@@ -40,19 +40,19 @@ namespace Assets.Scripts.Core.Mobs
                 OnAttackStateChanged(this);
         }
 
-        void Attack_Abort(Operation obj)
+        private void Attack_Abort(Operation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);
         }
 
-        void Attack_InWaitPart(AttackOperation obj)
+        private void Attack_InWaitPart(AttackOperation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);
         }
 
-        void Attack_OnComplete(Operation obj)
+        private void Attack_OnComplete(Operation obj)
         {
             if (OnAttackStateChanged != null)
                 OnAttackStateChanged(this);

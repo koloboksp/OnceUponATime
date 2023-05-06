@@ -6,11 +6,11 @@ using UnityEngine;
 namespace Assets.ShapeEditor
 {
     public class FrontWallsMeshGenerator
-    {  
-        List<int> mTriangles = new List<int>();
-        List<Vector3> mVertices = new List<Vector3>();
-        List<Vector3> mNormals = new List<Vector3>();
-        List<Vector2> mUVs = new List<Vector2>();
+    {
+        private List<int> mTriangles = new List<int>();
+        private List<Vector3> mVertices = new List<Vector3>();
+        private List<Vector3> mNormals = new List<Vector3>();
+        private List<Vector2> mUVs = new List<Vector2>();
 
         public List<int> Triangles => mTriangles;
         public List<Vector3> Vertices => mVertices;

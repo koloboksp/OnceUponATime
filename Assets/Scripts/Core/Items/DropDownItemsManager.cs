@@ -29,7 +29,7 @@ namespace Assets.Scripts.Core.Items
 
         public List<DropDownLevelInfo> LevelInfos = new List<DropDownLevelInfo>();
 
-        static DropDownItemsManager mInstance;
+        private static DropDownItemsManager mInstance;
         public static DropDownItemsManager Instance
         {
             get

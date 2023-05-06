@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core
     {
         public event Action<HopelessPlace> OnHeroEnter;
 
-        void OnTriggerEnter2D(Collider2D collider2d)
+        private void OnTriggerEnter2D(Collider2D collider2d)
         {
             var component = collider2d.gameObject.GetComponent<Hero>();
             if (component != null)

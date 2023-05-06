@@ -1,39 +1,39 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Items
 {
     [CreateAssetMenu(fileName = "SlingshotItem", menuName = "Items/SlingshotItem", order = 51)]
     public class SlingshotItem : RangedWeaponItem
     {
-        public SlingshotBullet BulletPrefab;
-        public float ShotForce = 20;
-
-
-        SlingshotBullet mBulletInstance;
+        [FormerlySerializedAs("BulletPrefab")] [SerializeField] private SlingshotBullet _bulletPrefab;
+        [FormerlySerializedAs("ShotForce")] [SerializeField] private float _shotForce = 20;
+        
+        private SlingshotBullet _bulletInstance;
 
         public override void Shot(float angle)
         {
-            mBulletInstance = Instantiate(BulletPrefab, mEquipmentViewPartInstance.transform.position, mEquipmentViewPartInstance.transform.rotation);
-            mBulletInstance.Owner = this;
-            mBulletInstance.IgnoreCollisions(true);
+            _bulletInstance = Instantiate(_bulletPrefab, mEquipmentViewPartInstance.transform.position, mEquipmentViewPartInstance.transform.rotation);
+            _bulletInstance.Owner = this;
+            _bulletInstance.IgnoreCollisions(true);
             
             var directionOrientation = Owner.transform.rotation * Quaternion.Euler(0, 0, angle);
-            mBulletInstance.AddForce((directionOrientation * Vector3.right) * ShotForce * mBulletInstance.Mass);
-            mBulletInstance.OnDestroy += BulletInstance_OnDestroy;
+            _bulletInstance.AddForce((directionOrientation * Vector3.right) * _shotForce * _bulletInstance.Mass);
+            _bulletInstance.OnDestroy += BulletInstance_OnDestroy;
         }
 
         public override void EndAttack()
         {
-            if(mBulletInstance != null)
-                mBulletInstance.IgnoreCollisions(false);
+            if(_bulletInstance != null)
+                _bulletInstance.IgnoreCollisions(false);
         }
 
-        void BulletInstance_OnDestroy(SlingshotBullet bullet)
+        private void BulletInstance_OnDestroy(SlingshotBullet bullet)
         {
-            if (mBulletInstance == bullet)
+            if (_bulletInstance == bullet)
             {
-                mBulletInstance.OnDestroy -= BulletInstance_OnDestroy;
-                mBulletInstance = null;
+                _bulletInstance.OnDestroy -= BulletInstance_OnDestroy;
+                _bulletInstance = null;
             }
         }
     }

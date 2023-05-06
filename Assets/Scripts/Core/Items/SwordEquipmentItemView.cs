@@ -1,23 +1,25 @@
 using Assets.Scripts.Effects;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.Core.Items
 {
     public class SwordEquipmentItemView : EquipmentItemView
     {
-        public TrailEffect TrailEffect;
+        [FormerlySerializedAs("TrailEffect")] [SerializeField] private TrailEffect _trailEffect;
 
         public override void BeginDealDamage()
         {
             base.BeginDealDamage();
 
-            TrailEffect.Emit = true;
+            _trailEffect.Emit = true;
         }
 
         public override void EndDealDamage()
         {
             base.EndDealDamage();
 
-            TrailEffect.Emit = false;
+            _trailEffect.Emit = false;
         }
     }
 }
