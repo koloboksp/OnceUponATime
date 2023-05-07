@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core;
+using Assets.Scripts.Core.Items;
+using Assets.Scripts.Core.Mobs;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -41,6 +43,28 @@ namespace Assets.Scripts.UI
             _action2Btn.AutoReturn = true;
 
             OnActiveStatusChanged?.Invoke(this);
+
+            
+        }
+
+        private void Start()
+        {
+            var hero = FindObjectOfType<Hero>();
+            if (hero != null)
+            {
+                hero.OnItemInWeaponSlotsChanged += Hero_OnItemInWeaponSlotsChanged;
+                Hero_OnItemInWeaponSlotsChanged(hero);
+            }
+        }
+
+        private void Hero_OnItemInWeaponSlotsChanged(Hero obj)
+        {
+            bool isRangedWeapon = false;
+            foreach (var mainWeaponSlot in obj.MainWeaponSlots)
+                if (mainWeaponSlot.InventoryItem != null && mainWeaponSlot.InventoryItem.ItemInstance is RangedWeaponItem)
+                    isRangedWeapon = true;
+            
+            _action1Btn.SetStyle(isRangedWeapon ? UIAttackBtn.Style.Ranged : UIAttackBtn.Style.Melee);
         }
 
         private void OnDisable()

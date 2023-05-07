@@ -152,7 +152,5 @@ namespace Assets.Scripts.Core.Mobs.HeroMisc
             var rangedWeaponItem = weaponItem as RangedWeaponItem;
             rangedWeaponItem.EndAttack();       
         }
-
-      
     }
 }

@@ -50,8 +50,7 @@ namespace Assets.Scripts.Core
 
             var uiInstance = Instantiate(LevelDefaultPrefabsLinker.Instance.UIPrefab);
             SceneManager.MoveGameObjectToScene(uiInstance, gameObject.scene);
-
-
+            
             var heroInstance = FindObjectOfType<Hero>();
             if (heroInstance == null)
             {

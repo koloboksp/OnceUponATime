@@ -362,11 +362,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 198242479}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 198242479}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 8.299559, y: -3.720436}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 8.105347, y: -4.013897}
@@ -971,11 +970,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d8784240c76054ca6914b4b1edd708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destination:
+  _destination:
     mId: a36342d85f8d734297c04780e85f5d58
-  DestinationExit:
+  _destinationExit:
     mId: a36342d85f8d734297c04780e85f5d58
-  ExitDirection: 1
+  _exitDirection: 1
 --- !u!4 &331718336
 Transform:
   m_ObjectHideFlags: 0
@@ -2102,11 +2101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 694858733}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 694858733}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 8.042825, y: -0.16532648}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 5.988529, y: 1.0100136}
@@ -2431,7 +2429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8430cf4e25ba34e4795043026ded381c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
+  _prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
 --- !u!1 &763333942
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,7 +2474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8430cf4e25ba34e4795043026ded381c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
+  _prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
 --- !u!1 &801802956
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,7 +2503,8 @@ Transform:
   m_LocalPosition: {x: 95.3, y: 28.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1090465718}
   m_Father: {fileID: 2078956557}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2524,6 +2523,7 @@ MonoBehaviour:
   _mainLighting: {fileID: 5686326340071271137, guid: 16d8368d20073504f9ae7efe4df12ab7,
     type: 3}
   _transitionLighting: {fileID: 0}
+  _mainLight: {fileID: 1090465720}
 --- !u!1001 &838176339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2804,7 +2804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8430cf4e25ba34e4795043026ded381c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3553298726182847905, guid: 17adc36193d1aa9488bfb8b9c4b0ae67, type: 3}
+  _prefab: {fileID: 3553298726182847905, guid: 17adc36193d1aa9488bfb8b9c4b0ae67, type: 3}
 --- !u!1 &981829162
 GameObject:
   m_ObjectHideFlags: 0
@@ -3080,11 +3080,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1019230936}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1019230936}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 11.027502, y: -5.008215}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 10.488173, y: -3.462862}
@@ -3388,11 +3387,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1078655577}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1078655577}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 4.868065, y: -0.38165426}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 4.7072296, y: -26.921991}
@@ -3485,12 +3483,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090465717}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -95.3, y: -25.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2078956557}
-  m_RootOrder: 11
+  m_Father: {fileID: 801802957}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1090465719
 MonoBehaviour:
@@ -3915,11 +3913,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1097764644}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1097764644}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: -18.643286, y: -8.050026}
       DepthOffset: {x: 0, y: -0.5589386}
     - Position: {x: -34.55104, y: -9.103439}
@@ -4038,12 +4035,9 @@ MonoBehaviour:
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 12.950114, y: -9.609224}
       DepthOffset: {x: 0, y: 0}
-  - points: []
-    mPoints: []
-  - points: []
-    mPoints: []
-  - points: []
-    mPoints: []
+  - _points: []
+  - _points: []
+  - _points: []
   WalkableAngle: 35
   GenerateWalkablePart: 1
   PolygonCollider2D: {fileID: 1097764642}
@@ -4435,11 +4429,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1181281405}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1181281405}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 4.8757253, y: -0.04817462}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 4.439378, y: 1.9517426}
@@ -4538,9 +4531,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4f8b2838c57f1479c2c48d1ff528dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Body: {fileID: 1181281409}
-  AngleSpeed: -30
-  FixPosition: 1
+  _body: {fileID: 1181281409}
+  _angleSpeed: -30
+  _fixPosition: 1
 --- !u!50 &1181281409
 Rigidbody2D:
   serializedVersion: 4
@@ -4606,7 +4599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8430cf4e25ba34e4795043026ded381c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
+  _prefab: {fileID: 4638830512240270576, guid: ba0297dd89849c34c974102e0873d373, type: 3}
 --- !u!1 &1197119476
 GameObject:
   m_ObjectHideFlags: 0
@@ -4784,7 +4777,7 @@ PrefabInstance:
     - target: {fileID: 7398015673280060694, guid: eb6faee4cca3ada4ea4c2be5734d41ed,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7398015673280060694, guid: eb6faee4cca3ada4ea4c2be5734d41ed,
         type: 3}
@@ -5303,7 +5296,7 @@ PrefabInstance:
     - target: {fileID: 7398015673280060694, guid: eb6faee4cca3ada4ea4c2be5734d41ed,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7398015673280060694, guid: eb6faee4cca3ada4ea4c2be5734d41ed,
         type: 3}
@@ -5434,11 +5427,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d8784240c76054ca6914b4b1edd708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destination:
+  _destination:
     mId: d410577338c725499cc0da237b56b1a5
-  DestinationExit:
+  _destinationExit:
     mId: 
-  ExitDirection: 0
+  _exitDirection: 0
 --- !u!1001 &1513981646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5957,11 +5950,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1732428923}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1732428923}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 11.667271, y: -4.0038137}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 11.027502, y: -5.008215}
@@ -6172,11 +6164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 1826497849}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 1826497849}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 10.440464, y: -3.9723654}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 9.641214, y: -2.2076113}
@@ -6566,7 +6557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83e269c3a945dd458d493c72f60f10c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
+  _prefab: {fileID: 0}
 --- !u!1001 &1946336805
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7079,11 +7070,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 2038826812}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 2038826812}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 8.992422, y: -3.4414167}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 9.96272, y: -2.7244277}
@@ -7252,11 +7242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf79903a4d392348baa171599d550af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hero: {fileID: 0}
-  Id:
+  _hero: {fileID: 0}
+  _id:
     mId: bf4276b48b78e94989f40b5edd75b297
   _levelLighting: {fileID: 801802958}
-  Bounds:
+  _bounds:
     serializedVersion: 2
     x: -30
     y: -23.82
@@ -7285,7 +7275,6 @@ Transform:
   - {fileID: 145906571}
   - {fileID: 208970031}
   - {fileID: 801802957}
-  - {fileID: 1090465718}
   - {fileID: 1461142798}
   - {fileID: 1252474157}
   m_Father: {fileID: 0}
@@ -7411,11 +7400,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f501305ae423f1945b5cd38081948a1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshFilter: {fileID: 2093408820}
-  Depth: 1
-  mShapes:
-  - points: []
-    mPoints:
+  _meshFilter: {fileID: 2093408820}
+  _depth: 1
+  _shapes:
+  - _points:
     - Position: {x: 8.899973, y: -5.036209}
       DepthOffset: {x: 0, y: 0}
     - Position: {x: 8.912228, y: -5.813038}
@@ -7573,7 +7561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8430cf4e25ba34e4795043026ded381c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3146633180825024184, guid: 01eb81d7079084942a3db96c816571ed, type: 3}
+  _prefab: {fileID: 3146633180825024184, guid: 01eb81d7079084942a3db96c816571ed, type: 3}
 --- !u!43 &2141687379
 Mesh:
   m_ObjectHideFlags: 0

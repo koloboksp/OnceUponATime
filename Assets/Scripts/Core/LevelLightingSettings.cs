@@ -10,9 +10,11 @@ namespace Assets.Scripts.Core
         [FormerlySerializedAs("AmbientLight")] [SerializeField] private Color _ambientLight = Color.gray;
         [FormerlySerializedAs("FakeLightingDarknessColor")] [SerializeField] private Color _fakeLightingDarknessColor = Color.black; 
         [FormerlySerializedAs("EnvironmentLightIntencity")] [SerializeField] private float _environmentLightIntensity = 10000.0f;
+        [SerializeField] private float _mainLightIntensity = 1.0f;
 
         public Color AmbientLight => _ambientLight;
         public Color FakeLightingDarknessColor => _fakeLightingDarknessColor;
         public float EnvironmentLightIntensity => _environmentLightIntensity;
+        public float MainLightIntensity => _mainLightIntensity;
     }
 }

@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
 {
     public class UIAttackBtn : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
+        private Style _activeStyle;
         private bool _mouseDown;
         private Vector2 _inputVector;
         private Vector2 _startPointerPosition;
@@ -28,21 +29,24 @@ namespace Assets.Scripts.UI
         {
             if (_mouseDown)
             {
-                var deltaPosition = eventData.position - _startPointerPosition;
-                var btnHalfHeight = _pressedState.rectTransform.sizeDelta.y * 0.5f;
+                if (_activeStyle == Style.Ranged)
+                {
+                    var deltaPosition = eventData.position - _startPointerPosition;
+                    var btnHalfHeight = _pressedState.rectTransform.sizeDelta.y * 0.5f;
 
-                var halfDragSize = _dragArea.rectTransform.sizeDelta.y * 0.5f;
-                
-                _pressedState.rectTransform.anchoredPosition = _btnStartPosition + new Vector2(0, 
-                                                                  Mathf.Clamp(deltaPosition.y, 
-                                                                      -halfDragSize + btnHalfHeight - _btnStartPosition.y, 
-                                                                      halfDragSize - btnHalfHeight - _btnStartPosition.y));
+                    var halfDragSize = _dragArea.rectTransform.sizeDelta.y * 0.5f;
 
-                var deltaPositionY = _pressedState.rectTransform.anchoredPosition.y / (halfDragSize - btnHalfHeight);  
+                    _pressedState.rectTransform.anchoredPosition = _btnStartPosition + new Vector2(0,
+                        Mathf.Clamp(deltaPosition.y,
+                            -halfDragSize + btnHalfHeight - _btnStartPosition.y,
+                            halfDragSize - btnHalfHeight - _btnStartPosition.y));
 
-                deltaPositionY = Mathf.Clamp(deltaPositionY, -1, 1);
-                deltaPositionY = deltaPositionY * 60;
-                _inputVector = new Vector2(0, deltaPositionY);
+                    var deltaPositionY = _pressedState.rectTransform.anchoredPosition.y / (halfDragSize - btnHalfHeight);
+
+                    deltaPositionY = Mathf.Clamp(deltaPositionY, -1, 1);
+                    deltaPositionY = deltaPositionY * 60;
+                    _inputVector = new Vector2(0, deltaPositionY);
+                }
             }
         }
         
@@ -76,6 +80,27 @@ namespace Assets.Scripts.UI
 
             _normalState.enabled = true;
             _pressedState.enabled = false;
+        }
+
+        public void SetStyle(Style style)
+        {
+            _activeStyle = style;
+            if (_activeStyle == Style.Melee)
+            {
+                _dragArea.gameObject.SetActive(false);
+                _pressedState.rectTransform.anchoredPosition = Vector2.zero;
+                _normalState.rectTransform.anchoredPosition = _pressedState.rectTransform.anchoredPosition;
+            }
+            else
+            {
+                _dragArea.gameObject.SetActive(true);
+            }
+        }
+
+        public enum Style
+        {
+            Melee,
+            Ranged,
         }
     }
 }
