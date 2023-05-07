@@ -93,6 +93,8 @@ namespace Assets.ShapeEditor
             var mesh = (MeshFilter.sharedMesh == null) ? new Mesh() : MeshFilter.sharedMesh;
             MeshFilter.sharedMesh = mesh;
 
+            mesh.Clear();
+            
             mesh.subMeshCount = triangles.Count;
             mesh.name = gameObject.name + "_Mesh";
             mesh.SetVertices(vertices);
@@ -102,18 +104,16 @@ namespace Assets.ShapeEditor
                 mesh.SetTriangles(triangles[smIndex], smIndex);
 
             mesh.RecalculateNormals();
-            
+            mesh.UploadMeshData(false);
         }
 
        
         public Polygon[] Process(ShapeCreator owner)
         {
-            // Generate array of valid shape data
             CompositeShape.CompositeShapeData[] eligibleShapes = Shapes
                 .Select(x => new CompositeShape.CompositeShapeData(x.Points.ToArray())).Where(x => x.IsValidShape)
                 .ToArray();
 
-            // Set parents for all shapes. A parent is a shape which completely contains another shape.
             for (int i = 0; i < eligibleShapes.Length; i++)
             {
                 for (int j = 0; j < eligibleShapes.Length; j++)
@@ -128,18 +128,15 @@ namespace Assets.ShapeEditor
                 }
             }
 
-            // Holes are shapes with an odd number of parents.
             CompositeShape.CompositeShapeData[] holeShapes =
                 eligibleShapes.Where(x => x.Parents.Count % 2 != 0).ToArray();
             foreach (CompositeShape.CompositeShapeData holeShape in holeShapes)
             {
-                // The most immediate parent (i.e the smallest parent shape) will be the one that has the highest number of parents of its own. 
                 CompositeShape.CompositeShapeData immediateParent =
                     holeShape.Parents.OrderByDescending(x => x.Parents.Count).First();
                 immediateParent.Holes.Add(holeShape);
             }
 
-            // Solid shapes have an even number of parents
             CompositeShape.CompositeShapeData[] solidShapes =
                 eligibleShapes.Where(x => x.Parents.Count % 2 == 0).ToArray();
             foreach (CompositeShape.CompositeShapeData solidShape in solidShapes)
@@ -148,7 +145,6 @@ namespace Assets.ShapeEditor
 
             }
 
-            // Create polygons from the solid shapes and their associated hole shapes
             Polygon[] polygons = solidShapes.Select(x => new Polygon(x.Polygon.Points, x.Holes.Select(h => h.Polygon.Points).ToArray())).ToArray();
 
             return polygons;
