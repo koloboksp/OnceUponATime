@@ -11,6 +11,7 @@ namespace Assets.Scripts.Core
         private Color _ambientLight;
         private float _maxEnvironmentLightIntensity;
         private float _mainLightIntensity;
+        private Color _clearColor;
 
         [SerializeField] private LevelLightingSettings _mainLighting;
         [SerializeField] private LevelLightingSettings _transitionLighting;
@@ -52,6 +53,7 @@ namespace Assets.Scripts.Core
                 _ambientLight = Color.Lerp(_mainLighting.AmbientLight, _transitionLighting.AmbientLight, _transition);
                 _maxEnvironmentLightIntensity = Mathf.Lerp(_mainLighting.EnvironmentLightIntensity, _transitionLighting.EnvironmentLightIntensity, _transition);
                 _mainLightIntensity = Mathf.Lerp(_mainLighting.MainLightIntensity, _transitionLighting.MainLightIntensity, _transition);
+                _clearColor = Color.Lerp(_mainLighting.ClearColor, _transitionLighting.ClearColor, _transition);
             }
             else
             {
@@ -59,11 +61,14 @@ namespace Assets.Scripts.Core
                 _ambientLight = _mainLighting.AmbientLight;
                 _maxEnvironmentLightIntensity = _mainLighting.EnvironmentLightIntensity;
                 _mainLightIntensity = _mainLighting.MainLightIntensity;
+                _clearColor = _mainLighting.ClearColor;
             }
             
             RenderSettings.ambientMode = AmbientMode.Flat;
             RenderSettings.ambientLight = AmbientLight;
             _mainLight.intensity = _mainLightIntensity;
+            if(Camera.main != null)
+                Camera.main.backgroundColor = _clearColor;
             
             Shader.SetGlobalFloat("_maxEnvironmentLightIntensity", _maxEnvironmentLightIntensity);
         }

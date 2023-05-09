@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1685387358}
   - component: {fileID: 1685387357}
+  - component: {fileID: 6058970471880374354}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -94,6 +95,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &6058970471880374354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685387356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &4359150480310627050
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,5 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1c6239026973842b7ba5e22df4493b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AmbientLight: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 0}
-  FakeLightingDarknessColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _ambientLight: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 0}
+  _fakeLightingDarknessColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _environmentLightIntensity: 10000
+  _mainLightIntensity: 1
+  _clearColor: {r: 0.4470588, g: 0.7091498, b: 1, a: 1}
