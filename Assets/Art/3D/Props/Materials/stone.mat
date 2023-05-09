@@ -2,27 +2,34 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: stone
-  m_Shader: {fileID: 10703, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: ADDMAP_BOT ADDMAP_ON ADDMAP_TOP ADDMAP_UVWORLD BOTMAP_ON COLOR_ON
-    Colored FLOW_UV LIGHT_ON LIGHT_SUN TOPMAP_ON _ADDMAPHEIGHTON_ON _BLENDMODE_FADE
-    _COLORMODE_TWO _FLOWMODE_FLOWUV _MODE_NORMALWORLD _REFLECTMODE_NONE
+  m_Shader: {fileID: 4800000, guid: e727e1e6565ee404b80a54f7c349cf29, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AddMap:
         m_Texture: {fileID: 2800000, guid: a7ef00240a1e66243a54f2f1776c9c0b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 492f55a46de8e55419743b225a0fa237, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BotMap:
@@ -85,10 +92,27 @@ Material:
         m_Texture: {fileID: 2800000, guid: bca9a889d11eb0143a2c73b11d3bb381, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TopMap:
         m_Texture: {fileID: 2800000, guid: a7ef00240a1e66243a54f2f1776c9c0b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AddMapBot: 1
     - _AddMapHeightOn: 1
@@ -97,7 +121,10 @@ Material:
     - _AddMapOn: 1
     - _AddMapSize: 0.2
     - _AddMapTop: 1
+    - _AlphaClip: 0
+    - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 1
     - _BopUVWBox: 0
     - _BotMapLevel: -0.49
     - _BotMapLevelMid: 0.5
@@ -111,6 +138,7 @@ Material:
     - _ClipAlpha: 0
     - _ColorMode: 1
     - _Colored: 1
+    - _Cull: 2
     - _Cutoff: 0.5
     - _Decay: 0
     - _Density: 18.2
@@ -119,7 +147,8 @@ Material:
     - _DistortAmount: 0
     - _DistortSpeedU: 0
     - _DistortSpeedV: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _FPS: 0
     - _FlipU: 0
     - _FlipV: 0
@@ -128,6 +157,7 @@ Material:
     - _FramesV: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
+    - _GlossinessSource: 0
     - _GlossyReflections: 1
     - _GlowAmount: 0
     - _GrayLevel: 0
@@ -148,15 +178,23 @@ Material:
     - _Mode: 4
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _QueueOffset: 0
     - _RampOffset: 0
+    - _ReceiveShadows: 1
     - _ReflecMapLOD: 1
     - _ReflectAmount: 1
     - _ReflectMode: 0
+    - _Shininess: 0
+    - _Smoothness: 0.5
+    - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
+    - _SpecSource: 0
     - _SpecularHighlights: 1
     - _SpeedU: 0
     - _SpeedV: 0
-    - _SrcBlend: 5
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
     - _SwapUV: 0
     - _TopMapHeightOn: 0
     - _TopMapLevel: 0.349
@@ -172,11 +210,14 @@ Material:
     - _ZTestAlways: 0
     - _ZWrite: 1
     m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CaveColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 1, g: 0, b: 0, a: 1}
     - _Color1: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color2: {r: 0, g: 0, b: 0, a: 1}
     - _ColorBrush: {r: 0, g: 0, b: 0, a: 0}
     - _ColorDecay: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  m_BuildTextureStacks: []

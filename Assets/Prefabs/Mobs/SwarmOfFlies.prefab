@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.43, y: 8.658237, z: -0.0043322444}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6329069147194965316}
   m_Father: {fileID: 0}
@@ -46,22 +47,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0068feb1a7f99464fad39317691144d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bounds:
+  _bounds:
     serializedVersion: 2
     x: 0
     y: 0
     width: 0
     height: 0
-  Lives: 1
-  MaxLives: 1
-  DeathTime: 1
-  FlyPrefab: {fileID: 9199491775627092659, guid: b308c3698875d814f941e791b2c6e373,
+  _lives: 2
+  _maxLives: 2
+  _deathTime: 1
+  _flyPrefab: {fileID: 9199491775627092659, guid: b308c3698875d814f941e791b2c6e373,
     type: 3}
-  BodyTrigger: {fileID: 2753496026854157421}
-  ReactionTrigger: {fileID: 2100017296675849012}
-  Speed: 2
-  Damage: 1
-  DamageReduce: 0.1
+  _bodyTrigger: {fileID: 2753496026854157421}
+  _reactionTrigger: {fileID: 2100017296675849012}
+  _speed: 2
+  _damage: 1
+  _damageReduce: 0.1
+  _dropDownItemsLevel: 20
 --- !u!114 &8709838444456406369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,10 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b1b297f10e20c844a6feba3daac6b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Owner: {fileID: 1449571607873241949}
-  UIPartPrefab: {fileID: 2119306603433717232, guid: 934b344ed5a30fd4c8a91cc0880bb8ff,
+  _owner: {fileID: 1449571607873241949}
+  _uiPartPrefab: {fileID: 2119306603433717232, guid: 934b344ed5a30fd4c8a91cc0880bb8ff,
     type: 3}
-  Offset: {x: 0, y: 1, z: 0}
+  _offset: {x: 0, y: 1, z: 0}
 --- !u!58 &2753496026854157421
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -122,6 +124,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1713024901197118168}
   m_RootOrder: 0

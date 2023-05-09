@@ -30,7 +30,7 @@ namespace Assets.Scripts.Effects
 		{
 			var width = Mathf.Max(1, cameraTextureDescriptor.width >> _downSample);
 			var height = Mathf.Max(1, cameraTextureDescriptor.height >> _downSample);
-			var blurTextureDesc = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBHalf, 0, 0);
+			var blurTextureDesc = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGB32, 0, 0);
 
 			cmd.GetTemporaryRT(_destination.id, blurTextureDesc, FilterMode.Point);
 			

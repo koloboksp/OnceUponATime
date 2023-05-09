@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a46e40c190418c49b840bce5620fa73, type: 3}
   m_Name: HandItem
   m_EditorClassIdentifier: 
-  Owner: {fileID: 0}
-  EquipmentViewPartPrefab: {fileID: 0}
-  Type: 20
-  DamageType: 2
-  Attack: 0.34
-  HorizontalRange: 0.9
-  VerticalRangePadding: 0
-  Force: 4
-  HandPunchEffectPrefab: {fileID: 545879214341893731, guid: 29cbeed30a7013147a72f15f9c9b95be,
+  _owner: {fileID: 0}
+  _type: 20
+  _equipmentViewPartPrefab: {fileID: 0}
+  _itemPreparationViewPrefab: {fileID: 0}
+  _meleeDamageType: 1
+  _meleeAttack: 1
+  _meleeForce: 1
+  _meleeHorizontalRange: 1
+  _meleeVerticalRangePadding: 0
+  _handPunchEffectPrefab: {fileID: 545879214341893731, guid: 29cbeed30a7013147a72f15f9c9b95be,
     type: 3}

@@ -47,4 +47,4 @@ MonoBehaviour:
   _ambientLight: {r: 0.2735849, g: 0.26971343, b: 0.26971343, a: 0}
   _fakeLightingDarknessColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
   _environmentLightIntensity: 1000
-  _mainLightIntensity: 0
+  _mainLightIntensity: 0.05

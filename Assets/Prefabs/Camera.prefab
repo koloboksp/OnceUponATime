@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5927170466070297893}
   - component: {fileID: 5927170466070297881}
   - component: {fileID: 7347915290342123324}
+  - component: {fileID: 7409934029152009076}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -46,7 +47,7 @@ Camera:
   m_GameObject: {fileID: 5927170466070297894}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -100,9 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1e5b49ae2fba540ae97a37927a2ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Owner: {fileID: 0}
-  Target: {fileID: 0}
-  FakeLight: {fileID: 6520478747272708535, guid: 671abbb7197a4424ea34e4337d107f64,
+  _owner: {fileID: 0}
+  _target: {fileID: 0}
+  _fakeLight: {fileID: 6520478747272708535, guid: 671abbb7197a4424ea34e4337d107f64,
     type: 2}
 --- !u!114 &5927170466070297893
 MonoBehaviour:
@@ -116,10 +117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05671402563af4049bd8b4442dafeb65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Observer: {fileID: 5927170466070297883}
-  Control: {fileID: 5907037195787404556}
-  Distance: 11
-  VerticalOffset: 2
+  _observer: {fileID: 5927170466070297883}
+  _control: {fileID: 5907037195787404556}
+  _distance: 11
+  _verticalOffset: 2
 --- !u!114 &5927170466070297881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +166,20 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &7409934029152009076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5927170466070297894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 263e30958dec58d4998c42bcd8434c6a, type: 2}
